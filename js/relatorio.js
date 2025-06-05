@@ -185,16 +185,16 @@ const REGISTRO = {
 
   carregarDoStorage() {
     const dados = localStorage.getItem(`relatorio_${this.fotografo}`);
-    {
-      const title = document.getElementById("registros-title");
-      if (localStorage.getItem("fot") == "Sarah") {
-        title.innerText = "";
-        title.innerText = `Gerenciar registros da Sarah.`;
-      } else {
-        title.innerText = "";
-        title.innerText = `Gerenciar registros do Elias.`;
-      }
-    }
+    // {
+    //   const title = document.getElementById("registros-title");
+    //   if (localStorage.getItem("fot") == "Sarah") {
+    //     title.innerText = "";
+    //     title.innerText = `Gerenciar registros da Sarah.`;
+    //   } else {
+    //     title.innerText = "";
+    //     title.innerText = `Gerenciar registros do Elias.`;
+    //   }
+    // }
 
     if (dados != undefined) {
       return (this.relatorios[this.fotografo] = JSON.parse(dados));

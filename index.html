@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="style.css" />
     <title>Relatório do dia.</title>
   </head>
   <body>
     <header>
-      <h1>Relatório de Fotos 📸</h1>
+      <div>
+        <img src="arcanjos-logo-2.png" alt="Logo" />
+      </div>
+      <!-- <h1>Relatório de Fotos 📸</h1> -->
       <div id="buttons-header">
+        <button class="dark-mode-btn" id="vale">Vale</button>
+        <button class="dark-mode-btn" id="desconto">Descontos</button>
         <button class="dark-mode-btn" id="change-fot">Mudar Fotógrafo</button>
         <button class="dark-mode-btn" id="theme-btn">Dark Mode</button>
       </div>
@@ -19,7 +25,7 @@
       <div class="container">
         <form id="formRegistro">
           <div id="div-registros-title">
-            <h1 id="registros-title"></h1>
+            <h1 id="registros-title">Gerenciar Registros</h1>
           </div>
           <input type="text" id="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
           <input type="number" id="vendidas" placeholder="Vendas" autocomplete="off" required />

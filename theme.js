@@ -1,6 +1,7 @@
 function applyTheme(theme) {
   document.body.classList.remove("dark", "light");
   document.body.classList.add(theme);
+  document.getElementById("theme-btn").textContent = `${theme} mode`;
 }
 
 document.getElementById("theme-btn").addEventListener("click", () => {
