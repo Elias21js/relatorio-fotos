@@ -1,5 +1,5 @@
 import REGISTRO from "./relatorio.js";
-import { applyTheme } from "../../theme.js";
+import { applyTheme } from "../theme.js";
 
 // Inicialização ao carregar a página
 {

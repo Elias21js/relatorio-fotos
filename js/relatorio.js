@@ -1,3 +1,5 @@
+import register from "./registro.js";
+
 const REGISTRO = {
   relatorios: {
     Elias: [],
@@ -48,10 +50,8 @@ const REGISTRO = {
 
     if (!dayExists) {
       this.relatorios[this.fotografo].push(day);
-      const storage = JSON.parse(localStorage.getItem("filtering"));
-      if (storage) {
-        this.ordernar(storage.campo, storage.ordem);
-      }
+      const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
+      this.ordernar(campo, ordem);
       this.atualizarLista();
 
       this.showSucess("Registro adicionado com sucesso!");
@@ -118,7 +118,7 @@ const REGISTRO = {
       const aproveitamento = document.createElement("span");
       aproveitamento.innerText = `${day.aprov}%`;
 
-      [data, vendas, sobras, producao, aproveitamento].forEach((i) => criarRegistro.appendChild(i));
+      criarRegistro.append(data, vendas, sobras, producao, aproveitamento);
 
       lista.appendChild(criarRegistro);
     });
@@ -144,29 +144,20 @@ const REGISTRO = {
     return newDate;
   },
 
-  editarDia(day) {
-    if (!day || !day.data || !day.vendas || !day.sobras)
-      return this.showError("Você deve inserir uma data, as vendas e as sobras.");
+  editarDia({ id, data, vendas, sobras }) {
+    if (!data || !vendas || !sobras) return this.showError("Você deve inserir uma data, as vendas e as sobras.");
 
     // verifica se já existe um dia com a mesma data
-    const dataFind = this.relatorios[this.fotografo].find((dia) => dia.data === day.data);
-    const idExists = dataFind?.id === day?.id;
-    console.log(day);
+    const dataFind = this.relatorios[this.fotografo].find((dia) => dia.data === data);
+    const idExists = dataFind?.id === id;
 
     if ((dataFind && idExists) || (!dataFind && !idExists)) {
-      this.removerRegistro(day.id);
+      this.removerRegistro(id);
 
-      this.adicionarDia({
-        id: uuid.v4(),
-        data: this.converterData(day.data),
-        vendas: day.vendas,
-        sobras: day.sobras,
-        producao: parseInt(day.vendas) + parseInt(day.sobras),
-        aprov: ((parseFloat(day.vendas) / (parseFloat(day.vendas) + parseFloat(day.sobras))) * 100).toFixed(2),
-      });
+      this.adicionarDia(new register(this.converterData(data), vendas, sobras));
 
-      const storage = JSON.parse(localStorage.getItem("filtering"));
-      this.ordernar(storage.campo, storage.ordem);
+      const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
+      this.ordernar(campo, ordem);
       this.atualizarLista();
 
       return this.showSucess(`Registro alterado com sucesso.`);

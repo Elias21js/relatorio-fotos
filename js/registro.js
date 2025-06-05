@@ -1,3 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
+
 export default class Registro {
-  constructor() {}
+  constructor(data, vendas, sobras) {
+    this.id = uuidv4();
+    this.data = data;
+    this.vendas = vendas;
+    this.sobras = sobras;
+    this.producao = parseInt(this.vendas) + parseInt(this.sobras);
+    this.aprov = ((parseFloat(this.vendas) / this.producao) * 100).toFixed(2);
+  }
 }

@@ -1,3 +1,4 @@
+import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 
 // CRIAR REGISTRO
@@ -8,18 +9,8 @@ import REGISTRO from "./relatorio.js";
     const data = document.getElementById("data").value;
     const vendas = parseInt(document.getElementById("vendidas").value);
     const sobras = parseInt(document.getElementById("sobras").value);
-    const producao = vendas + sobras;
-    const aprov = (vendas / producao) * 100;
 
-    REGISTRO.adicionarDia({
-      id: uuid.v4(),
-      data: REGISTRO.converterData(data),
-      vendas,
-      sobras,
-      producao,
-      aprov: aprov.toFixed(2),
-    });
-
+    REGISTRO.adicionarDia(new register(REGISTRO.converterData(data), vendas, sobras));
     document.getElementById("formRegistro").reset();
   });
 }
