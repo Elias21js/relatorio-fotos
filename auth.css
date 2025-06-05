@@ -6,3 +6,85 @@
   box-sizing: border-box;
   font-family: "JetBrains Mono", monospace;
 }
+
+body {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("./src/desktop-2.jpg");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-flow: column nowrap;
+  row-gap: 8rem;
+  width: clamp(350px, 90vw, 500px);
+  height: 35rem;
+  background: rgba(255, 255, 255, 0.1); /* Fundo levemente branco/transparente */
+  backdrop-filter: blur(4px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Contorninho elegante */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Um glowzinho maroto */
+  padding: 1.8rem;
+  color: white; /* Opcional, depende do fundo */
+  border-top-left-radius: 8rem;
+  border-bottom-right-radius: 8rem;
+
+  & #title {
+    font-size: 1.7rem;
+    margin-top: 2rem;
+  }
+
+  & #inputs {
+    width: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    row-gap: 1rem;
+
+    & input {
+      width: 70%;
+      border-top-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      padding: 0.7rem;
+      padding-left: 1.4rem;
+      outline: none;
+      border: 1px solid white;
+    }
+  }
+
+  & #buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row nowrap;
+    column-gap: clamp(2rem, 10vw, 8rem);
+
+    & .btn-auth {
+      padding: 0.7rem 1.2rem;
+      outline: none;
+      border: 2px solid white;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border-top-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+      cursor: pointer;
+      background-color: transparent;
+    }
+  }
+}
+
+/* @media screen and (max-width: 425) {
+  main {
+    & #buttons {
+      flex-direction: column;
+    }
+  }
+} */

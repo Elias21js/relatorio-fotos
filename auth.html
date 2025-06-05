@@ -3,8 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="src/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="auth.css" />
     <title>Auth</title>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <div id="title">
+        <h2>Entre</h2>
+      </div>
+      <div id="inputs">
+        <input type="text" autocomplete="off" id="name" name="name" placeholder="Nome" />
+        <input type="password" autocomplete="off" id="senha" name="senha" placeholder="Senha" />
+      </div>
+      <div id="buttons">
+        <button type="button" class="btn-auth" id="btn-login">Entrar</button>
+        <button type="button" class="btn-auth" id="btn-register">Registrar</button>
+      </div>
+    </main>
+  </body>
 </html>
