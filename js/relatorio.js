@@ -77,6 +77,8 @@ const REGISTRO = {
       header.appendChild(span);
     });
 
+    const btn_relatorio = document.getElementById("gerarRelatorio");
+
     this.relatorios[this.fotografo].forEach((day) => {
       const criarRegistro = document.createElement("div");
       criarRegistro.className = "registro div-estilosa";
@@ -104,24 +106,30 @@ const REGISTRO = {
       const [dia, mes] = day.data.split("/");
       const relaDate = new Date(2025, mes - 1, dia);
 
-      data.innerText = `${day.data} - ${descobrirDiaDaSemana(relaDate)}`;
+      data.textContent = `${day.data} - ${descobrirDiaDaSemana(relaDate)}`;
 
       const vendas = document.createElement("span");
-      vendas.innerText = day.vendas;
+      vendas.textContent = day.vendas;
 
       const sobras = document.createElement("span");
-      sobras.innerText = day.sobras;
+      sobras.textContent = day.sobras;
 
       const producao = document.createElement("span");
-      producao.innerText = day.producao;
+      producao.textContent = day.producao;
 
       const aproveitamento = document.createElement("span");
-      aproveitamento.innerText = `${day.aprov}%`;
+      aproveitamento.textContent = `${day.aprov}%`;
 
       criarRegistro.append(data, vendas, sobras, producao, aproveitamento);
 
       lista.appendChild(criarRegistro);
     });
+
+    if (this.relatorios[this.fotografo].length < 1) {
+      btn_relatorio.style.display = "none";
+    } else {
+      btn_relatorio.style.display = "block";
+    }
   },
 
   converterData(data) {

@@ -68,12 +68,10 @@ import REGISTRO from "./relatorio.js";
           inputAttributes: {
             autoComplete: "off",
           },
-          showCancelButton: true,
           theme: `${localStorage.getItem("theme")}`,
           confirmButtonText: "Concluir edição",
           denyButtonText: "Remover dia",
           showDenyButton: true,
-          cancelButtonText: "Cancelar",
           reverseButtons: true,
           html: `
               <div id="edit-div">

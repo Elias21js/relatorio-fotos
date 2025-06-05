@@ -66,6 +66,7 @@ header {
 
 main {
   user-select: none;
+  padding-top: 5rem;
 
   & .container {
     flex: 1;
@@ -73,31 +74,40 @@ main {
     display: flex;
     align-items: center;
     flex-direction: column;
-    gap: 3.2rem;
+    gap: 10rem;
 
     & #formRegistro {
       background: var(--card-color);
       padding: 2.4rem;
       border-radius: 15px;
       display: flex;
+      align-items: center;
       width: clamp(330px, 100%, 500px);
       flex-direction: column;
-      gap: 1.6rem;
+      row-gap: 2rem;
       box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
 
       & #div-registros-title {
-        align-self: center;
+        margin: 2rem 0;
       }
 
       & input {
         padding: 1.2rem;
         border: 1px solid #ccc;
+        width: clamp(60%, 80%, 90%);
         border-radius: 0.5rem;
         font-size: 1.6rem;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+
+        &::placeholder {
+          color: var(--text-color);
+        }
       }
 
       & button {
         padding: 1.2rem;
+        margin: 2rem 0;
         border: 1px solid #ccc;
         border-radius: 0.5rem;
         font-size: 1.6rem;
@@ -117,6 +127,13 @@ main {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
 }
 
 .swal2-cancel {
@@ -297,7 +314,7 @@ button {
 
 .swal2-popup {
   font-size: 1.2rem;
-
+  width: clamp(320px, 100%, 420px);
   & button {
     font-size: 1.5rem;
   }
