@@ -1,0 +1,450 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --card-color: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", monospace;
+}
+
+html {
+  font-size: 62.5%;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+body {
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+
+  &.dark {
+    --bg-color: #121212;
+    --text-color: #f5f5f5;
+    --card-color: #1e1e1e;
+  }
+
+  &.light {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --card-color: #fff;
+  }
+
+  &.swal2-shown {
+    padding-right: 0px !important;
+  }
+}
+
+header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-content: space-between;
+  justify-items: end;
+  padding: 0rem 4rem;
+  background: var(--card-color);
+  outline: var(--card-color) 1px solid;
+
+  & img {
+    width: clamp(128px, 5vw, 10vw);
+    height: clamp(128px, 5vw, 10vw);
+  }
+
+  & #buttons-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 2rem;
+  }
+}
+
+main {
+  user-select: none;
+  padding: 5rem 0;
+  min-height: 100vh;
+  background-image: url("./src/desktop-2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  & .container {
+    flex: 1;
+    padding: 3.2rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10rem;
+
+    & #formRegistro {
+      background: var(--card-color);
+      padding: 2.4rem;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      width: clamp(330px, 100%, 500px);
+      flex-direction: column;
+      row-gap: 2rem;
+      box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+
+      & #div-registros-title {
+        margin: 2rem 0;
+      }
+
+      & input {
+        padding: 1.2rem;
+        border: 1px solid #ccc;
+        width: clamp(60%, 80%, 90%);
+        border-radius: 0.5rem;
+        font-size: 1.6rem;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+
+        &::placeholder {
+          color: var(--text-color);
+        }
+      }
+
+      & button {
+        padding: 1.2rem;
+        margin: 2rem 0;
+        border: 1px solid #ccc;
+        border-radius: 0.5rem;
+        font-size: 1.6rem;
+        width: 50%;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        align-self: center;
+      }
+    }
+  }
+
+  .listagem {
+    & #registro-header {
+      border-color: white;
+
+      & span {
+        color: white;
+      }
+    }
+  }
+}
+
+#edit-div {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
+}
+
+.swal2-cancel {
+  color: #fff;
+  background-color: #636580;
+  border-color: #636580;
+}
+
+.swal2-confirm {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.swal2-actions {
+  flex-flow: column-reverse;
+}
+
+.botao-estiloso {
+  position: relative;
+  padding: 1.5rem 3rem;
+  font-size: 1.8rem;
+  color: #fff;
+  background: linear-gradient(135deg, #962afc, #e377c3);
+  border: none;
+  border-radius: 5rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.3s, transform 0.3s;
+  box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.botao-estiloso::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: all 0.5s;
+  transform: skewX(-20deg);
+}
+
+.botao-estiloso:hover::after {
+  left: 100%;
+}
+
+.botao-estiloso:hover {
+  transform: scale(1.03);
+  background: linear-gradient(135deg, #a777e3, #6e8efb);
+}
+
+.botao-estiloso:active {
+  transform: scale(0.95);
+}
+
+.swal2-container {
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.listagem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  font-size: 1.6rem;
+
+  #registro-header {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(114px, 251px));
+    background: transparent;
+    padding: 1.6rem;
+    text-align: center;
+    box-shadow: none;
+    font-weight: bold;
+    border-radius: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    transition: transform 0.5s ease;
+    border-bottom: 2px solid var(--text-color);
+    padding-bottom: 0.8rem;
+    margin-bottom: 0.8rem;
+
+    & span {
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    & span:first-child {
+      text-align: left;
+    }
+
+    & span:last-child {
+      text-align: end;
+    }
+  }
+
+  .registro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card-color);
+    padding: 1.6rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.7s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    &:first-child:hover {
+      transform: scaleX(1);
+      cursor: default;
+    }
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    & span {
+      flex: 1;
+      text-align: center;
+      min-width: 8rem; /* Definindo um espaço mínimo pra cada coluna */
+    }
+
+    &.div-estilosa::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent 40%, #8828ff 50%, transparent 60%);
+      transform: skewX(-20deg);
+      transition: left 0.7s ease;
+      z-index: 0;
+    }
+
+    &.div-estilosa:hover::before {
+      left: 0%;
+    }
+
+    &.div-estilosa span {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
+button {
+  user-select: none;
+}
+
+#gerarRelatorio-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+}
+
+/* Estilo extra pra deixar a data alinhada à esquerda */
+.registro span:first-child {
+  text-align: left;
+}
+
+/* E o aproveitamento alinhado à direita pra ficar bonito */
+.registro span:last-child {
+  text-align: right;
+}
+
+.dark-mode-btn {
+  background: none;
+  border: 0.2rem solid var(--text-color);
+  color: var(--text-color);
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.swal2-popup {
+  font-size: 1.2rem;
+  width: clamp(320px, 100%, 420px);
+  & button {
+    font-size: 1.5rem;
+  }
+}
+
+.swal2-popup .ul-rela {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+}
+
+@media screen and (max-width: 600px) {
+  main {
+    background-image: url("./src/desktop-2.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  .registro {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  header {
+    & #buttons-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+}
+
+@media screen and (max-width: 610px) {
+  header {
+    place-items: center;
+    grid-template-columns: 1fr;
+    padding-bottom: 5rem;
+    padding-top: 1rem;
+    position: static;
+
+    & #buttons-header {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      row-gap: 2rem;
+    }
+  }
+
+  main {
+    & .container {
+      & #formRegistro {
+        padding: 3rem;
+        row-gap: 3rem;
+
+        input {
+          font-size: 1.3rem;
+        }
+
+        & button {
+          font-size: 1.2rem;
+          width: 50vw;
+        }
+      }
+    }
+  }
+
+  main {
+    & .container {
+      & .listagem {
+        align-self: stretch;
+
+        & #registro-header {
+          display: none;
+        }
+
+        & .registro {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          & span:nth-child(2)::before {
+            content: "Vendas: ";
+          }
+
+          & span:nth-child(3)::before {
+            content: "Sobras: ";
+          }
+
+          & span:nth-child(4)::before {
+            content: "Produção: ";
+          }
+
+          & span:nth-child(5)::before {
+            content: "Aproveitamento: ";
+          }
+        }
+      }
+    }
+  }
+
+  .swal2-popup {
+    font-size: 0.9rem;
+
+    & button {
+      font-size: 1.2rem;
+    }
+  }
+
+  #gerarRelatorio {
+    font-size: 1.5rem;
+  }
+}
