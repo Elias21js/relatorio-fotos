@@ -1,0 +1,297 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --card-color: #fff;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+main {
+  user-select: none;
+}
+
+body.dark {
+  --bg-color: #121212;
+  --text-color: #f5f5f5;
+  --card-color: #1e1e1e;
+}
+
+body.light {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --card-color: #fff;
+}
+
+body {
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 4rem;
+  background: var(--card-color);
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+#buttons-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 2rem;
+}
+
+.container {
+  flex: 1;
+  padding: 3.2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+form {
+  background: var(--card-color);
+  padding: 2.4rem;
+  border-radius: 15px;
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  gap: 1.6rem;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+#div-registros-title {
+  align-self: center;
+}
+
+form input,
+form button {
+  padding: 1.2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+}
+
+form button {
+  width: 50%;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  align-self: center;
+}
+
+#edit-div {
+  display: flex;
+  flex-flow: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.swal2-cancel {
+  color: #fff;
+  background-color: #636580;
+  border-color: #636580;
+}
+
+.swal2-confirm {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.swal2-actions {
+  flex-flow: column-reverse;
+}
+
+.botao-estiloso {
+  position: relative;
+  padding: 1.5rem 3rem;
+  font-size: 1.8rem;
+  color: #fff;
+  background: linear-gradient(135deg, #962afc, #e377c3);
+  border: none;
+  border-radius: 5rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.3s, transform 0.3s;
+  box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.botao-estiloso::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: all 0.5s;
+  transform: skewX(-20deg);
+}
+
+.botao-estiloso:hover::after {
+  left: 100%;
+}
+
+.botao-estiloso:hover {
+  transform: scale(1.03);
+  background: linear-gradient(135deg, #a777e3, #6e8efb);
+}
+
+.botao-estiloso:active {
+  transform: scale(0.95);
+}
+
+.listagem {
+  display: flex;
+  flex-direction: column;
+  width: 128rem;
+  gap: 0.8rem;
+  font-size: 1.6rem;
+}
+
+.registro {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-color);
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.7s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.div-estilosa::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent 40%, #8828ff 50%, transparent 60%);
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+  z-index: 0;
+}
+
+.div-estilosa:hover::before {
+  left: 0%;
+}
+
+.div-estilosa span {
+  position: relative;
+  z-index: 1;
+}
+
+.registro:first-child:hover {
+  transform: scaleX(1);
+  cursor: default;
+}
+
+.registro:hover {
+  transform: scale(1.04);
+}
+
+.registro span {
+  flex: 1;
+  text-align: center;
+  min-width: 8rem; /* Definindo um espaço mínimo pra cada coluna */
+}
+
+button {
+  user-select: none;
+}
+
+#gerarRelatorio-div {
+  display: flex;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 7rem;
+}
+
+#registro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  padding: 1.6rem;
+  box-shadow: none;
+  font-weight: bold;
+  border-radius: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  transition: transform 0.5s ease;
+  border-bottom: 2px solid var(--text-color);
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+#registro-header span {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Estilo extra pra deixar a data alinhada à esquerda */
+.registro span:first-child {
+  text-align: left;
+}
+
+/* E o aproveitamento alinhado à direita pra ficar bonito */
+.registro span:last-child {
+  text-align: right;
+}
+
+.dark-mode-btn {
+  background: none;
+  border: 0.2rem solid var(--text-color);
+  color: var(--text-color);
+  padding: 0.8rem 1.6rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.swal2-popup {
+  font-size: 1.2rem;
+}
+
+.swal2-popup button {
+  font-size: 1.5rem;
+}
+
+.ul-rela {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+}
+
+@media (max-width: 600px) {
+  .registro {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}

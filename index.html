@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Relatório do dia.</title>
+  </head>
+  <body>
+    <header>
+      <h1>Relatório de Fotos 📸</h1>
+      <div id="buttons-header">
+        <button class="dark-mode-btn" id="change-fot">Mudar Fotógrafo</button>
+        <button class="dark-mode-btn" id="theme-btn">Dark Mode</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <form id="formRegistro">
+          <div id="div-registros-title">
+            <h1 id="registros-title"></h1>
+          </div>
+          <input type="text" id="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
+          <input type="number" id="vendidas" placeholder="Vendas" autocomplete="off" required />
+          <input type="number" id="sobras" placeholder="Sobras" autocomplete="off" required />
+          <button type="submit" class="botao-estiloso" id="add-reg">Adicionar Registro</button>
+        </form>
+
+        <div class="listagem" id="listaRegistros"></div>
+        <!-- Lista de registros -->
+      </div>
+
+      <div id="gerarRelatorio-div">
+        <button id="gerarRelatorio" type="submit" class="botao-estiloso">Gerar relatório</button>
+      </div>
+    </main>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="theme.js"></script>
+  <script type="module" src="./js/script.js"></script>
+  <script type="module" src="./js/relatorio.js"></script>
+  <script type="module" src="./js/dom.js"></script>
+  <script type="module" src="./js/ini.js"></script>
+</html>
