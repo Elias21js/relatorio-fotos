@@ -12,3 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
   !localStorage.getItem("fot") ? localStorage.setItem("fot", "Elias") : "";
   applyTheme(savedTheme);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const getUserLogged = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
+
+  if (!getUserLogged && !getUserLogged.uid) {
+    window.location.href = "/auth";
+  }
+});
