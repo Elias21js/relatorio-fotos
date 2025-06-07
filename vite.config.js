@@ -4,5 +4,5 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
-  base: "/", // exemplo: '/relatorio-fotos/'
+  base: "/relatorio-fotos", // exemplo: '/relatorio-fotos/'
 });
