@@ -6,7 +6,7 @@ export default defineConfig({
     target: "esnext",
     input: {
       main: resolve(__dirname, "index.html"),
-      auth: resolve(__dirname, "auth/index.html"),
+      auth: resolve(__dirname, "auth.html"),
     },
   },
   base: "/relatorio-fotos", // exemplo: '/relatorio-fotos/'
