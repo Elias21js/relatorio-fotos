@@ -20,7 +20,7 @@ const isLogged = () => {
   const atual = window.location.pathname;
 
   if (!getUserLogged && !getUserLogged.uid && !atual.includes("auth")) {
-    return (window.location.href = "/auth");
+    return (window.location.href = "/relatorio-fotos/auth");
   }
 };
 
