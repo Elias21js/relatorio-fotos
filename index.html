@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/assets/favicon-BYJlRSnv.png" type="image/x-icon" />
+    <title>Relatório do Mês.</title>
+    <script type="module" crossorigin src="/assets/index-CfQAVVpD.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-P2mtb2pi.css">
+  </head>
+  <body>
+    <header>
+      <div>
+        <img src="/assets/arcanjos-logo-2-BZRJ-lu9.png" alt="Logo" />
+      </div>
+      <!-- <h1>Relatório de Fotos 📸</h1> -->
+      <div id="buttons-header">
+        <button class="dark-mode-btn" id="vale">Vales</button>
+        <button class="dark-mode-btn" id="desconto">Descontos</button>
+        <button class="dark-mode-btn" id="faltas">Faltas</button>
+        <button class="dark-mode-btn" id="log-out">Sair</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <form id="formRegistro">
+          <div id="div-registros-title">
+            <h1 id="registros-title">Gerenciar Registros</h1>
+          </div>
+          <input type="text" id="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
+          <input type="number" id="vendidas" placeholder="Vendas" autocomplete="off" required />
+          <input type="number" id="sobras" placeholder="Sobras" autocomplete="off" required />
+          <button type="submit" class="botao-estiloso" id="add-reg">Adicionar Registro</button>
+        </form>
+
+        <div class="listagem" id="listaRegistros"></div>
+        <!-- Lista de registros -->
+      </div>
+
+      <div id="gerarRelatorio-div">
+        <button id="gerarRelatorio" type="submit" class="botao-estiloso">Gerar relatório</button>
+      </div>
+    </main>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="./js/sweetconfig.js"></script>
+</html>
