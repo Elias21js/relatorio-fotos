@@ -1,7 +1,7 @@
 import { showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
-import { getUserName } from "./user.js";
+import { addVale, getUserName } from "./user.js";
 
 // CRIAR REGISTRO
 {
@@ -70,7 +70,6 @@ import { getUserName } from "./user.js";
           inputAttributes: {
             autoComplete: "off",
           },
-          theme: `dark`,
           confirmButtonText: "Concluir edição",
           denyButtonText: "Remover dia",
           showDenyButton: true,
@@ -96,11 +95,13 @@ import { getUserName } from "./user.js";
             `,
           focusConfirm: false,
           preConfirm: () => {
-            return [
-              document.getElementById("swal-input1").value,
-              document.getElementById("swal-input2").value,
-              document.getElementById("swal-input3").value,
-            ];
+            const swal1 = document.getElementById("swal-input1").value;
+            const swal2 = document.getElementById("swal-input2").value;
+            const swal3 = document.getElementById("swal-input3").value;
+
+            if (swal1.trim() === "" || swal2.trim() === "" || swal3.trim() === "") return false;
+
+            return [swal1, swal2, swal3];
           },
         }).then(({ isConfirmed, isDenied, dismiss, value }) => {
           if (isConfirmed) {
@@ -167,3 +168,62 @@ import { getUserName } from "./user.js";
     });
   });
 }
+
+// ADICIONAR VALES
+
+document.getElementById("vale").addEventListener("click", () => {
+  Swal.fire({
+    title: `Adicionar vale: `,
+    icon: "info",
+    inputAttributes: {
+      autoComplete: "off",
+    },
+    confirmButtonText: "Adicionar",
+    denyButtonText: "Voltar",
+    showDenyButton: true,
+    customClass: {
+      popup: "swal-glass",
+    },
+    reverseButtons: true,
+    html: `
+              <div id="edit-div">
+                <div>
+                    <label for="swal-input1">Data: </label>
+                    <input id="swal-input1" class="swal2-input" autocomplete="off">
+                </div>
+                <div>
+                    <label for="swal-input2">Motivo: </label>
+                    <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
+                </div>
+                <div>
+                    <label for="swal-input3">Valor: </label>
+                    <input id="swal-input3" class="swal2-input" autocomplete="off">
+                </div>
+              </div>
+            `,
+    focusConfirm: false,
+    preConfirm: () => {
+      const data = document.getElementById("swal-input1").value;
+      const motivo = document.getElementById("swal-input2").value;
+      const valor = document.getElementById("swal-input3").value;
+
+      if (!data || data.trim() === "") return false;
+      if (!valor || valor.trim() === "") return false;
+
+      return [data, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
+    },
+  }).then(({ isConfirmed, isDenied, dismiss, value }) => {
+    if (isConfirmed) {
+      if (!value) return;
+      const Arrayed = Array.from(value);
+      console.log(Arrayed);
+      addVale({ data: value[0], motivo: value[1], valor: value[2] });
+    } else if (isDenied) {
+    } else if (dismiss === Swal.DismissReason.cancel) {
+    }
+  });
+});
+
+// ADICIONAR DESCONTOS
+
+// ADICIONAR FOTOS FALTANDO

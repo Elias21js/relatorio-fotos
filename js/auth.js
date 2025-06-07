@@ -129,7 +129,13 @@ btn_register.addEventListener("click", async () => {
 
     try {
       const credentials = await createUserWithEmailAndPassword(auth, email.value, password.value);
-      await setDoc(doc(db, "usuarios", credentials.user.uid), { user: user.value, email: email.value, banca: [] });
+      await setDoc(doc(db, "usuarios", credentials.user.uid), {
+        user: user.value,
+        email: email.value,
+        banca: [],
+        vales: [],
+        descontos: [],
+      });
 
       email.style.display = "none";
 
