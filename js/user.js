@@ -19,7 +19,7 @@ const isLogged = () => {
   const getUserLogged = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
 
   if (!getUserLogged && !getUserLogged.uid) {
-    return (window.location.href = "/auth");
+    return (window.location.href = "/relatorio-fotos/auth");
   }
 };
 
