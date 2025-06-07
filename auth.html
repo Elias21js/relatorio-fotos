@@ -12,17 +12,19 @@
       <div id="title">
         <img src="src/arcanjos-logo-2.png" alt="" />
       </div>
-      <div id="inputs">
-        <input type="text" autocomplete="off" id="user" name="user" placeholder="Usuário" />
-        <input type="text" autocomplete="off" id="email" name="email" placeholder="Email" />
-        <input type="password" autocomplete="off" id="password" name="password" placeholder="Senha" />
-      </div>
-      <div id="buttons">
-        <button type="button" class="btn-auth" id="btn-login">Entrar</button>
-        <button type="button" class="btn-auth" id="btn-register">
-          <span class="btn-text">Registrar</span> <span class="spinner"></span>
-        </button>
-      </div>
+      <form id="auth-form">
+        <div id="inputs">
+          <input type="text" autocomplete="off" id="user" name="user" placeholder="Usuário" />
+          <input type="text" autocomplete="off" id="email" name="email" placeholder="Email" />
+          <input type="password" autocomplete="off" id="password" name="password" placeholder="Senha" />
+        </div>
+        <div id="buttons">
+          <button type="submit" class="btn-auth" id="btn-login">Entrar</button>
+          <button type="submit" class="btn-auth" id="btn-register">
+            <span class="btn-text">Registrar</span> <span class="spinner"></span>
+          </button>
+        </div>
+      </form>
     </main>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

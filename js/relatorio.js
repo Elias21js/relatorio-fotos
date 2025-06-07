@@ -1,68 +1,79 @@
+import { doc, updateDoc } from "firebase/firestore";
 import register from "./registro.js";
+import { getUser } from "./user.js";
+import { db } from "../db/firebase.js";
+import { Toast } from "./toast.js";
+import Registro from "./registro.js";
+import { showSucess, showError } from "./toast.js";
 
 const REGISTRO = {
-  relatorios: {
-    Elias: [],
-    Sarah: [],
-  },
+  relatorios: [],
 
-  theme: localStorage.getItem("theme"),
-  fotografo: localStorage.getItem("fot"),
-
-  showSucess(message) {
-    Swal.fire({
-      title: message,
-      icon: "success",
-      draggable: true,
-      theme: this.theme,
-    });
-  },
-
-  showError(message) {
-    Swal.fire({
-      title: message,
-      icon: "error",
-      draggable: true,
-      theme: this.theme,
-    });
-  },
-
-  fotografoAtual() {
-    if (this.fotografo === "Elias") {
-      return this.relatorios.Elias;
-    } else if (this.fotografo === "Sarah") {
-      return this.relatorios.Sarah;
+  async init() {
+    const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const local = JSON.parse(localStorage.getItem(`banca_${uid}_cache`));
+    if (local) {
+      this.relatorios = local;
+      Toast.fire({ icon: "success", title: "Carregando dados do cache local..." });
     } else {
-      return console.error("Nenhum fotógrafo foi selecionado.");
+      const usuario = await getUser();
+      this.relatorios = usuario?.banca ?? [];
+      Toast.fire({ icon: "success", title: "Carregando dados do servidor..." });
+      this.updateDB();
     }
   },
 
-  trocarFotografo() {
-    this.fotografo = this.fotografo === "Elias" ? "Sarah" : "Elias";
-    localStorage.setItem("fot", this.fotografo);
-    this.carregarDoStorage();
-    this.atualizarLista();
+  async updateDB() {
+    const user = JSON.parse(localStorage.getItem("userLoggedIn"));
+    if (!user) return;
+
+    console.log(user);
+
+    const userRef = doc(db, "usuarios", user.uid);
+    try {
+      await updateDoc(userRef, {
+        banca: this.relatorios.map((reg) => {
+          if (reg instanceof Registro) return reg.toJSON();
+
+          return reg;
+        }),
+      });
+
+      localStorage.setItem(
+        `banca_${user.uid}_cache`,
+        JSON.stringify(
+          this.relatorios.map((reg) => {
+            if (reg instanceof Registro) return reg.toJSON();
+
+            return reg;
+          })
+        )
+      );
+    } catch (err) {
+      Toast.fire({ icon: "error", title: "⚠️ Erro ao salvar no database." });
+      console.log(err);
+    }
   },
 
-  adicionarDia(day) {
-    const dayExists = this.relatorios[this.fotografo].find((day_in) => day_in.data === day.data);
+  async adicionarDia(day) {
+    const dayExists = this.relatorios.find((day_in) => day_in.data === day.data);
     console.log(dayExists);
 
     if (!dayExists) {
-      this.relatorios[this.fotografo].push(day);
+      this.relatorios.push(day);
+      await this.updateDB();
+
       const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
       this.ordernar(campo, ordem);
       this.atualizarLista();
 
-      this.showSucess("Registro adicionado com sucesso!");
+      showSucess("Registro adicionado com sucesso!");
     } else {
-      this.showError(`Este dia já foi anteriormente adicionado, tente editá-lo.`);
+      showError(`Este dia já foi anteriormente adicionado, tente editá-lo.`);
     }
   },
 
   atualizarLista() {
-    this.salvarNoStorage();
-
     const lista = document.getElementById("listaRegistros");
     lista.innerHTML = "";
 
@@ -79,7 +90,9 @@ const REGISTRO = {
 
     const btn_relatorio = document.getElementById("gerarRelatorio");
 
-    this.relatorios[this.fotografo].forEach((day) => {
+    console.log(this.relatorios);
+
+    this.relatorios.forEach((day) => {
       const criarRegistro = document.createElement("div");
       criarRegistro.className = "registro div-estilosa";
 
@@ -125,7 +138,7 @@ const REGISTRO = {
       lista.appendChild(criarRegistro);
     });
 
-    if (this.relatorios[this.fotografo].length < 1) {
+    if (this.relatorios.length < 1) {
       btn_relatorio.style.display = "none";
     } else {
       btn_relatorio.style.display = "block";
@@ -153,10 +166,10 @@ const REGISTRO = {
   },
 
   editarDia({ id, data, vendas, sobras }) {
-    if (!data || !vendas || !sobras) return this.showError("Você deve inserir uma data, as vendas e as sobras.");
+    if (!data || !vendas || !sobras) return showError("Você deve inserir uma data, as vendas e as sobras.");
 
     // verifica se já existe um dia com a mesma data
-    const dataFind = this.relatorios[this.fotografo].find((dia) => dia.data === data);
+    const dataFind = this.relatorios.find((dia) => dia.data === data);
     const idExists = dataFind?.id === id;
 
     if ((dataFind && idExists) || (!dataFind && !idExists)) {
@@ -168,51 +181,28 @@ const REGISTRO = {
       this.ordernar(campo, ordem);
       this.atualizarLista();
 
-      return this.showSucess(`Registro alterado com sucesso.`);
+      return showSucess(`Registro alterado com sucesso.`);
     } else {
-      return this.showError("Já existe um registro com esta data no relatório.");
+      return showError("Já existe um registro com esta data no relatório.");
     }
   },
 
   getId(date) {
     const cutDate = date.split(" ");
-    const ifExists = this.relatorios[this.fotografo].find((item) => item.data === cutDate[0]);
+    const ifExists = this.relatorios.find((item) => item.data === cutDate[0]);
     return ifExists ? ifExists.id : false;
   },
 
   removerRegistro(id) {
     console.log(id);
-    const index = this.relatorios[this.fotografo].findIndex((reg) => reg.id === id);
-    this.relatorios[this.fotografo].splice(index, 1);
+    const index = this.relatorios.findIndex((reg) => reg.id === id);
+    this.relatorios.splice(index, 1);
+    this.updateDB();
     this.atualizarLista();
   },
 
-  salvarNoStorage() {
-    localStorage.setItem(`relatorio_${this.fotografo}`, JSON.stringify(this.relatorios[this.fotografo]));
-  },
-
-  carregarDoStorage() {
-    const dados = localStorage.getItem(`relatorio_${this.fotografo}`);
-    // {
-    //   const title = document.getElementById("registros-title");
-    //   if (localStorage.getItem("fot") == "Sarah") {
-    //     title.innerText = "";
-    //     title.innerText = `Gerenciar registros da Sarah.`;
-    //   } else {
-    //     title.innerText = "";
-    //     title.innerText = `Gerenciar registros do Elias.`;
-    //   }
-    // }
-
-    if (dados != undefined) {
-      return (this.relatorios[this.fotografo] = JSON.parse(dados));
-    } else {
-      return (this.relatorios[this.fotografo] = []);
-    }
-  },
-
   ordernar(campo, ordem) {
-    this.relatorios[this.fotografo].sort((a, b) => {
+    this.relatorios.sort((a, b) => {
       let valorA, valorB;
 
       if (campo.toLowerCase() === "data") {
@@ -238,7 +228,7 @@ const REGISTRO = {
       return ordem === "Maior" ? valorB - valorA : valorA - valorB;
     });
 
-    console.log(this.relatorios[this.fotografo]);
+    console.log(this.relatorios);
     this.atualizarLista();
   },
 };

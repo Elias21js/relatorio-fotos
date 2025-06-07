@@ -2,10 +2,6 @@
 
 import REGISTRO from "./relatorio.js";
 
-document.getElementById("change-fot").addEventListener("click", () => {
-  REGISTRO.trocarFotografo();
-});
-
 const date = document.getElementById("data");
 const vendas = document.getElementById("vendidas");
 const sobras = document.getElementById("sobras");

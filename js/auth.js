@@ -1,6 +1,7 @@
 import { auth, db } from "../db/firebase.js";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { Toast } from "./toast.js";
 
 const user = document.getElementById("user");
 const email = document.getElementById("email");
@@ -12,6 +13,10 @@ function isEmpty({ value: nome }, { value: senha }) {
   }
   return false;
 }
+
+document.getElementById("auth-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+});
 
 document.getElementById("btn-login").addEventListener("click", async () => {
   if (isEmpty(user, password))
@@ -124,7 +129,7 @@ btn_register.addEventListener("click", async () => {
 
     try {
       const credentials = await createUserWithEmailAndPassword(auth, email.value, password.value);
-      await setDoc(doc(db, "usuarios", credentials.user.uid), { user: user.value, email: email.value });
+      await setDoc(doc(db, "usuarios", credentials.user.uid), { user: user.value, email: email.value, banca: [] });
 
       email.style.display = "none";
 
@@ -149,25 +154,13 @@ btn_register.addEventListener("click", async () => {
         });
       } else {
         activeBtn();
-        console.err(err.message);
+        console.error(err.message);
       }
     }
   } catch (err) {
     activeBtn();
-    console.error("abaixo", err.message);
+    console.log("linha 158, auth.js", err.message);
   }
-});
-
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.onmouseenter = Swal.stopTimer;
-    toast.onmouseleave = Swal.resumeTimer;
-  },
 });
 
 document.addEventListener("DOMContentLoaded", () => {

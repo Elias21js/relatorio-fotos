@@ -9,4 +9,15 @@ export default class Registro {
     this.producao = parseInt(this.vendas) + parseInt(this.sobras);
     this.aprov = ((parseFloat(this.vendas) / this.producao) * 100).toFixed(2);
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      data: this.data,
+      vendas: this.vendas,
+      sobras: this.sobras,
+      producao: this.producao,
+      aprov: this.aprov,
+    };
+  }
 }

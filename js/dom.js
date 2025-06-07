@@ -1,5 +1,7 @@
+import { showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
+import { getUserName } from "./user.js";
 
 // CRIAR REGISTRO
 {
@@ -34,7 +36,7 @@ import REGISTRO from "./relatorio.js";
         title: `Filtrar ${element.textContent}`,
         text: "Selecione uma das opções a ser filtrada",
         input: "radio",
-        theme: localStorage.getItem("theme"),
+        theme: "dark",
         inputOptions,
         inputValidator: (value) => {
           if (!value) {
@@ -68,10 +70,13 @@ import REGISTRO from "./relatorio.js";
           inputAttributes: {
             autoComplete: "off",
           },
-          theme: `${localStorage.getItem("theme")}`,
+          theme: `dark`,
           confirmButtonText: "Concluir edição",
           denyButtonText: "Remover dia",
           showDenyButton: true,
+          customClass: {
+            popup: "swal-glass",
+          },
           reverseButtons: true,
           html: `
               <div id="edit-div">
@@ -111,19 +116,9 @@ import REGISTRO from "./relatorio.js";
           } else if (isDenied) {
             REGISTRO.removerRegistro(REGISTRO.getId(data));
 
-            Swal.fire({
-              title: "Dia removido!",
-              text: `Dia ${data} removido.`,
-              theme: localStorage.getItem("theme"),
-              icon: "success",
-            });
+            showSucess(`Dia ${data} removido.`);
           } else if (dismiss === Swal.DismissReason.cancel) {
-            Swal.fire({
-              title: "Cancelado",
-              text: "O dia não foi editado.",
-              theme: localStorage.getItem("theme"),
-              icon: "error",
-            });
+            showError("O dia não foi editado.");
           }
         });
       });
@@ -135,14 +130,9 @@ import REGISTRO from "./relatorio.js";
 
 {
   document.getElementById("gerarRelatorio").addEventListener("click", () => {
-    if (REGISTRO.relatorios[REGISTRO.fotografo].length === 0)
-      return Swal.fire({
-        title: "Não há registros para gerar relatório",
-        icon: "error",
-        theme: localStorage.getItem("theme"),
-      });
+    if (REGISTRO.relatorios.length === 0) return showError("Não há registros para gerar relatório");
 
-    const newRelatory = REGISTRO.relatorios[REGISTRO.fotografo].reduce(
+    const newRelatory = REGISTRO.relatorios.reduce(
       (ac, item) => {
         ac.sumDatas += 1;
         ac.sumVendas += parseInt(item.vendas);
@@ -156,8 +146,11 @@ import REGISTRO from "./relatorio.js";
     );
 
     Swal.fire({
-      title: `📸 Relatório Geral do(a) ${REGISTRO.fotografo}`,
-      theme: localStorage.getItem("theme"),
+      title: `📸 Relatório Geral do(a) ${getUserName()}`,
+      width: "30vw",
+      customClass: {
+        popup: "rela-geral swal-glass",
+      },
       html: `
         <div class="rela-div">
           <ul class="ul-rela">
