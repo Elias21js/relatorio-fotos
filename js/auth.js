@@ -57,7 +57,7 @@ document.getElementById("btn-login").addEventListener("click", async () => {
     });
 
     setTimeout(() => {
-      window.location.href = "/relatorio-fotos/";
+      window.location.href = "/relatorio-fotos/index.html";
     }, 500);
   } catch (err) {
     if (err.code === "auth/invalid-credential" || err.code === "auth/wrong-password") {
@@ -173,6 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const getUserLogged = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
 
   if (getUserLogged && getUserLogged.uid) {
-    window.location.href = "/relatorio-fotos/";
+    window.location.href = "/relatorio-fotos/index.html";
   }
 });

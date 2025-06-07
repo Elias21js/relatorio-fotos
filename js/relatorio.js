@@ -10,6 +10,7 @@ const REGISTRO = {
   relatorios: [],
 
   async init() {
+    if (!localStorage.getItem("userLoggedIn")) return;
     const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
     const local = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)) ?? [];
     const localVales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];

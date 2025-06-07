@@ -17,9 +17,10 @@ export const getUser = async () => {
 
 const isLogged = () => {
   const getUserLogged = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
+  const atual = window.location.pathname;
 
-  if (!getUserLogged && !getUserLogged.uid) {
-    return (window.location.href = "/relatorio-fotos/auth");
+  if (!getUserLogged && !getUserLogged.uid && !atual.includes("auth")) {
+    return (window.location.href = "/auth");
   }
 };
 
