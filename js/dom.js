@@ -1,7 +1,7 @@
 import { showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
-import { addVale, getUserName } from "./user.js";
+import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
 
 // CRIAR REGISTRO
 {
@@ -130,8 +130,18 @@ import { addVale, getUserName } from "./user.js";
 // GERAR RELATÓRIO
 
 {
-  document.getElementById("gerarRelatorio").addEventListener("click", () => {
+  document.getElementById("gerarRelatorio").addEventListener("click", async () => {
     if (REGISTRO.relatorios.length === 0) return showError("Não há registros para gerar relatório");
+
+    const { vales, descontos, faltas } = await getUserBanca();
+
+    const sumVales = vales.reduce((ac, i) => ac + parseFloat(i.valor), 0);
+    const sumDescontos = descontos.reduce((ac, i) => {
+      if (i.motivo === "Foto Ausente") return ac + 15 * parseInt(i.fotos);
+
+      return ac + parseFloat(i.valor);
+    }, 0);
+    const sumFaltas = faltas.reduce((ac, i) => ac + parseInt(i.fotos), 0);
 
     const newRelatory = REGISTRO.relatorios.reduce(
       (ac, item) => {
@@ -156,11 +166,15 @@ import { addVale, getUserName } from "./user.js";
         <div class="rela-div">
           <ul class="ul-rela">
             <li><strong>📅 Dias Trabalhados:</strong> ${newRelatory.sumDatas}</li>
-            <li><strong>💰 Ganho Total:</strong> R$ ${newRelatory.ganho},00</li>
-            <li><strong>🛒 Vendas Totais:</strong> ${newRelatory.sumVendas}</li>
+            <li><strong>💸 Salário Bruto:</strong> R$ ${newRelatory.ganho}</li>
+            <li><strong>🧾 Salário Líquido:</strong> R$ ${newRelatory.ganho - sumDescontos}</li>
+            <li><strong>🛍️ Vendas Totais:</strong> ${newRelatory.sumVendas}</li>
             <li><strong>📦 Sobras:</strong> ${newRelatory.sumSobras}</li>
             <li><strong>🏭 Produção:</strong> ${newRelatory.sumProd}</li>
-            <li><strong>📈 Aproveitamento:</strong> ${newRelatory.sumAprov}%</li>
+            <li><strong>🎟️ Vales:</strong> R$ ${sumVales}</li>
+            <li><strong>📉 Descontos:</strong> R$ ${sumDescontos}</li>
+            <li><strong>📸 Fotos perdidas:</strong> ${sumFaltas}</li>
+            <li><strong>📊 Aproveitamento:</strong> ${newRelatory.sumAprov}%</li>
           </ul>
         </div>
       `,
@@ -226,4 +240,105 @@ document.getElementById("vale").addEventListener("click", () => {
 
 // ADICIONAR DESCONTOS
 
+document.getElementById("desconto").addEventListener("click", () => {
+  Swal.fire({
+    title: `Adicionar desconto: `,
+    icon: "info",
+    inputAttributes: {
+      autoComplete: "off",
+    },
+    confirmButtonText: "Adicionar",
+    denyButtonText: "Voltar",
+    showDenyButton: true,
+    customClass: {
+      popup: "swal-glass",
+    },
+    reverseButtons: true,
+    html: `
+              <div id="edit-div">
+                <div>
+                    <label for="swal-input1">Data: </label>
+                    <input id="swal-input1" class="swal2-input" autocomplete="off">
+                </div>
+                <div>
+                    <label for="swal-input2">Motivo: </label>
+                    <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
+                </div>
+                <div>
+                    <label for="swal-input3">Valor: </label>
+                    <input id="swal-input3" class="swal2-input" autocomplete="off">
+                </div>
+              </div>
+            `,
+    focusConfirm: false,
+    preConfirm: () => {
+      const data = document.getElementById("swal-input1").value;
+      const motivo = document.getElementById("swal-input2").value;
+      const valor = document.getElementById("swal-input3").value;
+
+      if (!data || data.trim() === "") return false;
+      if (!valor || valor.trim() === "") return false;
+
+      return [data, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
+    },
+  }).then(({ isConfirmed, isDenied, dismiss, value }) => {
+    if (isConfirmed) {
+      if (!value) return;
+      const Arrayed = Array.from(value);
+      console.log(Arrayed);
+      addDesconto({ data: value[0], motivo: value[1], valor: value[2] });
+    } else if (isDenied) {
+    } else if (dismiss === Swal.DismissReason.cancel) {
+    }
+  });
+});
+
 // ADICIONAR FOTOS FALTANDO
+
+document.getElementById("faltas").addEventListener("click", () => {
+  Swal.fire({
+    title: `Registrar Foto Perdida: `,
+    icon: "info",
+    inputAttributes: {
+      autoComplete: "off",
+    },
+    confirmButtonText: "Adicionar",
+    denyButtonText: "Voltar",
+    showDenyButton: true,
+    customClass: {
+      popup: "swal-glass",
+    },
+    reverseButtons: true,
+    html: `
+              <div id="edit-div">
+                <div>
+                    <label for="swal-input1">Data: </label>
+                    <input id="swal-input1" class="swal2-input" autocomplete="off">
+                </div>
+                <div>
+                    <label for="swal-input2">Fotos: </label>
+                    <input id="swal-input2" class="swal2-input" autocomplete="off">
+                </div>
+              </div>
+            `,
+    focusConfirm: false,
+    preConfirm: () => {
+      const data = document.getElementById("swal-input1").value;
+      const fotos = document.getElementById("swal-input2").value;
+
+      if (!data || data.trim() === "") return false;
+      if (!fotos || fotos.trim() === "") return false;
+
+      return [data, fotos];
+    },
+  }).then(({ isConfirmed, isDenied, dismiss, value }) => {
+    if (isConfirmed) {
+      if (!value) return;
+      const Arrayed = Array.from(value);
+      console.log(Arrayed);
+      addFaltas({ data: value[0], fotos: value[1] });
+    } else if (isDenied) {
+    } else if (dismiss === Swal.DismissReason.cancel) {
+    }
+  });
+});

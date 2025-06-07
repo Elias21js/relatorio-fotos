@@ -1,5 +1,8 @@
 // Trocar os fotógrafos.
 
+import isEqual from "lodash/isEqual";
+import { hash } from "object-hash";
+
 import REGISTRO from "./relatorio.js";
 
 const date = document.getElementById("data");
@@ -66,3 +69,7 @@ sobras.addEventListener("input", (event) => {
     }
   }
 });
+
+export function isExactly(arr1, arr2) {
+  return isEqual(arr1, arr2);
+}

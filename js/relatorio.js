@@ -1,26 +1,41 @@
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import register from "./registro.js";
-import { getUser } from "./user.js";
 import { db } from "../db/firebase.js";
 import { Toast } from "./toast.js";
 import Registro from "./registro.js";
 import { showSucess, showError } from "./toast.js";
+import { isExactly } from "./script.js";
 
 const REGISTRO = {
   relatorios: [],
 
   async init() {
     const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
-    const local = JSON.parse(localStorage.getItem(`banca_${uid}_cache`));
-    if (local) {
+    const local = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)) ?? [];
+    const localVales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];
+    const localDescontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
+
+    const { banca, vales, descontos } = (await getDoc(doc(db, "usuarios", uid))).data();
+    console.log("Ln 20, relatorio.js: ", banca, local);
+    console.log("Ln 21, relatorio.js: ", vales, localVales);
+    console.log("Ln 22, relatorio.js: ", descontos, localDescontos);
+
+    if (isExactly(banca, local) && isExactly(vales, localVales) && isExactly(descontos, localDescontos)) {
+      Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
       this.relatorios = local;
-      Toast.fire({ icon: "success", title: "Carregando dados do cache local..." });
     } else {
-      const usuario = await getUser();
-      this.relatorios = usuario?.banca ?? [];
+      this.relatorios = banca;
+      console.log("Ln 27, relatorio.js - init()", this.relatorios);
+
+      if (!isExactly(banca, local)) localStorage.setItem(`banca_${uid}_cache`, JSON.stringify(banca));
+      if (!isExactly(vales, localVales)) localStorage.setItem(`vales_${uid}_cache`, JSON.stringify(vales ?? []));
+      if (!isExactly(descontos, localDescontos))
+        localStorage.setItem(`descontos_${uid}_cache`, JSON.stringify(descontos ?? []));
       Toast.fire({ icon: "success", title: "Carregando dados do servidor..." });
-      this.updateDB();
     }
+
+    const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
+    this.ordernar(campo, ordem);
   },
 
   async updateDB() {
@@ -55,7 +70,7 @@ const REGISTRO = {
     }
   },
 
-  async adicionarDia(day) {
+  async adicionarDia(day, edit = false) {
     const dayExists = this.relatorios.find((day_in) => day_in.data === day.data);
     console.log(dayExists);
 
@@ -67,7 +82,7 @@ const REGISTRO = {
       this.ordernar(campo, ordem);
       this.atualizarLista();
 
-      showSucess("Registro adicionado com sucesso!");
+      if (!edit) showSucess("Registro adicionado com sucesso!");
     } else {
       showError(`Este dia já foi anteriormente adicionado, tente editá-lo.`);
     }
@@ -175,7 +190,7 @@ const REGISTRO = {
     if ((dataFind && idExists) || (!dataFind && !idExists)) {
       this.removerRegistro(id);
 
-      this.adicionarDia(new register(this.converterData(data), vendas, sobras));
+      this.adicionarDia(new register(this.converterData(data), vendas, sobras), true);
 
       const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
       this.ordernar(campo, ordem);

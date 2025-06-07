@@ -51,16 +51,53 @@ export const addVale = async (newVale) => {
     await updateDoc(doc(db, "usuarios", user.uid), {
       vales: [...vales, newVale],
     });
+
+    localStorage.setItem(`vales_${user.uid}_cache`, JSON.stringify([...vales, newVale]));
+    addDesconto(newVale, "vales");
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const addDesconto = async (newDesconto, reason = false) => {
+  const user = JSON.parse(localStorage.getItem("userLoggedIn") ?? false);
+  if (!user) return false;
+  try {
+    const { descontos } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+
+    await updateDoc(doc(db, "usuarios", user.uid), {
+      descontos: [...descontos, newDesconto],
+    });
+
+    localStorage.setItem(`descontos_${user.uid}_cache`, JSON.stringify([...descontos, newDesconto]));
   } catch (err) {
     console.error(err);
   }
 
-  Toast.fire({ icon: "success", title: "Vales atualizados no banco de dados." });
+  if (reason === "faltas") {
+    Toast.fire({ icon: "success", title: "Faltas atualizadas no banco de dados." });
+  } else if (reason === "vales") {
+    Toast.fire({ icon: "success", title: "Vales atualizados no banco de dados." });
+  } else {
+    Toast.fire({ icon: "success", title: "Descontos atualizados no banco de dados." });
+  }
 };
 
-export const addDesconto = async () => {};
+export const addFaltas = async ({ data, fotos }) => {
+  addDesconto({ data, motivo: "Foto Ausente", fotos }, "faltas");
+};
 
-export const faltas = async () => {};
+export const getUserBanca = async () => {
+  const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+  const vales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];
+  const descontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
+  const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
+
+  console.log("Ln 93, vales - user.js", vales);
+  console.log("Ln 94, descontos - user.js", descontos);
+  console.log("Ln 95, faltas - user.js", faltas);
+  return { vales, descontos, faltas };
+};
 
 document.getElementById("log-out").addEventListener("click", logOut);
 document.addEventListener("DOMContentLoaded", isLogged);

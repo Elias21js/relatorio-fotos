@@ -8,12 +8,12 @@ import { getAuth, signOut } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyACJt2URmcDfA_5XZTaGaa3epN-3-jLOaM",
-  authDomain: "relatorio-fotos.firebaseapp.com",
-  projectId: "relatorio-fotos",
-  storageBucket: "relatorio-fotos.firebasestorage.app",
-  messagingSenderId: "325899048419",
-  appId: "1:325899048419:web:ba9f4af22e7cdc9f5cfcd6",
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECTID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_FIREBASE_APPID,
 };
 
 // Initialize Firebase
