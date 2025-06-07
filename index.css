@@ -366,14 +366,6 @@ button {
 }
 
 @media screen and (max-width: 600px) {
-  main {
-    background-image: url("./src/desktop-2.jpg");
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
-
   .registro {
     flex-direction: column;
     gap: 0.8rem;
