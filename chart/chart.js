@@ -74,15 +74,27 @@ export const renderDoughnut = (producao, vendas, sobras) => {
   });
 };
 
+const getOrdenedBanca = (banca) => {
+  const bancaOrdenada = banca.sort((a, b) => {
+    const [diaA, mesA] = a.data.split("/").map(Number);
+    const [diaB, mesB] = b.data.split("/").map(Number);
+    return new Date(2025, mesA - 1, diaA) - new Date(2025, mesB - 1, diaB);
+  });
+
+  const vendas = bancaOrdenada.map((v) => v.vendas);
+  const datas = bancaOrdenada.map((d) => d.data);
+  const sobras = bancaOrdenada.map((s) => s.sobras);
+  const producao = bancaOrdenada.map((p) => parseInt(p.vendas) + parseInt(p.sobras));
+
+  return { vendas, datas, sobras, producao };
+};
+
 export const renderLine = async () => {
   const ctx = document.getElementById("line-chart").getContext("2d");
   const element = document.getElementById("line-chart");
 
   const { banca } = await getUserBanca();
-  const vendas = banca.map((v) => v.vendas);
-  const datas = banca.map((d) => d.data);
-  const sobras = banca.map((s) => s.sobras);
-  const producao = banca.map((p) => p.vendas + p.sobras);
+  const { vendas, datas, sobras, producao } = getOrdenedBanca(banca);
 
   if (vendas.length < 5) {
     element.style.display = "none";
@@ -214,10 +226,7 @@ export const renderBar = async () => {
   const element = document.getElementById("bar-chart");
 
   const { banca } = await getUserBanca();
-  const vendas = banca.map((v) => v.vendas);
-  const sobras = banca.map((s) => s.sobras);
-  const producao = banca.map((p) => parseInt(p.vendas) + parseInt(p.sobras));
-  const datas = banca.map((d) => d.data);
+  const { vendas, datas, sobras, producao } = getOrdenedBanca(banca);
 
   if (vendas.length < 5) {
     element.style.display = "none";
