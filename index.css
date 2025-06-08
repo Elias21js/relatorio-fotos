@@ -530,7 +530,7 @@ button {
   backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
   color: white;
   padding-top: 4rem;
-  width: 300px;
+  width: clamp(300px, 85vw, 500px);
   padding-bottom: 4rem;
   border-top-left-radius: 15rem;
   border-bottom-right-radius: 15rem;
