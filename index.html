@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="/relatorio-fotos/assets/favicon-BYJlRSnv.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/relatorio-fotos/assets/favicon-BYJlRSnv.png" type="image/x-icon" />
     <title>Relatório do Mês.</title>
-    <script type="module" crossorigin src="/relatorio-fotos/assets/main-BftSRVwF.js"></script>
+    <script type="module" crossorigin src="/relatorio-fotos/assets/main-BH7C1B27.js"></script>
     <link rel="modulepreload" crossorigin href="/relatorio-fotos/assets/toast-BI0ik4SD.js">
-    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/main-D0ql3tsW.css">
+    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/main-CrOWnsV2.css">
   </head>
   <body>
     <header>
@@ -41,8 +41,15 @@
 
       <div id="gerarRelatorio-div">
         <button id="gerarRelatorio" type="submit" class="botao-estiloso">Gerar relatório</button>
+        <button id="gerarGraficos" type="submit" class="botao-estiloso">Mostrar gráficos</button>
+      </div>
+
+      <div id="charts">
+        <canvas id="doughnut-chart" width="500" height="500"></canvas>
+        <canvas id="line-chart" width="1200" height="800" style="width: 1200px; height: 800px"></canvas>
+        <canvas id="bar-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
       </div>
     </main>
   </body>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
