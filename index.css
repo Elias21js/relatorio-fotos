@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
-:root {
-  --bg-color: #f5f5f5;
-  --text-color: #333;
-  --card-color: #fff;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -20,7 +14,7 @@ html {
 }
 
 body {
-  color: var(--text-color);
+  color: white;
   min-height: 100vh;
   background-image: url("./src/desktop-4.webp");
   background-size: cover;
@@ -28,10 +22,6 @@ body {
   background-position: center;
   background-attachment: fixed;
   transition: background 0.3s, color 0.3s;
-
-  --bg-color: #121212;
-  --text-color: #f5f5f5;
-  --card-color: #1e1e1e;
 
   &.swal2-shown {
     padding-right: 0px !important;
@@ -59,6 +49,20 @@ header {
     align-items: center;
     justify-content: center;
     column-gap: 2rem;
+
+    & .btns-header {
+      padding: 1.2rem 2.4rem;
+      outline: none;
+      border: 2px solid white;
+      color: white;
+
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-top-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+      cursor: pointer;
+      background-color: transparent;
+    }
   }
 }
 
@@ -90,6 +94,9 @@ main {
 
       & #div-registros-title {
         margin: 2rem 0;
+        & h1 {
+          font-size: clamp(0.5rem, 4.9vw, 2rem);
+        }
       }
 
       & input {
@@ -104,10 +111,10 @@ main {
         backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
         border: 1px solid rgba(255, 255, 255, 0.2); /* Contorninho elegante */
         color: var(--text-color);
-        outline: 1px solid rgba(6, 5, 5, 0.366);
+        outline: none;
 
         &::placeholder {
-          color: var(--text-color);
+          color: rgba(255, 255, 255, 0.589);
         }
       }
 
@@ -119,7 +126,6 @@ main {
         border-bottom-right-radius: 15rem;
         font-size: 1.6rem;
         width: 50%;
-        background-color: #4caf50;
         color: white;
         border: none;
         cursor: pointer;
@@ -174,12 +180,13 @@ main {
   padding: 1.5rem 3rem;
   font-size: 1.8rem;
   color: #fff;
-  background: linear-gradient(135deg, #962afc, #e377c3);
+  background: transparent;
   border: none;
   border-radius: 5rem;
+  outline: none;
   cursor: pointer;
   overflow: hidden;
-  transition: background 0.3s, transform 0.3s;
+  transition: background 0.7s, transform 0.7s;
   box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.3);
 }
 
@@ -199,9 +206,13 @@ main {
   left: 100%;
 }
 
+.botao-estiloso:focus {
+  animation: pulso 0.6s ease-in-out;
+}
+
 .botao-estiloso:hover {
   transform: scale(1.03);
-  background: linear-gradient(135deg, #a777e3, #6e8efb);
+  background: linear-gradient(135deg, #e37777, #fb6eef);
 }
 
 .botao-estiloso:active {
@@ -328,7 +339,7 @@ button {
   text-align: right;
 }
 
-.dark-mode-btn {
+/* .dark-mode-btn {
   background: none;
   border: 0.2rem solid var(--text-color);
   color: var(--text-color);
@@ -336,7 +347,7 @@ button {
   border-radius: 0.5rem;
   cursor: pointer;
   font-weight: bold;
-}
+} */
 
 .swal2-popup {
   font-size: 1.2rem;
@@ -352,6 +363,7 @@ button {
 
 .rela-div {
   margin-top: 4rem;
+  font-size: clamp(1rem, 4vw, 5rem);
 }
 
 .swal2-popup .ul-rela {
@@ -366,10 +378,6 @@ button {
 }
 
 @media screen and (max-width: 600px) {
-  .registro {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
 }
 
 @media screen and (max-width: 750px) {
@@ -428,21 +436,69 @@ button {
           display: flex;
           align-items: center;
           justify-content: center;
+          flex-direction: column;
+          gap: 0.8rem;
+
+          &.div-estilosa::before,
+          &.div-estilosa:hover::before,
+          &.div-estilosa span {
+            all: unset;
+          }
+
+          &.div-estilosa {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: center;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 500;
+          }
+
+          &.div-estilosa:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+          }
+
+          &.div-estilosa span:first-child {
+            font-size: 1.45rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+          }
+
+          &.div-estilosa span:not(:first-child) {
+            font-size: 1.3rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.7rem;
+            border-radius: 10px;
+          }
+
+          & span:nth-child(1)::before {
+            content: "📅 ";
+          }
 
           & span:nth-child(2)::before {
-            content: "Vendas: ";
+            content: "🛒 Vendas: ";
           }
 
           & span:nth-child(3)::before {
-            content: "Sobras: ";
+            content: "🍞 Sobras: ";
           }
 
           & span:nth-child(4)::before {
-            content: "Produção: ";
+            content: "🏭 Produção: ";
           }
 
           & span:nth-child(5)::before {
-            content: "Aproveitamento: ";
+            content: "📈 Aproveitamento: ";
           }
         }
       }
@@ -473,6 +529,42 @@ button {
   background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
   backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
   color: white;
+  padding-top: 4rem;
+  width: 300px;
+  padding-bottom: 4rem;
   border-top-left-radius: 15rem;
   border-bottom-right-radius: 15rem;
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 10px rgba(129, 140, 248, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0);
+  }
+}
+
+.animado:hover {
+  animation: pulso 0.6s ease-in-out;
+}
+
+.animado:focus {
+  animation: pulso 0.6s ease-in-out;
+}
+
+@media screen and (max-width: 390px) {
+  .rela-title {
+    font-size: 4vw;
+  }
+
+  .swal2-popup .ul-rela {
+    font-size: 4vw;
+  }
 }

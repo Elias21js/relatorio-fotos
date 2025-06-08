@@ -158,8 +158,9 @@ import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./us
 
     Swal.fire({
       title: `📸 Relatório Geral do(a) ${getUserName()}`,
-      width: "30vw",
+      width: "clamp(265px, 90vw, 500px)",
       customClass: {
+        title: "rela-title",
         popup: "rela-geral swal-glass",
       },
       html: `
