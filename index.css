@@ -323,6 +323,8 @@ button {
   align-items: center;
   justify-content: center;
   margin-top: 4rem;
+  column-gap: 4rem;
+  row-gap: 4rem;
 
   & button {
     font-size: 1.6rem;
@@ -566,5 +568,9 @@ button {
 
   .swal2-popup .ul-rela {
     font-size: 4vw;
+  }
+
+  #gerarRelatorio-div {
+    flex-direction: column;
   }
 }

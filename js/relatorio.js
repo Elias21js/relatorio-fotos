@@ -108,6 +108,8 @@ const REGISTRO = {
 
     console.log(this.relatorios);
 
+    document.getElementById("charts").style.display = "none";
+
     this.relatorios.forEach((day) => {
       const criarRegistro = document.createElement("div");
       criarRegistro.className = "registro div-estilosa";
@@ -156,8 +158,10 @@ const REGISTRO = {
 
     if (this.relatorios.length < 1) {
       btn_relatorio.style.display = "none";
+      document.getElementById("gerarGraficos").style.display = "none";
     } else {
       btn_relatorio.style.display = "block";
+      document.getElementById("gerarGraficos").style.display = "block";
     }
   },
 

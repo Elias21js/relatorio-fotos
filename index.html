@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="src/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="./chart/chart.css" />
     <title>Relatório do Mês.</title>
   </head>
   <body>
@@ -39,10 +40,18 @@
 
       <div id="gerarRelatorio-div">
         <button id="gerarRelatorio" type="submit" class="botao-estiloso">Gerar relatório</button>
+        <button id="gerarGraficos" type="submit" class="botao-estiloso">Mostrar gráficos</button>
+      </div>
+
+      <div id="charts">
+        <canvas id="doughnut-chart" width="500" height="500"></canvas>
+        <canvas id="line-chart" width="1200" height="800" style="width: 1200px; height: 800px"></canvas>
+        <canvas id="bar-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
       </div>
     </main>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="./chart/chart.js"></script>
   <script type="module" src="./js/sweetconfig.js"></script>
   <script type="module" src="js/user.js"></script>
   <script type="module" src="./js/script.js"></script>

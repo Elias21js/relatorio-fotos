@@ -90,6 +90,9 @@ export const addFaltas = async ({ data, fotos }) => {
 
 export const getUserBanca = async () => {
   const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+  const banca = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)) ?? [];
+  const vendas = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)).reduce((ac, i) => ac + parseInt(i.vendas), 0);
+  const sobras = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)).reduce((ac, i) => ac + parseInt(i.sobras), 0);
   const vales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];
   const descontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
   const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
@@ -97,7 +100,7 @@ export const getUserBanca = async () => {
   console.log("Ln 93, vales - user.js", vales);
   console.log("Ln 94, descontos - user.js", descontos);
   console.log("Ln 95, faltas - user.js", faltas);
-  return { vales, descontos, faltas };
+  return { banca, vendas, sobras, vales, descontos, faltas };
 };
 
 document.getElementById("log-out").addEventListener("click", logOut);

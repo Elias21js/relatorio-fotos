@@ -2,6 +2,7 @@ import { showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
+import { renderBar, renderDoughnut, renderLine } from "../chart/chart.js";
 
 // CRIAR REGISTRO
 {
@@ -181,6 +182,20 @@ import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./us
       `,
       confirmButtonText: "Fechar",
     });
+  });
+}
+
+// GERAR GRÁFICOS
+
+{
+  document.getElementById("gerarGraficos").addEventListener("click", async () => {
+    const { banca, vendas, sobras } = await getUserBanca();
+    renderDoughnut(vendas + sobras, vendas, sobras);
+    renderLine(banca);
+    renderBar();
+    document.getElementById("charts").style.display = "flex";
+
+    // renderDoughnut();
   });
 }
 

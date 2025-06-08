@@ -1,0 +1,21 @@
+#charts {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+
+  row-gap: 10rem;
+  margin-top: 10rem;
+
+  & #doughnut-chart {
+    max-width: 500px;
+    max-height: 500px;
+    display: block;
+    aspect-ratio: 1 / 1; /* garante proporção quadrada, evita distorção */
+  }
+
+  & #line-chart {
+    max-width: 1200px;
+    max-height: 800px;
+  }
+}
