@@ -1,11 +1,20 @@
 #charts {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-flow: column nowrap;
+  max-width: 100%;
 
-  row-gap: 10rem;
-  margin-top: 10rem;
+  transition: all 0.5s ease;
+  opacity: 0;
+  height: 0;
+  padding: 0 2rem;
+  overflow: hidden;
+
+  &.visible {
+    opacity: 1;
+    height: auto;
+  }
 
   & #doughnut-chart {
     max-width: 500px;
@@ -15,7 +24,38 @@
   }
 
   & #line-chart {
-    max-width: 1200px;
+    max-width: 80%;
+    min-width: 375px; /* ou 800px se quiser mais espaço */
     max-height: 800px;
+    /* height: auto !important; 
+    
+    display: block;
+    max-width: 700px; */
+  }
+}
+
+#ranking-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+
+  transition: all 0.5s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+
+  &.visible {
+    opacity: 1;
+    height: auto;
+  }
+
+  & #bar-chart {
+    width: 100% !important;
+    max-width: 700px;
+    height: auto !important;
+    aspect-ratio: 4 / 3; /* ou 4/3, 1/1, etc */
+    margin: 0 auto;
+    display: block;
   }
 }

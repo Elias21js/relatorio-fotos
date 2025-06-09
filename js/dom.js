@@ -2,7 +2,7 @@ import { showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
-import { renderBar, renderDoughnut, renderLine } from "../chart/chart.js";
+import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/chart.js";
 
 // CRIAR REGISTRO
 {
@@ -187,18 +187,35 @@ import { renderBar, renderDoughnut, renderLine } from "../chart/chart.js";
 
 // GERAR GRÁFICOS
 
+const charts = document.getElementById("charts");
+const chartBtn = document.getElementById("gerarGraficos");
+
+const rankingDiv = document.getElementById("ranking-chart");
+const rankingBtn = document.getElementById("ranking");
+
 {
-  document.getElementById("gerarGraficos").addEventListener("click", async () => {
+  chartBtn.addEventListener("click", async () => {
     const { banca, vendas, sobras } = await getUserBanca();
     renderDoughnut(vendas + sobras, vendas, sobras);
     renderLine(banca);
-    renderBar();
-    document.getElementById("charts").style.display = "flex";
+    if (rankingDiv.classList.contains("visible")) rankingDiv.classList.remove("visible");
+    charts.classList.add("visible");
+    charts.style.rowGap = "10rem";
+    charts.style.marginTop = "10rem";
+  });
 
-    // renderDoughnut();
+  // GERAR RANKING
+
+  rankingBtn.addEventListener("click", () => {
+    if (charts.classList.contains("visible")) charts.classList.remove("visible");
+    rankingDiv.classList.add("visible");
+    smoothScrollTo(rankingDiv, 1000);
+
+    rankingDiv.style.marginTop = "10rem";
+
+    renderBar();
   });
 }
-
 // ADICIONAR VALES
 
 document.getElementById("vale").addEventListener("click", () => {

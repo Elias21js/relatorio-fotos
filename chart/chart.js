@@ -1,5 +1,5 @@
 import Chart from "chart.js/auto";
-import { getUserBanca } from "../js/user.js";
+import { getPhotographers, getUserBanca } from "../js/user.js";
 
 // Registra tudo que o doughnut precisa
 
@@ -112,7 +112,7 @@ export const renderLine = async () => {
     // "rgba(54, 235, 114, 0.8)",
     // "rgba(255, 86, 86, 0.8)"]
 
-    type: "line",
+    type: "bar",
     data: {
       labels: datas,
       datasets: [
@@ -120,44 +120,36 @@ export const renderLine = async () => {
           label: "Vendas",
           data: vendas,
           borderColor: "rgb(54, 235, 114)",
-          backgroundColor: "rgb(54, 235, 114)",
-          tension: 0.2,
-          fill: false,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          pointHoverBorderColor: "white",
-          pointHoverBorderWidth: 3,
+          backgroundColor: "rgba(54, 235, 114, 0.86)",
+          borderWidth: 1,
+          borderRadius: 8,
+          hoverBackgroundColor: "#fff",
+          hoverBorderWidth: 0,
         },
         {
           label: "Sobras",
           data: sobras,
           borderColor: "rgb(255, 86, 86)",
-          backgroundColor: "rgb(255, 86, 86)",
-          tension: 0.2,
-
-          fill: false,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          pointHoverBorderColor: "white",
-          pointHoverBorderWidth: 3,
+          backgroundColor: "rgba(255, 86, 86, 0.79)",
+          borderWidth: 1,
+          borderRadius: 8,
+          hoverBackgroundColor: "#fff",
+          hoverBorderWidth: 0,
         },
         {
           label: "Produção",
           data: producao,
-          borderColor: "rgb(53, 195, 220)",
-          backgroundColor: "rgb(53, 195, 220)",
-          tension: 0.2,
-
-          fill: false,
-          pointRadius: 5,
-          pointHoverBorderWidth: 3,
-          pointHoverRadius: 7,
-          pointHoverBorderColor: "white",
-          pointHoverBorderWidth: 3,
+          borderColor: "rgb(41, 71, 236)",
+          backgroundColor: "rgba(41, 70, 236, 0.84)",
+          borderWidth: 1,
+          borderRadius: 8,
+          hoverBackgroundColor: "#fff",
+          hoverBorderWidth: 0,
         },
       ],
     },
     options: {
+      indexAxis: "x",
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
@@ -189,22 +181,16 @@ export const renderLine = async () => {
             color: "#fff",
             stepSize: 5,
             font: {
-              size: 12,
-            },
-          },
-          title: {
-            display: true,
-            text: "Unidades",
-            color: "#fff",
-            font: {
-              size: 20,
-              weight: "normal",
+              size: 14,
             },
           },
         },
         x: {
           ticks: {
             color: "#fff",
+            font: {
+              size: 14,
+            },
           },
           title: {
             display: true,
@@ -223,17 +209,30 @@ export const renderLine = async () => {
 
 export const renderBar = async () => {
   const ctx = document.getElementById("bar-chart").getContext("2d");
-  const element = document.getElementById("bar-chart");
 
-  const { banca } = await getUserBanca();
-  const { vendas, datas, sobras, producao } = getOrdenedBanca(banca);
+  const ss = await getPhotographers("SS");
+  const sarah = await getPhotographers("Sarah");
+  const fly = await getPhotographers("fly");
 
-  if (vendas.length < 5) {
-    element.style.display = "none";
-    return; // 🛑 Sai fora sem tentar criar o gráfico!
-  } else {
-    element.style.display = "block"; // Garante que ele volte se necessário
-  }
+  const fotografos = [ss, sarah, fly].map((fotografo) => {
+    const vendas = fotografo.banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
+    const sobras = fotografo.banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+    const producao = parseInt(vendas) + parseInt(sobras);
+    const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
+
+    return { nome: fotografo.user, vendas, sobras, producao, aproveitamento: aprov.toFixed(2) };
+  });
+
+  const fotografosOrdenados = fotografos.sort((a, b) => b.vendas - a.vendas);
+
+  const nomes = fotografosOrdenados.map((i, idx) => {
+    const medalha = ["🥇", "🥈", "🥉"][idx] || "📸";
+    return `${medalha} ${i.nome}`;
+  });
+  const vendas = fotografosOrdenados.map((i) => i.vendas);
+  const sobras = fotografosOrdenados.map((i) => i.sobras);
+  const producao = fotografosOrdenados.map((i) => i.producao);
+  const aproveitamentos = fotografosOrdenados.map((i) => i.aproveitamento);
 
   if (window.barChartInstance) {
     window.barChartInstance.destroy();
@@ -242,71 +241,70 @@ export const renderBar = async () => {
   window.barChartInstance = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: datas,
+      labels: nomes,
       datasets: [
         {
           label: "Vendas",
           data: vendas,
           backgroundColor: "rgba(75, 192, 192, 0.9)",
-          borderColor: "rgba(75, 192, 192, 1)",
+          borderColor: "rgb(51, 228, 228)",
           borderWidth: 1,
-          borderRadius: 10, // Deixa as barras arredondadas
+          borderWidth: 1,
+          borderRadius: 8,
           hoverBackgroundColor: "#fff",
-          hoverBorderColor: "#4bc0c0",
+          hoverBorderWidth: 0,
         },
         {
           label: "Sobras",
           data: sobras,
-          backgroundColor: "rgba(255, 86, 86, 0.6)",
-          borderColor: "rgba(255, 86, 86, 1)",
+          backgroundColor: "rgba(255, 99, 133, 0.8)",
+          borderColor: "rgb(255, 52, 96)",
           borderWidth: 1,
-          borderRadius: 10, // Deixa as barras arredondadas
+          borderWidth: 1,
+          borderRadius: 8,
           hoverBackgroundColor: "#fff",
-          hoverBorderColor: "#4bc0c0",
+          hoverBorderWidth: 0,
         },
         {
           label: "Produção",
           data: producao,
-          backgroundColor: "rgba(53, 195, 220, 0.6)",
-          borderColor: "rgba(53, 195, 220, 1)",
+          backgroundColor: "rgba(45, 76, 250, 0.9)",
+          borderColor: "rgb(41, 80, 255)",
           borderWidth: 1,
-          borderRadius: 10, // Deixa as barras arredondadas
+          borderWidth: 1,
+          borderRadius: 8,
           hoverBackgroundColor: "#fff",
-          hoverBorderColor: "#4bc0c0",
+          hoverBorderWidth: 0,
         },
-        // {
-        //   label: "Aproveitamento (%)",
-        //   data: aproveitamento,
-        //   borderColor: "#f5d300",
-        //   backgroundColor: "#f5d300",
-        //   borderWidth: 2,
-        //   tension: 1,
-        //   yAxisID: "y1",
-        //   fill: false,
-        //   pointRadius: 5,
-        //   pointHoverRadius: 7,
-        // },
       ],
     },
     options: {
+      indexAxis: "x", // Horizontal ranking
       responsive: true,
       plugins: {
         legend: {
           labels: {
-            color: "#fff", // cor do texto da legenda
+            color: "#fff",
             font: {
-              size: 14,
+              size: 20,
+              family: "JetBrains Mono",
             },
           },
         },
         tooltip: {
           callbacks: {
-            label: (context) => `${context.dataset.label}: ${context.parsed.y}`,
+            label: function (context) {
+              const index = context.dataIndex;
+              const label = context.dataset.label;
+              const valor = context.raw;
+              const aproveitamento = aproveitamentos[index];
+              return `${label}: ${valor} | Aproveitamento: ${aproveitamento}%`;
+            },
           },
         },
         title: {
           display: true,
-          text: "Vendas por Dia",
+          text: "Ranking",
           color: "#fff",
           font: {
             size: 18,
@@ -315,15 +313,24 @@ export const renderBar = async () => {
       },
       scales: {
         x: {
+          beginAtZero: true,
           ticks: {
             color: "#fff",
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                if (width < 400) return 14;
+                if (width < 600) return 16;
+                return 20;
+              },
+              family: "JetBrains Mono",
+            },
           },
           grid: {
             color: "rgba(255, 255, 255, 0.1)",
           },
         },
         y: {
-          beginAtZero: true,
           ticks: {
             color: "#fff",
           },
@@ -335,3 +342,37 @@ export const renderBar = async () => {
     },
   });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btnGraficos = document.getElementById("gerarGraficos");
+  const chartsDiv = document.getElementById("charts");
+
+  btnGraficos.addEventListener("click", () => {
+    smoothScrollTo(chartsDiv, 1000); // 1000ms de rolagem suave
+  });
+});
+
+export function smoothScrollTo(targetY, duration) {
+  const realTarget = targetY.getBoundingClientRect().top + window.pageYOffset - 20;
+  const startY = window.pageYOffset;
+  const distance = realTarget - startY;
+  const startTime = performance.now();
+
+  function animation(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = easeInOutQuad(progress);
+
+    window.scrollTo(0, startY + distance * ease);
+
+    if (elapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  }
+
+  requestAnimationFrame(animation);
+}
+
+function easeInOutQuad(t) {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}

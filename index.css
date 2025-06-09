@@ -16,7 +16,7 @@ html {
 body {
   color: white;
   min-height: 100vh;
-  background-image: url("./src/desktop-4.webp");
+  background-image: url("./src/index.webp");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -448,7 +448,7 @@ button {
           }
 
           &.div-estilosa {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            background: linear-gradient(135deg, transparent, #7700ff3f);
             color: white;
             padding: 1.5rem;
             border-radius: 1.5rem;
@@ -569,7 +569,9 @@ button {
   .swal2-popup .ul-rela {
     font-size: 4vw;
   }
+}
 
+@media screen and (max-width: 487px) {
   #gerarRelatorio-div {
     flex-direction: column;
   }

@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { auth, db } from "../db/firebase.js";
 import { signOut } from "firebase/auth";
 import { Toast } from "./toast.js";
@@ -101,6 +101,16 @@ export const getUserBanca = async () => {
   console.log("Ln 94, descontos - user.js", descontos);
   console.log("Ln 95, faltas - user.js", faltas);
   return { banca, vendas, sobras, vales, descontos, faltas };
+};
+
+export const getPhotographers = async (username) => {
+  const usersRef = collection(db, "usuarios");
+  const reqSnap = await getDocs(query(usersRef, where("user", "==", username)));
+
+  if (reqSnap.empty) return null;
+
+  const doc = reqSnap.docs[0];
+  return { id: doc.id, ...doc.data() };
 };
 
 document.getElementById("log-out").addEventListener("click", logOut);

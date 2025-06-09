@@ -108,8 +108,6 @@ const REGISTRO = {
 
     console.log(this.relatorios);
 
-    document.getElementById("charts").style.display = "none";
-
     this.relatorios.forEach((day) => {
       const criarRegistro = document.createElement("div");
       criarRegistro.className = "registro div-estilosa";

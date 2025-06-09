@@ -12,7 +12,7 @@ body {
   place-items: center;
   width: 100vw;
   height: max-content;
-  background-image: url("./src/desktop-meubb.webp");
+  background-image: url("./src/auth.webp");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
