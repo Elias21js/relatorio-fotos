@@ -1,3 +1,5 @@
+import { blurMobileInputs } from "../js/toast.js";
+
 const ribbon = document.getElementById("ribbon");
 
 ribbon.addEventListener("click", () => {
@@ -38,6 +40,7 @@ ribbon.addEventListener("click", () => {
 
         </div>
     `,
+    didOpen: blurMobileInputs(),
     preConfirm() {
       const inicial = document.getElementById("initialR").value;
       const atual = document.getElementById("atualR").value;
@@ -99,6 +102,7 @@ ribbon.addEventListener("click", () => {
                 </div>
             </div>
           `,
+          didOpen: blurMobileInputs(),
           preConfirm() {
             const finishR = document.getElementById("finishR").value;
             const resetedR = document.getElementById("resetedR").value;

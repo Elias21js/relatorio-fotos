@@ -1,4 +1,4 @@
-import { showError, showSucess } from "./toast.js";
+import { blurMobileInputs, showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
@@ -79,7 +79,7 @@ import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/
           },
           reverseButtons: true,
           html: `
-              <div id="edit-div">
+              <div class="edit-div">
                 <div>
                     <label for="swal-input1">Data: </label>
                     <input id="swal-input1" class="swal2-input" value=${data}>
@@ -94,6 +94,7 @@ import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/
                 </div>
               </div>
             `,
+          didOpen: blurMobileInputs(),
           focusConfirm: false,
           preConfirm: () => {
             const swal1 = document.getElementById("swal-input1").value;
@@ -232,21 +233,22 @@ document.getElementById("vale").addEventListener("click", () => {
     },
     reverseButtons: true,
     html: `
-              <div id="edit-div">
-                <div>
-                    <label for="swal-input1">Data: </label>
-                    <input id="swal-input1" class="swal2-input" autocomplete="off">
-                </div>
-                <div>
-                    <label for="swal-input2">Motivo: </label>
-                    <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
-                </div>
-                <div>
-                    <label for="swal-input3">Valor: </label>
-                    <input id="swal-input3" class="swal2-input" autocomplete="off">
-                </div>
-              </div>
-            `,
+        <div class="edit-div">
+          <div>
+              <label for="swal-input1">Data: </label>
+              <input id="swal-input1" class="swal2-input" autocomplete="off">
+          </div>
+          <div>
+              <label for="swal-input2">Motivo: </label>
+              <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
+          </div>
+          <div>
+              <label for="swal-input3">Valor: </label>
+              <input id="swal-input3" class="swal2-input" autocomplete="off">
+          </div>
+        </div>
+      `,
+    didOpen: blurMobileInputs(),
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -261,7 +263,6 @@ document.getElementById("vale").addEventListener("click", () => {
   }).then(({ isConfirmed, isDenied, dismiss, value }) => {
     if (isConfirmed) {
       if (!value) return;
-      const Arrayed = Array.from(value);
       addVale({ data: value[0], motivo: value[1], valor: value[2] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {
@@ -286,21 +287,22 @@ document.getElementById("desconto").addEventListener("click", () => {
     },
     reverseButtons: true,
     html: `
-              <div id="edit-div">
-                <div>
-                    <label for="swal-input1">Data: </label>
-                    <input id="swal-input1" class="swal2-input" autocomplete="off">
-                </div>
-                <div>
-                    <label for="swal-input2">Motivo: </label>
-                    <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
-                </div>
-                <div>
-                    <label for="swal-input3">Valor: </label>
-                    <input id="swal-input3" class="swal2-input" autocomplete="off">
-                </div>
-              </div>
-            `,
+      <div class="edit-div">
+        <div>
+            <label for="swal-input1">Data: </label>
+            <input id="swal-input1" class="swal2-input" autocomplete="off">
+        </div>
+        <div>
+            <label for="swal-input2">Motivo: </label>
+            <input id="swal-input2" class="swal2-input" placeholder="(OPCIONAL)" autocomplete="off">
+        </div>
+        <div>
+            <label for="swal-input3">Valor: </label>
+            <input id="swal-input3" class="swal2-input" autocomplete="off">
+        </div>
+      </div>
+    `,
+    didOpen: blurMobileInputs(),
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -315,7 +317,6 @@ document.getElementById("desconto").addEventListener("click", () => {
   }).then(({ isConfirmed, isDenied, dismiss, value }) => {
     if (isConfirmed) {
       if (!value) return;
-      const Arrayed = Array.from(value);
       addDesconto({ data: value[0], motivo: value[1], valor: value[2] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {
@@ -340,17 +341,18 @@ document.getElementById("faltas").addEventListener("click", () => {
     },
     reverseButtons: true,
     html: `
-              <div id="edit-div">
-                <div>
-                    <label for="swal-input1">Data: </label>
-                    <input id="swal-input1" class="swal2-input" autocomplete="off">
-                </div>
-                <div>
-                    <label for="swal-input2">Fotos: </label>
-                    <input id="swal-input2" class="swal2-input" autocomplete="off">
-                </div>
-              </div>
-            `,
+    <div class="edit-div">
+      <div>
+          <label for="swal-input1">Data: </label>
+          <input id="swal-input1" class="swal2-input" autocomplete="off">
+      </div>
+      <div>
+          <label for="swal-input2">Fotos: </label>
+          <input id="swal-input2" class="swal2-input" autocomplete="off">
+      </div>
+    </div>
+  `,
+    didOpen: blurMobileInputs(),
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -364,7 +366,6 @@ document.getElementById("faltas").addEventListener("click", () => {
   }).then(({ isConfirmed, isDenied, dismiss, value }) => {
     if (isConfirmed) {
       if (!value) return;
-      const Arrayed = Array.from(value);
       addFaltas({ data: value[0], fotos: value[1] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {

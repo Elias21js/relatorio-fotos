@@ -192,15 +192,15 @@ export const renderLine = async () => {
               size: 14,
             },
           },
-          title: {
-            display: true,
-            text: "Dias",
-            color: "#fff",
-            font: {
-              size: 20,
-              weight: "normal",
-            },
-          },
+          // title: {
+          //   display: true,
+          //   text: "Dias",
+          //   color: "#fff",
+          //   font: {
+          //     size: 20,
+          //     weight: "normal",
+          //   },
+          // },
         },
       },
     },
@@ -302,14 +302,14 @@ export const renderBar = async () => {
             },
           },
         },
-        title: {
-          display: true,
-          text: "Ranking",
-          color: "#fff",
-          font: {
-            size: 18,
-          },
-        },
+        // title: {
+        //   display: true,
+        //   text: "Ranking",
+        //   color: "#fff",
+        //   font: {
+        //     size: 18,
+        //   },
+        // },
       },
       scales: {
         x: {

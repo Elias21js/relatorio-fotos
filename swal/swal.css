@@ -27,6 +27,10 @@
   }
 }
 
+.swal2-timer-progress-bar {
+  background-color: #4caf50 !important;
+}
+
 .rela-div {
   margin-top: 4rem;
   font-size: clamp(1rem, 4vw, 5rem);
@@ -51,7 +55,7 @@
   flex-flow: column nowrap;
 }
 
-#edit-div {
+.edit-div {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -66,23 +70,35 @@
 }
 
 .swal2-validation-message {
-  background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
-  backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  background: rgba(255, 255, 255, 0.061);
+  backdrop-filter: blur(2px);
   color: white;
 }
 
+.toast-glass {
+  background: rgba(255, 255, 255, 0.061) !important;
+  backdrop-filter: blur(2px) !important;
+  color: rgb(255, 255, 255);
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.progress-glass {
+  color: #4caf50;
+}
+
 .swal-glass {
-  background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
-  backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  background: rgba(255, 255, 255, 0.061);
+  backdrop-filter: blur(2px);
   color: white;
   padding-top: 4rem;
-  width: clamp(300px, 85vw, 500px);
+  width: clamp(280px, 85vw, 500px);
   padding-bottom: 4rem;
   border-top-left-radius: 15rem;
   border-bottom-right-radius: 15rem;
 
   & .swal2-radio {
-    background: transparent; /* Fundo levemente branco/transparente */
+    background: transparent;
     color: white;
 
     & .radioRibbon {
@@ -136,7 +152,7 @@
   row-gap: 1rem;
 
   & p {
-    font-size: 1vw;
+    font-size: clamp(16px, 1vw, 20px);
     text-align: center;
   }
 }

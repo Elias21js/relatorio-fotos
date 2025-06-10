@@ -1,0 +1,158 @@
+@media screen and (max-width: 750px) {
+  header {
+    & #buttons-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
+  }
+}
+
+@media screen and (max-width: 610px) {
+  header {
+    place-items: center;
+    grid-template-columns: 1fr;
+    padding-bottom: 5rem;
+    padding-top: 1rem;
+    position: static;
+
+    & #buttons-header {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+      row-gap: 2rem;
+    }
+  }
+
+  main {
+    & .container {
+      & .listagem {
+        align-self: stretch;
+
+        & #registro-header {
+          display: none;
+        }
+
+        & .registro {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 0.8rem;
+
+          &.div-estilosa::before,
+          &.div-estilosa:hover::before,
+          &.div-estilosa span {
+            all: unset;
+          }
+
+          &.div-estilosa {
+            background: linear-gradient(135deg, transparent, #7700ff3f);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: center;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 500;
+          }
+
+          &.div-estilosa:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+          }
+
+          &.div-estilosa span:first-child {
+            font-size: 1.45rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+          }
+
+          &.div-estilosa span:not(:first-child) {
+            font-size: 1.3rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.3rem 0.7rem;
+            border-radius: 10px;
+          }
+
+          & span:nth-child(1)::before {
+            content: "📅 ";
+          }
+
+          & span:nth-child(2)::before {
+            content: "🛒 Vendas: ";
+          }
+
+          & span:nth-child(3)::before {
+            content: "🍞 Sobras: ";
+          }
+
+          & span:nth-child(4)::before {
+            content: "🏭 Produção: ";
+          }
+
+          & span:nth-child(5)::before {
+            content: "📈 Aproveitamento: ";
+          }
+        }
+      }
+
+      & #formRegistro {
+        padding: 3rem;
+        row-gap: 3rem;
+
+        input {
+          font-size: 1.3rem;
+        }
+
+        & button {
+          font-size: 1.2rem;
+          width: 50vw;
+        }
+      }
+    }
+  }
+
+  .swal2-popup {
+    font-size: 0.9rem;
+
+    & button {
+      font-size: 1.2rem;
+    }
+  }
+
+  #gerarRelatorio {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 487px) {
+  #gerarRelatorio-div {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .edit-div {
+    & div {
+      flex-flow: column nowrap;
+      align-items: start;
+    }
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .rela-title {
+    font-size: 4vw;
+  }
+
+  .swal2-popup .ul-rela {
+    font-size: 4vw;
+  }
+}
