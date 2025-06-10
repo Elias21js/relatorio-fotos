@@ -121,7 +121,7 @@ function print() { __p += __j.call(arguments, '') }
         <div class="edit-div">
             <div>
                 <label for="initialR">Inicial</label>
-                <input name="initialR"  class="swal2-input"  id="initialR" type="text" autocomplete="off" placeholder="Ribbon Inicial" value="${t.inicial??0}">
+                <input name="initialR"  class="swal2-input"  id="initialR" type="text" autocomplete="off" placeholder="Ribbon Inicial" value="${t?.inicial??0}">
             </div>
 
             <div> 
@@ -144,12 +144,12 @@ function print() { __p += __j.call(arguments, '') }
             <div class="edit-div">
                 <div>
                     <label for="finishR">Terminou</label>
-                    <input name="finishR"  class="swal2-input"  id="finishR" type="text" autocomplete="off" placeholder="Ex: (-1, 2, 1)" value="${t.finishR??""}">
+                    <input name="finishR"  class="swal2-input"  id="finishR" type="text" autocomplete="off" placeholder="Ex: (-1, 2, 1)" value="${t?.finishR??""}">
                 </div>
 
                 <div> 
                     <label for="resetedR">Começou</label>
-                    <input name="resetedR"  class="swal2-input"  id="resetedR" type="text" autocomplete="off" placeholder="Ex: (799, 800)" value="${t.resetedR??""}">
+                    <input name="resetedR"  class="swal2-input"  id="resetedR" type="text" autocomplete="off" placeholder="Ex: (799, 800)" value="${t?.resetedR??""}">
                 </div>
             </div>
           `,preConfirm(){const u=document.getElementById("finishR").value,h=document.getElementById("resetedR").value;return u.trim()===""||h.trim()===""?Swal.showValidationMessage("Preencha os campos obrigatórios."):!Number.isInteger(parseInt(u))||!Number.isInteger(parseInt(h))?Swal.showValidationMessage("Os valores deverão conter apenas números."):{finishR:u,resetedR:h}}}).then(({isConfirmed:u,value:h})=>{if(u){localStorage.setItem(`ribbon_${n}_cache`,JSON.stringify({inicial:s,finishR:h.finishR,resetedR:h.resetedR}));const{finishR:d,resetedR:p}=h,_=parseInt(s)-parseInt(d),v=parseInt(p)-parseInt(o),C=_+v-parseInt(c),b=C-parseInt(l);return Swal.fire({title:"📸 Relatório de Produção",html:`
