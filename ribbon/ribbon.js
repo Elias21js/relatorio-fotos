@@ -42,7 +42,7 @@ ribbon.addEventListener("click", () => {
       const inicial = document.getElementById("initialR").value;
       const atual = document.getElementById("atualR").value;
       const sobras = document.getElementById("ribbonSobras").value;
-      const descontar = document.getElementById("ribbonOthers").value || "";
+      const descontar = document.getElementById("ribbonOthers").value || 0;
 
       if (inicial.trim() === "" || atual.trim() === "" || sobras.trim() === "") {
         return Swal.showValidationMessage("Preencha os campos obrigatórios.");
@@ -65,7 +65,7 @@ ribbon.addEventListener("click", () => {
           `ribbon_${uid}_cache`,
           JSON.stringify({
             inicial,
-            descontar,
+            descontar: descontar === 0 ? "" : descontar,
           })
         );
 
@@ -117,7 +117,7 @@ ribbon.addEventListener("click", () => {
               `ribbon_${uid}_cache`,
               JSON.stringify({
                 inicial,
-                descontar,
+                descontar: descontar === 0 ? "" : descontar,
                 finishR: value.finishR,
                 resetedR: value.resetedR,
               })
