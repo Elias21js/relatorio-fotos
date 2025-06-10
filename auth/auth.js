@@ -1,7 +1,7 @@
 import { auth, db } from "../db/firebase.js";
 import { collection, query, where, getDocs, setDoc, doc } from "firebase/firestore";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { Toast } from "./toast.js";
+import { Toast } from "../js/toast.js";
 
 const user = document.getElementById("user");
 const email = document.getElementById("email");

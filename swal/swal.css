@@ -1,0 +1,142 @@
+.swal2-cancel {
+  color: #fff;
+  background-color: #636580;
+  border-color: #636580;
+}
+
+.swal2-confirm {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.swal2-actions {
+  flex-flow: column-reverse;
+}
+
+.swal2-container {
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.swal2-popup {
+  font-size: 1.2rem;
+  width: clamp(320px, 100%, 420px);
+  & button {
+    font-size: 1.5rem;
+  }
+}
+
+.rela-div {
+  margin-top: 4rem;
+  font-size: clamp(1rem, 4vw, 5rem);
+}
+
+.swal2-popup .ul-rela {
+  display: grid;
+  grid-column: 1;
+  grid-row: 6;
+  place-content: center;
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  font-size: 1.6rem;
+}
+
+.rela-geral {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  flex-flow: column nowrap;
+}
+
+#edit-div {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+  }
+}
+
+.swal2-validation-message {
+  background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
+  backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  color: white;
+}
+
+.swal-glass {
+  background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
+  backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  color: white;
+  padding-top: 4rem;
+  width: clamp(300px, 85vw, 500px);
+  padding-bottom: 4rem;
+  border-top-left-radius: 15rem;
+  border-bottom-right-radius: 15rem;
+
+  & .swal2-radio {
+    background: transparent; /* Fundo levemente branco/transparente */
+    color: white;
+
+    & .radioRibbon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column nowrap;
+      row-gap: 2rem;
+    }
+  }
+}
+
+.radio-toggle {
+  display: flex;
+}
+
+.radio-toggle input[type="radio"] {
+  display: none;
+}
+
+.radio-toggle label {
+  padding: 5px 10px;
+  border: 2px solid #ccc;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  background-color: transparent;
+  color: white;
+  user-select: none;
+}
+
+.radio-toggle input[type="radio"]:checked + label {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.radio-toggle input[type="radio"]#nao:checked + label {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.swal-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column nowrap;
+  row-gap: 1rem;
+
+  & p {
+    font-size: 1vw;
+    text-align: center;
+  }
+}

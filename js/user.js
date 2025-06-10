@@ -97,9 +97,6 @@ export const getUserBanca = async () => {
   const descontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
   const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
 
-  console.log("Ln 93, vales - user.js", vales);
-  console.log("Ln 94, descontos - user.js", descontos);
-  console.log("Ln 95, faltas - user.js", faltas);
   return { banca, vendas, sobras, vales, descontos, faltas };
 };
 

@@ -17,16 +17,11 @@ const REGISTRO = {
     const localDescontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
 
     const { banca, vales, descontos } = (await getDoc(doc(db, "usuarios", uid))).data();
-    console.log("Ln 20, relatorio.js: ", banca, local);
-    console.log("Ln 21, relatorio.js: ", vales, localVales);
-    console.log("Ln 22, relatorio.js: ", descontos, localDescontos);
-
     if (isExactly(banca, local) && isExactly(vales, localVales) && isExactly(descontos, localDescontos)) {
       Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
       this.relatorios = local;
     } else {
       this.relatorios = banca;
-      console.log("Ln 27, relatorio.js - init()", this.relatorios);
 
       if (!isExactly(banca, local)) localStorage.setItem(`banca_${uid}_cache`, JSON.stringify(banca));
       if (!isExactly(vales, localVales)) localStorage.setItem(`vales_${uid}_cache`, JSON.stringify(vales ?? []));
@@ -42,8 +37,6 @@ const REGISTRO = {
   async updateDB() {
     const user = JSON.parse(localStorage.getItem("userLoggedIn"));
     if (!user) return;
-
-    console.log(user);
 
     const userRef = doc(db, "usuarios", user.uid);
     try {
@@ -67,13 +60,12 @@ const REGISTRO = {
       );
     } catch (err) {
       Toast.fire({ icon: "error", title: "⚠️ Erro ao salvar no database." });
-      console.log(err);
+      console.error(err);
     }
   },
 
   async adicionarDia(day, edit = false) {
     const dayExists = this.relatorios.find((day_in) => day_in.data === day.data);
-    console.log(dayExists);
 
     if (!dayExists) {
       this.relatorios.push(day);
@@ -105,8 +97,6 @@ const REGISTRO = {
     });
 
     const btn_relatorio = document.getElementById("gerarRelatorio");
-
-    console.log(this.relatorios);
 
     this.relatorios.forEach((day) => {
       const criarRegistro = document.createElement("div");
@@ -167,7 +157,6 @@ const REGISTRO = {
     const splited = data.split("/");
     let newDate = "";
 
-    console.log(splited);
     if (splited[0].length < 2) {
       newDate += `0${splited[0]}/`;
     } else {
@@ -212,7 +201,6 @@ const REGISTRO = {
   },
 
   removerRegistro(id) {
-    console.log(id);
     const index = this.relatorios.findIndex((reg) => reg.id === id);
     this.relatorios.splice(index, 1);
     this.updateDB();
@@ -246,7 +234,6 @@ const REGISTRO = {
       return ordem === "Maior" ? valorB - valorA : valorA - valorB;
     });
 
-    console.log(this.relatorios);
     this.atualizarLista();
   },
 };

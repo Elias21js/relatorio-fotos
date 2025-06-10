@@ -37,7 +37,9 @@ import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/
         title: `Filtrar ${element.textContent}`,
         text: "Selecione uma das opções a ser filtrada",
         input: "radio",
-        theme: "dark",
+        customClass: {
+          popup: "swal-glass",
+        },
         inputOptions,
         inputValidator: (value) => {
           if (!value) {
@@ -47,8 +49,6 @@ import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/
       });
 
       if (item_swal) {
-        console.log(element.textContent);
-        console.log(item_swal);
         REGISTRO.ordernar(element.textContent, item_swal);
       }
     }
@@ -106,7 +106,6 @@ import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/
           },
         }).then(({ isConfirmed, isDenied, dismiss, value }) => {
           if (isConfirmed) {
-            console.log(value);
             const Arrayed = Array.from(value);
 
             REGISTRO.editarDia({
@@ -263,7 +262,6 @@ document.getElementById("vale").addEventListener("click", () => {
     if (isConfirmed) {
       if (!value) return;
       const Arrayed = Array.from(value);
-      console.log(Arrayed);
       addVale({ data: value[0], motivo: value[1], valor: value[2] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {
@@ -318,7 +316,6 @@ document.getElementById("desconto").addEventListener("click", () => {
     if (isConfirmed) {
       if (!value) return;
       const Arrayed = Array.from(value);
-      console.log(Arrayed);
       addDesconto({ data: value[0], motivo: value[1], valor: value[2] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {
@@ -368,7 +365,6 @@ document.getElementById("faltas").addEventListener("click", () => {
     if (isConfirmed) {
       if (!value) return;
       const Arrayed = Array.from(value);
-      console.log(Arrayed);
       addFaltas({ data: value[0], fotos: value[1] });
     } else if (isDenied) {
     } else if (dismiss === Swal.DismissReason.cancel) {
