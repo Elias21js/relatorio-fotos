@@ -17,7 +17,7 @@ ribbon.addEventListener("click", () => {
             <div>
                 <label for="initialR">Inicial</label>
                 <input name="initialR"  class="swal2-input"  id="initialR" type="text" autocomplete="off" placeholder="Ribbon Inicial" value="${
-                  storaged.inicial ?? 0
+                  storaged?.inicial ?? 0
                 }">
             </div>
 
@@ -85,14 +85,14 @@ ribbon.addEventListener("click", () => {
                 <div>
                     <label for="finishR">Terminou</label>
                     <input name="finishR"  class="swal2-input"  id="finishR" type="text" autocomplete="off" placeholder="Ex: (-1, 2, 1)" value="${
-                      storaged.finishR ?? ""
+                      storaged?.finishR ?? ""
                     }">
                 </div>
 
                 <div> 
                     <label for="resetedR">Começou</label>
                     <input name="resetedR"  class="swal2-input"  id="resetedR" type="text" autocomplete="off" placeholder="Ex: (799, 800)" value="${
-                      storaged.resetedR ?? ""
+                      storaged?.resetedR ?? ""
                     }">
                 </div>
             </div>
