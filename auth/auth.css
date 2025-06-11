@@ -12,7 +12,12 @@ body {
   place-items: center;
   width: 100vw;
   height: max-content;
-  background-image: url("../src/auth.webp");
+  @media screen and (max-width: 700px) {
+    background-image: url("../src/auth-700x.webp");
+  }
+  @media screen and (min-width: 701px) {
+    background-image: url("../src/auth.webp");
+  }
   background-position: center;
   background-size: cover;
   background-attachment: fixed;

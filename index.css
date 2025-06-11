@@ -16,7 +16,12 @@ html {
 body {
   color: white;
   min-height: 100vh;
-  background-image: url("./src/index.webp");
+  @media screen and (max-width: 700px) {
+    background-image: url("./src/index-700x.webp");
+  }
+  @media screen and (min-width: 701px) {
+    background-image: url("./src/index.webp");
+  }
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
