@@ -20,7 +20,7 @@
 }
 
 .swal2-popup {
-  font-size: 1.2rem;
+  font-size: clamp(12px, 0.5vw, 16px);
   width: clamp(320px, 100%, 420px);
   & button {
     font-size: 1.5rem;

@@ -3,7 +3,6 @@ import { getPhotographers, getUserBanca } from "../js/user.js";
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
-import { isArray, wrap } from "lodash";
 
 const ctx = document.getElementById("doughnut-chart").getContext("2d");
 
@@ -220,12 +219,6 @@ export const renderBarPessoal = async () => {
     },
   });
 };
-
-function parseDataBR(dataStr) {
-  const [dia, mes] = dataStr.split("/").map(Number);
-  const ano = 2025; // Pega de forma dinâmica se quiser
-  return new Date(ano, mes - 1, dia);
-}
 
 const getBancas = async (period) => {
   const ss = await getPhotographers("SS");
