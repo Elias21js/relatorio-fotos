@@ -2,7 +2,14 @@ import { blurMobileInputs, showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
-import { renderBar, renderDoughnut, renderLine, renderSemanal, renderSwiper, smoothScrollTo } from "../chart/chart.js";
+import {
+  renderBar,
+  renderDoughnut,
+  renderBarPessoal,
+  renderSemanal,
+  renderSwiper,
+  smoothScrollTo,
+} from "../chart/chart.js";
 
 // CRIAR REGISTRO
 {
@@ -240,7 +247,7 @@ const showRanking = (before = false) => {
   chartBtn.addEventListener("click", async () => {
     const { banca, vendas, sobras } = await getUserBanca();
     renderDoughnut(vendas + sobras, vendas, sobras);
-    renderLine(banca);
+    renderBarPessoal(banca);
     showChart("charts");
     charts.style.rowGap = "10rem";
     charts.style.marginTop = "10rem";

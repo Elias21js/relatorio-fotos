@@ -24,13 +24,12 @@
   }
 
   & #line-chart {
-    max-width: 80%;
-    min-width: 375px; /* ou 800px se quiser mais espaço */
-    max-height: 800px;
-    /* height: auto !important; 
-    
+    width: 100% !important;
+    max-width: 1200px;
+    height: auto !important;
+    aspect-ratio: 4 / 3; /* ou 4/3, 1/1, etc */
+    margin: 0 auto;
     display: block;
-    max-width: 700px; */
   }
 }
 
@@ -61,7 +60,7 @@
 }
 
 #ranking-choice {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 2rem;
@@ -70,6 +69,7 @@
   height: 0;
 
   &.visible {
+    display: flex;
     opacity: 1;
     height: auto;
     margin-top: 5rem;
@@ -99,6 +99,10 @@
     font-size: 2rem;
   }
 
+  & .swiper-pagination {
+    bottom: 0;
+  }
+
   & .semanal-charts {
     width: 100% !important;
     max-width: 700px;
@@ -107,23 +111,4 @@
     margin: 0 auto;
     display: block;
   }
-}
-
-.custom-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  z-index: 10;
-  cursor: pointer;
-  transform: translateY(-50%);
-}
-
-.swiper-button-prev.custom-arrow {
-  left: 15%;
-}
-
-.swiper-button-next.custom-arrow {
-  right: 15%;
 }

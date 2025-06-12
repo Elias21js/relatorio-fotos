@@ -3,11 +3,7 @@ import { getPhotographers, getUserBanca } from "../js/user.js";
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { isArray, wrap } from "lodash";
-
-// Registra tudo que o doughnut precisa
 
 const ctx = document.getElementById("doughnut-chart").getContext("2d");
 
@@ -95,7 +91,7 @@ const getOrdenedBanca = (banca) => {
   return { vendas, datas, sobras, producao };
 };
 
-export const renderLine = async () => {
+export const renderBarPessoal = async () => {
   const ctx = document.getElementById("line-chart").getContext("2d");
   const element = document.getElementById("line-chart");
 
@@ -109,11 +105,11 @@ export const renderLine = async () => {
     element.style.display = "block"; // Garante que ele volte se necessário
   }
 
-  if (window.lineChartInstance) {
-    window.lineChartInstance.destroy();
+  if (window.barPessoalChartInstance) {
+    window.barPessoalChartInstance.destroy();
   }
 
-  window.lineChartInstance = new Chart(ctx, {
+  window.barPessoalChartInstance = new Chart(ctx, {
     // ["rgba(53, 195, 220, 0.7)",
     // "rgba(54, 235, 114, 0.8)",
     // "rgba(255, 86, 86, 0.8)"]
@@ -157,14 +153,16 @@ export const renderLine = async () => {
     options: {
       indexAxis: "x",
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
       plugins: {
         legend: {
           labels: {
             color: "#ffffff",
             font: {
-              size: 20,
-              weight: "400",
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
               family: "JetBrains Mono",
             },
           },
@@ -187,7 +185,12 @@ export const renderLine = async () => {
             color: "#fff",
             stepSize: 5,
             font: {
-              size: 14,
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                if (width < 400) return 14;
+                if (width < 600) return 16;
+                return 20;
+              },
             },
           },
         },
@@ -195,7 +198,12 @@ export const renderLine = async () => {
           ticks: {
             color: "#fff",
             font: {
-              size: 14,
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                if (width < 400) return 14;
+                if (width < 600) return 16;
+                return 20;
+              },
             },
           },
           // title: {
@@ -353,7 +361,10 @@ export const renderBar = async () => {
           labels: {
             color: "#fff",
             font: {
-              size: 20,
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
               family: "JetBrains Mono",
             },
           },
@@ -517,7 +528,10 @@ export const renderSemanal = async () => {
             labels: {
               color: "#fff",
               font: {
-                size: 20,
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  return Math.max(8, Math.min(width * 0.03, 24));
+                },
                 family: "JetBrains Mono",
               },
             },
@@ -538,7 +552,10 @@ export const renderSemanal = async () => {
             text: "Primeira Semana (01 ao 07)",
             color: "#fff",
             font: {
-              size: 22,
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
             },
           },
         },
@@ -631,7 +648,10 @@ export const renderSemanal = async () => {
             labels: {
               color: "#fff",
               font: {
-                size: 20,
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  return Math.max(8, Math.min(width * 0.03, 24));
+                },
                 family: "JetBrains Mono",
               },
             },
@@ -652,7 +672,10 @@ export const renderSemanal = async () => {
             text: "Segunda Semana (08 ao 15)",
             color: "#fff",
             font: {
-              size: 22,
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
               family: "JetBrains Mono",
             },
           },
