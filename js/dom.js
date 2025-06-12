@@ -2,7 +2,7 @@ import { blurMobileInputs, showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
 import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
-import { renderBar, renderDoughnut, renderLine, smoothScrollTo } from "../chart/chart.js";
+import { renderBar, renderDoughnut, renderLine, renderSemanal, renderSwiper, smoothScrollTo } from "../chart/chart.js";
 
 // CRIAR REGISTRO
 {
@@ -193,28 +193,62 @@ const chartBtn = document.getElementById("gerarGraficos");
 const rankingDiv = document.getElementById("ranking-chart");
 const rankingBtn = document.getElementById("ranking");
 
+const rankChoice = document.getElementById("ranking-choice");
+const rankingSemanal = document.getElementById("ranking-semanal");
+
+const rankSemanalBtn = document.getElementById("semanal");
+const rankMensalBtn = document.getElementById("mensal");
+
+const showChart = (chartToDisplay) => {
+  if (chartToDisplay === "charts") {
+    charts.classList.add("visible");
+    rankChoice.classList.remove("visible");
+    rankingSemanal.classList.remove("visible");
+    rankingDiv.classList.remove("visible");
+    charts.classList.add("visible");
+  }
+
+  if (chartToDisplay === "showRanking") {
+    rankChoice.classList.add("visible");
+    rankingDiv.classList.add("visible");
+    rankingSemanal.classList.remove("visible");
+    charts.classList.remove("visible");
+  }
+
+  if (chartToDisplay === "rankingSemanal") {
+    rankingDiv.classList.remove("visible");
+    rankingSemanal.classList.add("visible");
+  }
+};
+
+rankSemanalBtn.addEventListener("click", async () => {
+  await renderSwiper();
+  await renderSemanal();
+  showChart("rankingSemanal");
+});
+
+// GERAR RANKING
+
+const showRanking = (before = false) => {
+  showChart("showRanking");
+  if (before) smoothScrollTo(rankingDiv, 1000);
+  rankingDiv.style.marginTop = "10rem";
+  renderBar();
+};
+
 {
   chartBtn.addEventListener("click", async () => {
     const { banca, vendas, sobras } = await getUserBanca();
     renderDoughnut(vendas + sobras, vendas, sobras);
     renderLine(banca);
-    if (rankingDiv.classList.contains("visible")) rankingDiv.classList.remove("visible");
-    charts.classList.add("visible");
+    showChart("charts");
     charts.style.rowGap = "10rem";
     charts.style.marginTop = "10rem";
   });
 
-  // GERAR RANKING
+  rankingBtn.addEventListener("click", () => showRanking(true));
 
-  rankingBtn.addEventListener("click", () => {
-    if (charts.classList.contains("visible")) charts.classList.remove("visible");
-    rankingDiv.classList.add("visible");
-    smoothScrollTo(rankingDiv, 1000);
-
-    rankingDiv.style.marginTop = "10rem";
-
-    renderBar();
-  });
+  rankMensalBtn.addEventListener("click", showRanking);
 }
 // ADICIONAR VALES
 

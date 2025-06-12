@@ -47,12 +47,38 @@
         <button id="ranking" type="submit" class="botao-estiloso">Mostrar Ranking</button>
       </div>
 
+      <div id="ranking-choice">
+        <button id="semanal" type="submit" class="botao-estiloso">Semanal</button>
+        <button id="mensal" type="submit" class="botao-estiloso">Mensal</button>
+      </div>
+
       <div id="charts">
         <canvas id="doughnut-chart" width="500" height="500"></canvas>
         <canvas id="line-chart" width="1200" height="800" style="width: 1200px; height: 800px"></canvas>
       </div>
       <div id="ranking-chart">
         <canvas id="bar-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
+      </div>
+
+      <div id="ranking-semanal" class="swiper">
+        <div id="wrapper" class="swiper-wrapper">
+          <!-- Gráficos inseridos aqui -->
+        </div>
+
+        <!-- Botões de navegação -->
+        <div class="swiper-button-prev custom-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2" fill="none" />
+          </svg>
+        </div>
+        <div class="swiper-button-next custom-arrow">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2" fill="none" />
+          </svg>
+        </div>
+
+        <!-- Paginação (bolinhas) -->
+        <div class="swiper-pagination"></div>
       </div>
     </main>
   </body>

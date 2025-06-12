@@ -59,3 +59,71 @@
     display: block;
   }
 }
+
+#ranking-choice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  transition: all 0.5s ease;
+  opacity: 0;
+  height: 0;
+
+  &.visible {
+    opacity: 1;
+    height: auto;
+    margin-top: 5rem;
+  }
+}
+
+#ranking-semanal {
+  transition: all 0.5s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+
+  &.visible {
+    opacity: 1;
+    height: auto;
+  }
+
+  & .swiper {
+    width: 100%;
+    height: 300px;
+  }
+
+  & .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  & .semanal-charts {
+    width: 100% !important;
+    max-width: 700px;
+    height: auto !important;
+    aspect-ratio: 4 / 3; /* ou 4/3, 1/1, etc */
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+.custom-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.swiper-button-prev.custom-arrow {
+  left: 15%;
+}
+
+.swiper-button-next.custom-arrow {
+  right: 15%;
+}

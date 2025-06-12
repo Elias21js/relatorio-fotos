@@ -1,5 +1,11 @@
 import Chart from "chart.js/auto";
 import { getPhotographers, getUserBanca } from "../js/user.js";
+import Swiper from "swiper";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { isArray, wrap } from "lodash";
 
 // Registra tudo que o doughnut precisa
 
@@ -207,32 +213,92 @@ export const renderLine = async () => {
   });
 };
 
-export const renderBar = async () => {
-  const ctx = document.getElementById("bar-chart").getContext("2d");
+function parseDataBR(dataStr) {
+  const [dia, mes] = dataStr.split("/").map(Number);
+  const ano = 2025; // Pega de forma dinâmica se quiser
+  return new Date(ano, mes - 1, dia);
+}
 
+const getBancas = async (period) => {
   const ss = await getPhotographers("SS");
   const sarah = await getPhotographers("Sarah");
   const fly = await getPhotographers("fly");
 
-  const fotografos = [ss, sarah, fly].map((fotografo) => {
-    const vendas = fotografo.banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
-    const sobras = fotografo.banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+  function filtrarPorDias(nome, banca, inicio, fim) {
+    const revBanca = banca.filter((item) => {
+      const [dia, mes] = item.data.split("/").map(Number);
+      return dia >= inicio && dia <= fim;
+    });
+
+    const vendas = revBanca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
+    const sobras = revBanca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
     const producao = parseInt(vendas) + parseInt(sobras);
     const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
 
-    return { nome: fotografo.user, vendas, sobras, producao, aproveitamento: aprov.toFixed(2) };
-  });
+    if (isNaN(aprov)) return;
 
-  const fotografosOrdenados = fotografos.sort((a, b) => b.vendas - a.vendas);
+    return { nome, vendas, sobras, producao, aprov };
+  }
 
-  const nomes = fotografosOrdenados.map((i, idx) => {
-    const medalha = ["🥇", "🥈", "🥉"][idx] || "📸";
-    return `${medalha} ${i.nome}`;
-  });
-  const vendas = fotografosOrdenados.map((i) => i.vendas);
-  const sobras = fotografosOrdenados.map((i) => i.sobras);
-  const producao = fotografosOrdenados.map((i) => i.producao);
-  const aproveitamentos = fotografosOrdenados.map((i) => i.aproveitamento);
+  if (period === "mensal") {
+    const rankingMensal = [ss, sarah, fly].map((fotografo) => {
+      const vendas = fotografo.banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
+      const sobras = fotografo.banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+      const producao = parseInt(vendas) + parseInt(sobras);
+      const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
+
+      return { nome: fotografo.user, vendas, sobras, producao, aproveitamento: aprov.toFixed(2) };
+    });
+
+    const fotografosOrdenados = rankingMensal.sort((a, b) => b.vendas - a.vendas);
+
+    const nomes = fotografosOrdenados.map((i, idx) => {
+      const medalha = ["🥇", "🥈", "🥉"][idx] || "📸";
+      return `${medalha} ${i.nome}`;
+    });
+
+    const vendas = fotografosOrdenados.map((i) => i.vendas);
+    const sobras = fotografosOrdenados.map((i) => i.sobras);
+    const producao = fotografosOrdenados.map((i) => i.producao);
+    const aproveitamentos = fotografosOrdenados.map((i) => i.aproveitamento);
+
+    return { nomes, vendas, sobras, producao, aproveitamentos };
+  } else {
+    const firstWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 1, 7));
+    const secondWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 8, 15));
+    const thirdWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 16, 22));
+    const fourthWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 23, 31));
+
+    const ordenedWeek = (week) => {
+      if (week[0] === undefined) return;
+
+      const ordered = [...week].sort((a, b) => b.vendas - a.vendas);
+
+      const medalha = ["🥇", "🥈", "🥉"] || "📸";
+      return ordered.map((i, idx) => ({
+        nomes: `${medalha[idx]} ${i.nome}`,
+        vendas: i.vendas,
+        sobras: i.sobras,
+        producao: i.producao,
+        aproveitamento: i.aprov.toFixed(2),
+      }));
+    };
+
+    const semanas = {
+      firstWeek: ordenedWeek(firstWeek),
+      secondWeek: ordenedWeek(secondWeek),
+      thirdWeek: ordenedWeek(thirdWeek),
+      fourthWeek: ordenedWeek(fourthWeek),
+    };
+
+    return semanas;
+  }
+};
+
+export const renderBar = async () => {
+  const ctx = document.getElementById("bar-chart").getContext("2d");
+
+  const { nomes, vendas, sobras, producao, aproveitamentos } = await getBancas("mensal");
 
   if (window.barChartInstance) {
     window.barChartInstance.destroy();
@@ -275,6 +341,7 @@ export const renderBar = async () => {
           borderRadius: 8,
           hoverBackgroundColor: "#fff",
           hoverBorderWidth: 0,
+          hidden: true,
         },
       ],
     },
@@ -341,6 +408,295 @@ export const renderBar = async () => {
       },
     },
   });
+};
+
+export const renderSwiper = async () => {
+  Swiper.use([Navigation, Pagination, Autoplay]);
+
+  return new Swiper(".swiper", {
+    loop: false, // slides infinitos
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+  });
+};
+
+export const renderSlides = (week, id) => {
+  if (!week) return false;
+
+  const wrapper = document.getElementById("wrapper");
+
+  if (document.getElementById(id)) {
+    document.getElementById(id).remove();
+    wrapper.innerHTML = "";
+  }
+
+  const swiperSlide = document.createElement("div");
+  swiperSlide.classList.add("swiper-slide");
+  swiperSlide.innerHTML = `<canvas
+              id="${id}"
+              class="semanal-charts"
+              width="1200"
+              height="800"
+              style="max-width: 1200px; max-height: 800px"
+            ></canvas>`;
+
+  wrapper.appendChild(swiperSlide);
+  return true;
+};
+
+export const renderSemanal = async () => {
+  const ctxThirdWeek = document.getElementById("third-week")?.getContext("2d");
+  const ctxFourthWeek = document.getElementById("fourth-week")?.getContext("2d");
+
+  const { firstWeek, secondWeek, thirdWeek, fourthWeek } = await getBancas("semanal");
+
+  if (window.firstChartInstance) window.firstChartInstance.destroy();
+  if (window.secondChartInstance) window.secondChartInstance.destroy();
+  if (window.thirdChartInstance) window.thirdChartInstance.destroy();
+  if (window.fourthChartInstance) window.fourthChartInstance.destroy();
+
+  if (renderSlides(firstWeek, "first-week")) {
+    const nomes = firstWeek.map((n) => n.nomes);
+    const vendas = firstWeek.map((n) => n.vendas);
+    const sobras = firstWeek.map((n) => n.sobras);
+    const producao = firstWeek.map((n) => n.producao);
+    const aproveitamentos = firstWeek.map((n) => n.aproveitamento);
+
+    window.firstChartInstance = new Chart(document.getElementById("first-week").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: nomes,
+        datasets: [
+          {
+            label: "Vendas",
+            data: vendas,
+            backgroundColor: "rgba(75, 192, 192, 0.9)",
+            borderColor: "rgb(51, 228, 228)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Sobras",
+            data: sobras,
+            backgroundColor: "rgba(255, 99, 133, 0.8)",
+            borderColor: "rgb(255, 52, 96)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Produção",
+            data: producao,
+            backgroundColor: "rgba(45, 76, 250, 0.9)",
+            borderColor: "rgb(41, 80, 255)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+            hidden: true,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "x", // Horizontal ranking
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#fff",
+              font: {
+                size: 20,
+                family: "JetBrains Mono",
+              },
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const index = context.dataIndex;
+                const label = context.dataset.label;
+                const valor = context.raw;
+                const aproveitamento = aproveitamentos[index];
+                return `${label}: ${valor} | Aproveitamento: ${aproveitamento}%`;
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Primeira Semana (01 ao 07)",
+            color: "#fff",
+            font: {
+              size: 22,
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  if (width < 400) return 14;
+                  if (width < 600) return 16;
+                  return 20;
+                },
+                family: "JetBrains Mono",
+              },
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+          y: {
+            ticks: {
+              color: "#fff",
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+        },
+      },
+    });
+  } else {
+  }
+
+  if (renderSlides(secondWeek, "second-week")) {
+    const nomes = secondWeek.map((n) => n.nomes);
+    const vendas = secondWeek.map((n) => n.vendas);
+    const sobras = secondWeek.map((n) => n.sobras);
+    const producao = secondWeek.map((n) => n.producao);
+    const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
+
+    window.firstChartInstance = new Chart(document.getElementById("second-week").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: nomes,
+        datasets: [
+          {
+            label: "Vendas",
+            data: vendas,
+            backgroundColor: "rgba(75, 192, 192, 0.9)",
+            borderColor: "rgb(51, 228, 228)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Sobras",
+            data: sobras,
+            backgroundColor: "rgba(255, 99, 133, 0.8)",
+            borderColor: "rgb(255, 52, 96)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Produção",
+            data: producao,
+            backgroundColor: "rgba(45, 76, 250, 0.9)",
+            borderColor: "rgb(41, 80, 255)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+            hidden: true,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "x", // Horizontal ranking
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#fff",
+              font: {
+                size: 20,
+                family: "JetBrains Mono",
+              },
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const index = context.dataIndex;
+                const label = context.dataset.label;
+                const valor = context.raw;
+                const aproveitamento = aproveitamentos[index];
+                return `${label}: ${valor} | Aproveitamento: ${aproveitamento}%`;
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Segunda Semana (08 ao 15)",
+            color: "#fff",
+            font: {
+              size: 22,
+              family: "JetBrains Mono",
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  if (width < 400) return 14;
+                  if (width < 600) return 16;
+                  return 20;
+                },
+                family: "JetBrains Mono",
+              },
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+          y: {
+            ticks: {
+              color: "#fff",
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+        },
+      },
+    });
+  } else {
+  }
+
+  if (renderSlides(thirdWeek, "third-week")) {
+  } else {
+  }
+
+  if (renderSlides(fourthWeek, "fourth-week")) {
+  } else {
+  }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
