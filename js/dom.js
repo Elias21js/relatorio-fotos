@@ -10,6 +10,7 @@ import {
   renderSwiper,
   smoothScrollTo,
 } from "../chart/chart.js";
+import flatpickr from "flatpickr";
 
 // CRIAR REGISTRO
 {
@@ -412,4 +413,70 @@ document.getElementById("faltas").addEventListener("click", () => {
     } else if (dismiss === Swal.DismissReason.cancel) {
     }
   });
+});
+
+// FILTRAR MÊSES
+
+import "flatpickr/dist/flatpickr.min.css";
+import { Portuguese } from "flatpickr/dist/l10n/pt.js";
+import { find } from "lodash";
+
+flatpickr("#data", {
+  dateFormat: "d/m", // Você escolhe o formato que quiser
+  defaultDate: "today",
+  altInput: false, // Exibe data bonitinha
+  altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
+  locale: Portuguese, // Traduz pro português
+});
+
+const yearElement = document.getElementById("yearDisplay");
+const monthElement = document.getElementById("monthDisplay");
+
+// ANO
+
+document.getElementById("prevYear").addEventListener("click", () => {
+  const anoSelecionado = yearElement.textContent;
+  yearElement.textContent = parseInt(anoSelecionado) - 1;
+});
+
+document.getElementById("nextYear").addEventListener("click", () => {
+  const anoSelecionado = yearElement.textContent;
+  yearElement.textContent = parseInt(anoSelecionado) + 1;
+});
+
+// MES
+
+const months = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
+
+document.getElementById("prevMonth").addEventListener("click", () => {
+  const mesSelecionado = monthElement.textContent;
+  const findMonth = months.findIndex((m) => m === mesSelecionado);
+
+  monthElement.textContent = months[findMonth === 0 ? 0 : findMonth - 1];
+});
+
+document.getElementById("nextMonth").addEventListener("click", () => {
+  const mesSelecionado = monthElement.textContent;
+  const findMonth = months.findIndex((m) => m === mesSelecionado);
+
+  monthElement.textContent = months[findMonth === 11 ? 11 : findMonth + 1];
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const actual = new Date();
+  yearElement.textContent = actual.getFullYear();
+  monthElement.textContent = months[actual.getMonth()];
 });
