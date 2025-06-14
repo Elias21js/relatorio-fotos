@@ -132,9 +132,13 @@ btn_register.addEventListener("click", async () => {
       await setDoc(doc(db, "usuarios", credentials.user.uid), {
         user: user.value,
         email: email.value,
-        banca: [],
-        vales: [],
-        descontos: [],
+        data: {
+          2025: {
+            banca: [],
+            vales: [],
+            descontos: [],
+          },
+        },
       });
 
       email.style.display = "none";

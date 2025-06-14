@@ -419,7 +419,6 @@ document.getElementById("faltas").addEventListener("click", () => {
 
 import "flatpickr/dist/flatpickr.min.css";
 import { Portuguese } from "flatpickr/dist/l10n/pt.js";
-import { find } from "lodash";
 
 flatpickr("#data", {
   dateFormat: "d/m", // Você escolhe o formato que quiser
@@ -429,54 +428,54 @@ flatpickr("#data", {
   locale: Portuguese, // Traduz pro português
 });
 
-const yearElement = document.getElementById("yearDisplay");
-const monthElement = document.getElementById("monthDisplay");
+// const yearElement = document.getElementById("yearDisplay");
+// const monthElement = document.getElementById("monthDisplay");
 
-// ANO
+// // ANO
 
-document.getElementById("prevYear").addEventListener("click", () => {
-  const anoSelecionado = yearElement.textContent;
-  yearElement.textContent = parseInt(anoSelecionado) - 1;
-});
+// document.getElementById("prevYear").addEventListener("click", () => {
+//   const anoSelecionado = yearElement.textContent;
+//   yearElement.textContent = parseInt(anoSelecionado) - 1;
+// });
 
-document.getElementById("nextYear").addEventListener("click", () => {
-  const anoSelecionado = yearElement.textContent;
-  yearElement.textContent = parseInt(anoSelecionado) + 1;
-});
+// document.getElementById("nextYear").addEventListener("click", () => {
+//   const anoSelecionado = yearElement.textContent;
+//   yearElement.textContent = parseInt(anoSelecionado) + 1;
+// });
 
-// MES
+// // MES
 
-const months = [
-  "Janeiro",
-  "Fevereiro",
-  "Março",
-  "Abril",
-  "Maio",
-  "Junho",
-  "Julho",
-  "Agosto",
-  "Setembro",
-  "Outubro",
-  "Novembro",
-  "Dezembro",
-];
+// const months = [
+//   "Janeiro",
+//   "Fevereiro",
+//   "Março",
+//   "Abril",
+//   "Maio",
+//   "Junho",
+//   "Julho",
+//   "Agosto",
+//   "Setembro",
+//   "Outubro",
+//   "Novembro",
+//   "Dezembro",
+// ];
 
-document.getElementById("prevMonth").addEventListener("click", () => {
-  const mesSelecionado = monthElement.textContent;
-  const findMonth = months.findIndex((m) => m === mesSelecionado);
+// document.getElementById("prevMonth").addEventListener("click", () => {
+//   const mesSelecionado = monthElement.textContent;
+//   const findMonth = months.findIndex((m) => m === mesSelecionado);
 
-  monthElement.textContent = months[findMonth === 0 ? 0 : findMonth - 1];
-});
+//   monthElement.textContent = months[findMonth === 0 ? 0 : findMonth - 1];
+// });
 
-document.getElementById("nextMonth").addEventListener("click", () => {
-  const mesSelecionado = monthElement.textContent;
-  const findMonth = months.findIndex((m) => m === mesSelecionado);
+// document.getElementById("nextMonth").addEventListener("click", () => {
+//   const mesSelecionado = monthElement.textContent;
+//   const findMonth = months.findIndex((m) => m === mesSelecionado);
 
-  monthElement.textContent = months[findMonth === 11 ? 11 : findMonth + 1];
-});
+//   monthElement.textContent = months[findMonth === 11 ? 11 : findMonth + 1];
+// });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const actual = new Date();
-  yearElement.textContent = actual.getFullYear();
-  monthElement.textContent = months[actual.getMonth()];
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   const actual = new Date();
+//   yearElement.textContent = actual.getFullYear();
+//   monthElement.textContent = months[actual.getMonth()];
+// });

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="./chart/chart.css" />
     <link rel="stylesheet" href="./swal/swal.css" />
     <link rel="stylesheet" href="./media.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css" />
+
     <title>Relatório do Mês.</title>
   </head>
   <body>
@@ -17,6 +19,7 @@
       </div>
       <!-- <h1>Relatório de Fotos 📸</h1> -->
       <div id="buttons-header">
+        <button class="btns-header animado" id="changeRelatorio">Trocar Mês</button>
         <button class="btns-header animado" id="ribbon">Ribbon</button>
         <button class="btns-header animado" id="vale">Vales</button>
         <button class="btns-header animado" id="desconto">Descontos</button>
@@ -30,7 +33,7 @@
         <form id="formRegistro">
           <div id="div-registros-title">
             <h1 id="registros-title">Gerenciar Registros</h1>
-            <div id="dateHandling">
+            <!-- <div id="dateHandling">
               <div id="yearHandle">
                 <svg
                   width="24"
@@ -106,7 +109,7 @@
                   />
                 </svg>
               </div>
-            </div>
+            </div> -->
           </div>
           <input type="text" id="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
           <input type="number" id="vendidas" placeholder="Vendas" autocomplete="off" required />
@@ -148,7 +151,7 @@
   <script type="module" src="./chart/chart.js"></script>
   <script type="module" src="./js/sweetconfig.js"></script>
   <script type="module" src="js/user.js"></script>
-  <script type="module" src="./js/script.js"></script>
+  <script type="module" src="./js/date.js"></script>
   <script type="module" src="./js/relatorio.js"></script>
   <script type="module" src="./js/ini.js"></script>
   <script type="module" src="./js/dom.js"></script>

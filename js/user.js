@@ -3,6 +3,25 @@ import { auth, db } from "../db/firebase.js";
 import { signOut } from "firebase/auth";
 import { Toast } from "./toast.js";
 
+export const actualYear = () => {
+  const now = new Date();
+  const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+  const year = JSON.parse(localStorage.getItem(`data_${uid}_forExib`))?.split("/");
+
+  if (!year) return now.getFullYear();
+
+  return year[1];
+};
+
+export const actualMonth = () => {
+  const now = new Date();
+  const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+  const month = JSON.parse(localStorage.getItem(`data_${uid}_forExib`))?.split("/");
+  if (!month) return now.getMonth();
+
+  return month[0];
+};
+
 export const getUser = async () => {
   const getUserLogged = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
 
@@ -47,7 +66,7 @@ export const addVale = async (newVale) => {
   const user = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
   if (!user) return;
   try {
-    const { vales } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+    const { data: vales } = (await getDoc(doc(db, "usuarios", user.uid))).data();
 
     await updateDoc(doc(db, "usuarios", user.uid), {
       vales: [...vales, newVale],
@@ -64,7 +83,7 @@ export const addDesconto = async (newDesconto, reason = false) => {
   const user = JSON.parse(localStorage.getItem("userLoggedIn") ?? false);
   if (!user) return false;
   try {
-    const { descontos } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+    const { data: descontos } = (await getDoc(doc(db, "usuarios", user.uid))).data();
 
     await updateDoc(doc(db, "usuarios", user.uid), {
       descontos: [...descontos, newDesconto],
@@ -90,14 +109,15 @@ export const addFaltas = async ({ data, fotos }) => {
 
 export const getUserBanca = async () => {
   const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
-  const banca = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)) ?? [];
-  const vendas = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)).reduce((ac, i) => ac + parseInt(i.vendas), 0);
-  const sobras = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)).reduce((ac, i) => ac + parseInt(i.sobras), 0);
-  const vales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];
-  const descontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
+  const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
+  const banca = dataCache.banca ?? [];
+  const vendas = dataCache.banca.reduce((ac, i) => ac + parseInt(i.vendas), 0);
+  const sobras = dataCache.banca.reduce((ac, i) => ac + parseInt(i.sobras), 0);
+  const vales = dataCache.vales ?? [];
+  const descontos = dataCache.descontos ?? [];
   const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
 
-  return { banca, vendas, sobras, vales, descontos, faltas };
+  return { dataCache, banca, vendas, sobras, vales, descontos, faltas };
 };
 
 export const getPhotographers = async (username) => {

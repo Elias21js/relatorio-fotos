@@ -12,12 +12,13 @@ body {
   place-items: center;
   width: 100vw;
   height: max-content;
-  @media screen and (max-width: 700px) {
+  background-image: url("../src/auth-dev.jpg");
+  /* @media screen and (max-width: 700px) {
     background-image: url("../src/auth-700x.webp");
   }
   @media screen and (min-width: 701px) {
     background-image: url("../src/auth.webp");
-  }
+  } */
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -74,11 +75,18 @@ main {
         width: 70%;
         border-top-left-radius: 20px;
         border-bottom-right-radius: 20px;
+        background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
+        backdrop-filter: blur(2px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+        color: white;
         font-size: 1rem;
         padding: 0.7rem;
         padding-left: 1.4rem;
         outline: none;
         border: 1px solid white;
+
+        &::placeholder {
+          color: white;
+        }
       }
 
       & #email {

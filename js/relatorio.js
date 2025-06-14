@@ -4,7 +4,8 @@ import { db } from "../db/firebase.js";
 import { Toast } from "./toast.js";
 import Registro from "./registro.js";
 import { showSucess, showError } from "./toast.js";
-import { isExactly } from "./script.js";
+import isEqual from "lodash/isEqual";
+import { actualYear, getPhotographers, getUserBanca } from "./user.js";
 
 const REGISTRO = {
   relatorios: [],
@@ -12,22 +13,16 @@ const REGISTRO = {
   async init() {
     if (!localStorage.getItem("userLoggedIn")) return;
     const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
-    const local = JSON.parse(localStorage.getItem(`banca_${uid}_cache`)) ?? [];
-    const localVales = JSON.parse(localStorage.getItem(`vales_${uid}_cache`)) ?? [];
-    const localDescontos = JSON.parse(localStorage.getItem(`descontos_${uid}_cache`)) ?? [];
+    const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`));
 
-    const { banca, vales, descontos } = (await getDoc(doc(db, "usuarios", uid))).data();
-    if (isExactly(banca, local) && isExactly(vales, localVales) && isExactly(descontos, localDescontos)) {
+    const { data } = (await getDoc(doc(db, "usuarios", uid))).data();
+    console.log("from db data", data[actualYear()]);
+    if (isExactly(dataCache, data[actualYear()])) {
       Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
-      this.relatorios = local;
     } else {
-      this.relatorios = banca;
-
-      if (!isExactly(banca, local)) localStorage.setItem(`banca_${uid}_cache`, JSON.stringify(banca));
-      if (!isExactly(vales, localVales)) localStorage.setItem(`vales_${uid}_cache`, JSON.stringify(vales ?? []));
-      if (!isExactly(descontos, localDescontos))
-        localStorage.setItem(`descontos_${uid}_cache`, JSON.stringify(descontos ?? []));
       Toast.fire({ icon: "success", title: "Carregando dados do servidor..." });
+      localStorage.setItem(`data_${uid}_cache`, JSON.stringify(data[actualYear()]));
+      this.relatorios = data[actualYear()].banca ?? [];
     }
 
     const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
@@ -81,7 +76,10 @@ const REGISTRO = {
     }
   },
 
-  atualizarLista() {
+  async atualizarLista() {
+    console.log(await getPhotographers("Sofia"));
+    console.log(await getUserBanca());
+
     const lista = document.getElementById("listaRegistros");
     lista.innerHTML = "";
 
@@ -96,7 +94,8 @@ const REGISTRO = {
       header.appendChild(span);
     });
 
-    const btn_relatorio = document.getElementById("gerarRelatorio");
+    const divRelatorio = document.getElementById("gerarRelatorio-div");
+    const listagem = document.getElementById("listaRegistros");
 
     this.relatorios.forEach((day) => {
       const criarRegistro = document.createElement("div");
@@ -145,11 +144,11 @@ const REGISTRO = {
     });
 
     if (this.relatorios.length < 1) {
-      btn_relatorio.style.display = "none";
-      document.getElementById("gerarGraficos").style.display = "none";
+      divRelatorio.style.display = "none";
+      listagem.style.display = "none";
     } else {
-      btn_relatorio.style.display = "block";
-      document.getElementById("gerarGraficos").style.display = "block";
+      divRelatorio.style.display = "flex";
+      listagem.style.display = "flex";
     }
   },
 
@@ -208,6 +207,8 @@ const REGISTRO = {
   },
 
   ordernar(campo, ordem) {
+    if (!this.relatorios) return;
+
     this.relatorios.sort((a, b) => {
       let valorA, valorB;
 
@@ -237,5 +238,9 @@ const REGISTRO = {
     this.atualizarLista();
   },
 };
+
+export function isExactly(arr1, arr2) {
+  return isEqual(arr1, arr2);
+}
 
 export default REGISTRO;
