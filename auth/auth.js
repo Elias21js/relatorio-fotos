@@ -7,6 +7,17 @@ const user = document.getElementById("user");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 
+const actualYear = () => {
+  const now = new Date();
+  return now.getFullYear();
+};
+
+const actualMonth = () => {
+  const now = new Date();
+  if (now.getMonth() + 1 < 10) return `0${now.getMonth()}`;
+  return now.getMonth() + 1;
+};
+
 function isEmpty({ value: nome }, { value: senha }) {
   if (!nome || nome === "" || !senha || senha === "") {
     return true;
@@ -133,10 +144,12 @@ btn_register.addEventListener("click", async () => {
         user: user.value,
         email: email.value,
         data: {
-          2025: {
-            banca: [],
-            vales: [],
-            descontos: [],
+          [`${actualYear()}`]: {
+            [`${actualMonth()}`]: {
+              banca: [],
+              vales: [],
+              descontos: [],
+            },
           },
         },
       });

@@ -455,9 +455,6 @@ export const renderSlides = (week, id) => {
 };
 
 export const renderSemanal = async () => {
-  const ctxThirdWeek = document.getElementById("third-week")?.getContext("2d");
-  const ctxFourthWeek = document.getElementById("fourth-week")?.getContext("2d");
-
   const { firstWeek, secondWeek, thirdWeek, fourthWeek } = await getBancas("semanal");
 
   if (window.firstChartInstance) window.firstChartInstance.destroy();
@@ -582,7 +579,6 @@ export const renderSemanal = async () => {
         },
       },
     });
-  } else {
   }
 
   if (renderSlides(secondWeek, "second-week")) {
@@ -592,7 +588,7 @@ export const renderSemanal = async () => {
     const producao = secondWeek.map((n) => n.producao);
     const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
 
-    window.firstChartInstance = new Chart(document.getElementById("second-week").getContext("2d"), {
+    window.secondChartInstance = new Chart(document.getElementById("second-week").getContext("2d"), {
       type: "bar",
       data: {
         labels: nomes,
@@ -703,16 +699,268 @@ export const renderSemanal = async () => {
         },
       },
     });
-  } else {
   }
 
   if (renderSlides(thirdWeek, "third-week")) {
-  } else {
+    const nomes = secondWeek.map((n) => n.nomes);
+    const vendas = secondWeek.map((n) => n.vendas);
+    const sobras = secondWeek.map((n) => n.sobras);
+    const producao = secondWeek.map((n) => n.producao);
+    const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
+
+    window.thirdChartInstance = new Chart(document.getElementById("third-week").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: nomes,
+        datasets: [
+          {
+            label: "Vendas",
+            data: vendas,
+            backgroundColor: "rgba(75, 192, 192, 0.9)",
+            borderColor: "rgb(51, 228, 228)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Sobras",
+            data: sobras,
+            backgroundColor: "rgba(255, 99, 133, 0.8)",
+            borderColor: "rgb(255, 52, 96)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Produção",
+            data: producao,
+            backgroundColor: "rgba(45, 76, 250, 0.9)",
+            borderColor: "rgb(41, 80, 255)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+            hidden: true,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "x", // Horizontal ranking
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  return Math.max(8, Math.min(width * 0.03, 24));
+                },
+                family: "JetBrains Mono",
+              },
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const index = context.dataIndex;
+                const label = context.dataset.label;
+                const valor = context.raw;
+                const aproveitamento = aproveitamentos[index];
+                return `${label}: ${valor} | Aproveitamento: ${aproveitamento}%`;
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Terceira Semana (15 ao 22)",
+            color: "#fff",
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
+              family: "JetBrains Mono",
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  if (width < 400) return 14;
+                  if (width < 600) return 16;
+                  return 20;
+                },
+                family: "JetBrains Mono",
+              },
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+          y: {
+            ticks: {
+              color: "#fff",
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+        },
+      },
+    });
   }
 
   if (renderSlides(fourthWeek, "fourth-week")) {
-  } else {
+    const nomes = secondWeek.map((n) => n.nomes);
+    const vendas = secondWeek.map((n) => n.vendas);
+    const sobras = secondWeek.map((n) => n.sobras);
+    const producao = secondWeek.map((n) => n.producao);
+    const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
+
+    window.fourthChartInstance = new Chart(document.getElementById("fourth-week").getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: nomes,
+        datasets: [
+          {
+            label: "Vendas",
+            data: vendas,
+            backgroundColor: "rgba(75, 192, 192, 0.9)",
+            borderColor: "rgb(51, 228, 228)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Sobras",
+            data: sobras,
+            backgroundColor: "rgba(255, 99, 133, 0.8)",
+            borderColor: "rgb(255, 52, 96)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+          },
+          {
+            label: "Produção",
+            data: producao,
+            backgroundColor: "rgba(45, 76, 250, 0.9)",
+            borderColor: "rgb(41, 80, 255)",
+            borderWidth: 1,
+            borderWidth: 1,
+            borderRadius: 8,
+            hoverBackgroundColor: "#fff",
+            hoverBorderWidth: 0,
+            hidden: true,
+          },
+        ],
+      },
+      options: {
+        indexAxis: "x", // Horizontal ranking
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  return Math.max(8, Math.min(width * 0.03, 24));
+                },
+                family: "JetBrains Mono",
+              },
+            },
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const index = context.dataIndex;
+                const label = context.dataset.label;
+                const valor = context.raw;
+                const aproveitamento = aproveitamentos[index];
+                return `${label}: ${valor} | Aproveitamento: ${aproveitamento}%`;
+              },
+            },
+          },
+          title: {
+            display: true,
+            text: "Quarta Semana (23 ao 31)",
+            color: "#fff",
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
+              family: "JetBrains Mono",
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              color: "#fff",
+              font: {
+                size: (ctx) => {
+                  const width = ctx.chart.width;
+                  if (width < 400) return 14;
+                  if (width < 600) return 16;
+                  return 20;
+                },
+                family: "JetBrains Mono",
+              },
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+          y: {
+            ticks: {
+              color: "#fff",
+            },
+            grid: {
+              color: "rgba(255, 255, 255, 0.1)",
+            },
+          },
+        },
+      },
+    });
   }
+};
+
+export const resetCharts = () => {
+  const charts = document.getElementById("charts");
+  const rankChoice = document.getElementById("ranking-choice");
+  const rankingSemanal = document.getElementById("ranking-semanal");
+  const rankingDiv = document.getElementById("ranking-chart");
+  charts.style.marginTop = "0";
+  rankingDiv.style.marginTop = "0";
+
+  if (window.DoughnutChartInstance) window.DoughnutChartInstance.destroy();
+  if (window.barPessoalChartInstance) window.barPessoalChartInstance.destroy();
+  if (window.barChartInstance) window.barChartInstance.destroy();
+  if (window.firstChartInstance) window.firstChartInstance.destroy();
+  if (window.secondChartInstance) window.secondChartInstance.destroy();
+  if (window.thirdChartInstance) window.thirdChartInstance.destroy();
+  if (window.fourthChartInstance) window.fourthChartInstance.destroy();
+  charts.classList.remove("visible");
+  rankChoice.classList.remove("visible");
+  rankingSemanal.classList.remove("visible");
+  rankingDiv.classList.remove("visible");
 };
 
 document.addEventListener("DOMContentLoaded", () => {

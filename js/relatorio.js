@@ -5,7 +5,7 @@ import { Toast } from "./toast.js";
 import Registro from "./registro.js";
 import { showSucess, showError } from "./toast.js";
 import isEqual from "lodash/isEqual";
-import { actualYear, getPhotographers, getUserBanca } from "./user.js";
+import { actualMonth, actualYear, getPhotographers, getUserBanca } from "./user.js";
 
 const REGISTRO = {
   relatorios: [],
@@ -13,16 +13,28 @@ const REGISTRO = {
   async init() {
     if (!localStorage.getItem("userLoggedIn")) return;
     const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
-    const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`));
+
+    if (!localStorage.getItem(`data_${uid}_forExib`))
+      localStorage.setItem(
+        `data_${uid}_forExib`,
+        JSON.stringify(`${actualMonth() < 10 ? "0" : ""}${actualMonth()}/${actualYear()}`)
+      );
+
+    const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
 
     const { data } = (await getDoc(doc(db, "usuarios", uid))).data();
-    console.log("from db data", data[actualYear()]);
-    if (isExactly(dataCache, data[actualYear()])) {
+    console.log("from dataCache", dataCache.banca);
+    console.log("from db data", data[actualYear()][actualMonth()]);
+    if (isExactly(dataCache, data[actualYear()][actualMonth()])) {
       Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
+      this.relatorios = dataCache.banca;
     } else {
       Toast.fire({ icon: "success", title: "Carregando dados do servidor..." });
-      localStorage.setItem(`data_${uid}_cache`, JSON.stringify(data[actualYear()]));
-      this.relatorios = data[actualYear()].banca ?? [];
+      localStorage.setItem(
+        `data_${uid}_cache`,
+        JSON.stringify(data[actualYear()][actualMonth()] ?? [{ banca: [], vales: [], descontos: [] }])
+      );
+      this.relatorios = data[actualYear()][actualMonth()]?.banca ?? [];
     }
 
     const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
@@ -34,24 +46,29 @@ const REGISTRO = {
     if (!user) return;
 
     const userRef = doc(db, "usuarios", user.uid);
+
     try {
       await updateDoc(userRef, {
-        banca: this.relatorios.map((reg) => {
+        [`data.${actualYear()}.${actualMonth()}.banca`]: this.relatorios.map((reg) => {
           if (reg instanceof Registro) return reg.toJSON();
 
           return reg;
         }),
       });
 
+      const oldStorage = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`)) ?? [{ vales: [], descontos: [] }];
+
       localStorage.setItem(
-        `banca_${user.uid}_cache`,
-        JSON.stringify(
-          this.relatorios.map((reg) => {
+        `data_${user.uid}_cache`,
+        JSON.stringify({
+          vales: [...(oldStorage.vales ?? [])],
+          descontos: [...(oldStorage.descontos ?? [])],
+          banca: this.relatorios.map((reg) => {
             if (reg instanceof Registro) return reg.toJSON();
 
             return reg;
-          })
-        )
+          }),
+        })
       );
     } catch (err) {
       Toast.fire({ icon: "error", title: "⚠️ Erro ao salvar no database." });
@@ -59,11 +76,26 @@ const REGISTRO = {
     }
   },
 
+  async updateDataList() {
+    const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+    const { data } = (await getDoc(doc(db, "usuarios", uid))).data();
+
+    this.relatorios = data[actualYear()][actualMonth()]?.banca ?? [];
+    localStorage.setItem(
+      `data_${uid}_cache`,
+      JSON.stringify(data[actualYear()][actualMonth()] ?? [{ banca: [], vales: [], descontos: [] }])
+    );
+    this.atualizarLista();
+
+    return Toast.fire({ icon: "success", title: `Buscando dados do mês ${actualMonth()}...` });
+  },
+
   async adicionarDia(day, edit = false) {
     const dayExists = this.relatorios.find((day_in) => day_in.data === day.data);
 
     if (!dayExists) {
       this.relatorios.push(day);
+
       await this.updateDB();
 
       const { campo, ordem } = JSON.parse(localStorage.getItem("filtering")) ?? { campo: "data", ordem: "Menor" };
@@ -79,6 +111,9 @@ const REGISTRO = {
   async atualizarLista() {
     console.log(await getPhotographers("Sofia"));
     console.log(await getUserBanca());
+    console.log("ATUALIZADO");
+    const { uid } = JSON.parse(localStorage.getItem(`userLoggedIn`));
+    console.log(JSON.parse(localStorage.getItem(`data_${uid}_cache`)));
 
     const lista = document.getElementById("listaRegistros");
     lista.innerHTML = "";

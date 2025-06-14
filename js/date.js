@@ -2,6 +2,9 @@ import flatpickr from "flatpickr";
 import { blurMobileInputs } from "./toast.js";
 import { Portuguese } from "flatpickr/dist/l10n/pt.js";
 import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
+import REGISTRO from "./relatorio.js";
+import { resetCharts } from "../chart/chart.js";
+import { actualMonth, actualYear } from "./user.js";
 
 document.getElementById("changeRelatorio").addEventListener("click", () => {
   Swal.fire({
@@ -40,19 +43,17 @@ document.getElementById("changeRelatorio").addEventListener("click", () => {
         return Swal.showValidationMessage("Preencha os campos obrigatórios.");
       }
 
-      // localStorage.setItem(
-      //   `ribbon_${uid}_cache`,
-      //   JSON.stringify({
-      //     inicial,
-      //     descontar: descontar === 0 ? "" : descontar,
-      //   }))
-
       return { dataChange };
     },
-  }).then(({ isConfirmed, value: { dataChange } }) => {
+  }).then(async ({ isConfirmed, value }) => {
     if (isConfirmed) {
+      const { dataChange } = value;
+      if (dataChange === `${actualMonth()}/${actualYear()}`) return;
       const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
+      localStorage.removeItem(`data_${uid}_cache`);
       localStorage.setItem(`data_${uid}_forExib`, JSON.stringify(dataChange));
+      resetCharts();
+      await REGISTRO.updateDataList();
     }
   });
 });

@@ -17,7 +17,7 @@ export const actualMonth = () => {
   const now = new Date();
   const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
   const month = JSON.parse(localStorage.getItem(`data_${uid}_forExib`))?.split("/");
-  if (!month) return now.getMonth();
+  if (!month) return now.getMonth() + 1 < 10 ? `${now.getMonth() + 1}` : now.getMonth() + 1;
 
   return month[0];
 };
@@ -66,13 +66,18 @@ export const addVale = async (newVale) => {
   const user = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
   if (!user) return;
   try {
-    const { data: vales } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+    const { data } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+
+    const vales = data[actualYear()][actualMonth()].vales;
 
     await updateDoc(doc(db, "usuarios", user.uid), {
-      vales: [...vales, newVale],
+      [`data.${actualYear()}.${actualMonth()}.vales`]: [...vales, newVale],
     });
 
-    localStorage.setItem(`vales_${user.uid}_cache`, JSON.stringify([...vales, newVale]));
+    const storaged = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`));
+    storaged.vales = [...storaged.vales, newVale];
+
+    localStorage.setItem(`data_${user.uid}_cache`, JSON.stringify(storaged));
     addDesconto(newVale, "vales");
   } catch (err) {
     console.error(err);
@@ -83,13 +88,18 @@ export const addDesconto = async (newDesconto, reason = false) => {
   const user = JSON.parse(localStorage.getItem("userLoggedIn") ?? false);
   if (!user) return false;
   try {
-    const { data: descontos } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+    const { data } = (await getDoc(doc(db, "usuarios", user.uid))).data();
+
+    const descontos = data[actualYear()][actualMonth()].descontos;
 
     await updateDoc(doc(db, "usuarios", user.uid), {
-      descontos: [...descontos, newDesconto],
+      [`data.${actualYear()}.${actualMonth()}.descontos`]: [...descontos, newDesconto],
     });
 
-    localStorage.setItem(`descontos_${user.uid}_cache`, JSON.stringify([...descontos, newDesconto]));
+    const storaged = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`));
+    storaged.descontos = [...storaged.descontos, newDesconto];
+
+    localStorage.setItem(`data_${user.uid}_cache`, JSON.stringify(storaged));
   } catch (err) {
     console.error(err);
   }
@@ -111,8 +121,8 @@ export const getUserBanca = async () => {
   const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
   const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
   const banca = dataCache.banca ?? [];
-  const vendas = dataCache.banca.reduce((ac, i) => ac + parseInt(i.vendas), 0);
-  const sobras = dataCache.banca.reduce((ac, i) => ac + parseInt(i.sobras), 0);
+  const vendas = dataCache.banca?.reduce((ac, i) => ac + parseInt(i.vendas), 0) ?? [];
+  const sobras = dataCache.banca?.reduce((ac, i) => ac + parseInt(i.sobras), 0) ?? [];
   const vales = dataCache.vales ?? [];
   const descontos = dataCache.descontos ?? [];
   const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
@@ -130,5 +140,5 @@ export const getPhotographers = async (username) => {
   return { id: doc.id, ...doc.data() };
 };
 
-document.getElementById("log-out").addEventListener("click", logOut);
+document.getElementById("log-out")?.addEventListener("click", logOut);
 document.addEventListener("DOMContentLoaded", isLogged);

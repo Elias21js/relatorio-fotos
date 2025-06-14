@@ -1,7 +1,7 @@
 import { blurMobileInputs, showError, showSucess } from "./toast.js";
 import register from "./registro.js";
 import REGISTRO from "./relatorio.js";
-import { addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
+import { actualMonth, addDesconto, addFaltas, addVale, getUserBanca, getUserName } from "./user.js";
 import {
   renderBar,
   renderDoughnut,
@@ -21,7 +21,7 @@ import flatpickr from "flatpickr";
     const vendas = parseInt(document.getElementById("vendidas").value);
     const sobras = parseInt(document.getElementById("sobras").value);
 
-    REGISTRO.adicionarDia(new register(REGISTRO.converterData(data), vendas, sobras));
+    REGISTRO.adicionarDia(new register(REGISTRO.converterData(`${data}/${actualMonth()}`), vendas, sobras));
     document.getElementById("formRegistro").reset();
   });
 }
@@ -89,8 +89,8 @@ import flatpickr from "flatpickr";
           html: `
               <div class="edit-div">
                 <div>
-                    <label for="swal-input1">Data: </label>
-                    <input id="swal-input1" class="swal2-input" value=${data}>
+                    <label for="swal-input1" >Data: </label>
+                    <input id="swal-input1" class="data swal2-input" value=${data}>
                 </div>
                 <div>
                     <label for="swal-input2">Vendas: </label>
@@ -102,7 +102,15 @@ import flatpickr from "flatpickr";
                 </div>
               </div>
             `,
-          didOpen: blurMobileInputs(),
+          didOpen: () => {
+            flatpickr(".data", {
+              dateFormat: "d", // Você escolhe o formato que quiser
+              defaultDate: "today",
+              altInput: false, // Exibe data bonitinha
+              altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
+              locale: Portuguese, // Traduz pro português
+            });
+          },
           focusConfirm: false,
           preConfirm: () => {
             const swal1 = document.getElementById("swal-input1").value;
@@ -111,7 +119,7 @@ import flatpickr from "flatpickr";
 
             if (swal1.trim() === "" || swal2.trim() === "" || swal3.trim() === "") return false;
 
-            return [swal1, swal2, swal3];
+            return [`${swal1}/${actualMonth()}`, swal2, swal3];
           },
         }).then(({ isConfirmed, isDenied, dismiss, value }) => {
           if (isConfirmed) {
@@ -213,7 +221,7 @@ const showChart = (chartToDisplay) => {
     rankChoice.classList.remove("visible");
     rankingSemanal.classList.remove("visible");
     rankingDiv.classList.remove("visible");
-    charts.classList.add("visible");
+    rankingDiv.style.marginTop = "0";
   }
 
   if (chartToDisplay === "showRanking") {
@@ -221,6 +229,7 @@ const showChart = (chartToDisplay) => {
     rankingDiv.classList.add("visible");
     rankingSemanal.classList.remove("visible");
     charts.classList.remove("visible");
+    charts.style.marginTop = "0";
   }
 
   if (chartToDisplay === "rankingSemanal") {
@@ -277,8 +286,8 @@ document.getElementById("vale").addEventListener("click", () => {
     html: `
         <div class="edit-div">
           <div>
-              <label for="swal-input1">Data: </label>
-              <input id="swal-input1" class="swal2-input" autocomplete="off">
+              <label for="swal-input1" >Data: </label>
+              <input id="swal-input1" class="data swal2-input" autocomplete="off">
           </div>
           <div>
               <label for="swal-input2">Motivo: </label>
@@ -290,7 +299,15 @@ document.getElementById("vale").addEventListener("click", () => {
           </div>
         </div>
       `,
-    didOpen: blurMobileInputs(),
+    didOpen: () => {
+      flatpickr(".data", {
+        dateFormat: "d", // Você escolhe o formato que quiser
+        defaultDate: "today",
+        altInput: false, // Exibe data bonitinha
+        altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
+        locale: Portuguese, // Traduz pro português
+      });
+    },
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -300,7 +317,7 @@ document.getElementById("vale").addEventListener("click", () => {
       if (!data || data.trim() === "") return false;
       if (!valor || valor.trim() === "") return false;
 
-      return [data, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
+      return [`${data}/${actualMonth()}`, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
     },
   }).then(({ isConfirmed, isDenied, dismiss, value }) => {
     if (isConfirmed) {
@@ -332,7 +349,7 @@ document.getElementById("desconto").addEventListener("click", () => {
       <div class="edit-div">
         <div>
             <label for="swal-input1">Data: </label>
-            <input id="swal-input1" class="swal2-input" autocomplete="off">
+            <input id="swal-input1" class="data swal2-input" autocomplete="off">
         </div>
         <div>
             <label for="swal-input2">Motivo: </label>
@@ -344,7 +361,15 @@ document.getElementById("desconto").addEventListener("click", () => {
         </div>
       </div>
     `,
-    didOpen: blurMobileInputs(),
+    didOpen: () => {
+      flatpickr(".data", {
+        dateFormat: "d", // Você escolhe o formato que quiser
+        defaultDate: "today",
+        altInput: false, // Exibe data bonitinha
+        altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
+        locale: Portuguese, // Traduz pro português
+      });
+    },
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -354,7 +379,7 @@ document.getElementById("desconto").addEventListener("click", () => {
       if (!data || data.trim() === "") return false;
       if (!valor || valor.trim() === "") return false;
 
-      return [data, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
+      return [`${data}/${actualMonth()}`, motivo.trim() === "" ? "motivo não informado." : motivo, valor];
     },
   }).then(({ isConfirmed, isDenied, dismiss, value }) => {
     if (isConfirmed) {
@@ -385,8 +410,8 @@ document.getElementById("faltas").addEventListener("click", () => {
     html: `
     <div class="edit-div">
       <div>
-          <label for="swal-input1">Data: </label>
-          <input id="swal-input1" class="swal2-input" autocomplete="off">
+          <label for="swal-input1" >Data: </label>
+          <input id="swal-input1" class="data swal2-input" autocomplete="off">
       </div>
       <div>
           <label for="swal-input2">Fotos: </label>
@@ -394,7 +419,15 @@ document.getElementById("faltas").addEventListener("click", () => {
       </div>
     </div>
   `,
-    didOpen: blurMobileInputs(),
+    didOpen: () => {
+      flatpickr(".data", {
+        dateFormat: "d", // Você escolhe o formato que quiser
+        defaultDate: "today",
+        altInput: false, // Exibe data bonitinha
+        altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
+        locale: Portuguese, // Traduz pro português
+      });
+    },
     focusConfirm: false,
     preConfirm: () => {
       const data = document.getElementById("swal-input1").value;
@@ -403,14 +436,13 @@ document.getElementById("faltas").addEventListener("click", () => {
       if (!data || data.trim() === "") return false;
       if (!fotos || fotos.trim() === "") return false;
 
-      return [data, fotos];
+      return { data: `${data}/${actualMonth()}`, fotos };
     },
-  }).then(({ isConfirmed, isDenied, dismiss, value }) => {
+  }).then(({ isConfirmed, value }) => {
     if (isConfirmed) {
       if (!value) return;
-      addFaltas({ data: value[0], fotos: value[1] });
-    } else if (isDenied) {
-    } else if (dismiss === Swal.DismissReason.cancel) {
+      const { data, fotos } = value;
+      addFaltas({ data, fotos });
     }
   });
 });
@@ -421,61 +453,9 @@ import "flatpickr/dist/flatpickr.min.css";
 import { Portuguese } from "flatpickr/dist/l10n/pt.js";
 
 flatpickr("#data", {
-  dateFormat: "d/m", // Você escolhe o formato que quiser
+  dateFormat: "d", // Você escolhe o formato que quiser
   defaultDate: "today",
   altInput: false, // Exibe data bonitinha
   altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
   locale: Portuguese, // Traduz pro português
 });
-
-// const yearElement = document.getElementById("yearDisplay");
-// const monthElement = document.getElementById("monthDisplay");
-
-// // ANO
-
-// document.getElementById("prevYear").addEventListener("click", () => {
-//   const anoSelecionado = yearElement.textContent;
-//   yearElement.textContent = parseInt(anoSelecionado) - 1;
-// });
-
-// document.getElementById("nextYear").addEventListener("click", () => {
-//   const anoSelecionado = yearElement.textContent;
-//   yearElement.textContent = parseInt(anoSelecionado) + 1;
-// });
-
-// // MES
-
-// const months = [
-//   "Janeiro",
-//   "Fevereiro",
-//   "Março",
-//   "Abril",
-//   "Maio",
-//   "Junho",
-//   "Julho",
-//   "Agosto",
-//   "Setembro",
-//   "Outubro",
-//   "Novembro",
-//   "Dezembro",
-// ];
-
-// document.getElementById("prevMonth").addEventListener("click", () => {
-//   const mesSelecionado = monthElement.textContent;
-//   const findMonth = months.findIndex((m) => m === mesSelecionado);
-
-//   monthElement.textContent = months[findMonth === 0 ? 0 : findMonth - 1];
-// });
-
-// document.getElementById("nextMonth").addEventListener("click", () => {
-//   const mesSelecionado = monthElement.textContent;
-//   const findMonth = months.findIndex((m) => m === mesSelecionado);
-
-//   monthElement.textContent = months[findMonth === 11 ? 11 : findMonth + 1];
-// });
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   const actual = new Date();
-//   yearElement.textContent = actual.getFullYear();
-//   monthElement.textContent = months[actual.getMonth()];
-// });
