@@ -14,7 +14,7 @@ const actualYear = () => {
 
 const actualMonth = () => {
   const now = new Date();
-  if (now.getMonth() + 1 < 10) return `0${now.getMonth()}`;
+  if (now.getMonth() + 1 < 10) return `0${now.getMonth() + 1}`;
   return now.getMonth() + 1;
 };
 

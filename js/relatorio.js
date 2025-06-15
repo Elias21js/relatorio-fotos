@@ -15,16 +15,13 @@ const REGISTRO = {
     const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
 
     if (!localStorage.getItem(`data_${uid}_forExib`))
-      localStorage.setItem(
-        `data_${uid}_forExib`,
-        JSON.stringify(`${actualMonth() < 10 ? "0" : ""}${actualMonth()}/${actualYear()}`)
-      );
+      localStorage.setItem(`data_${uid}_forExib`, JSON.stringify(`${actualMonth()}/${actualYear()}`));
 
     const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
 
     const { data } = (await getDoc(doc(db, "usuarios", uid))).data();
-    console.log("from dataCache", dataCache.banca);
-    console.log("from db data", data[actualYear()][actualMonth()]);
+    console.log("from dataCache", dataCache);
+    console.log("from db data", data);
     if (isExactly(dataCache, data[actualYear()][actualMonth()])) {
       Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
       this.relatorios = dataCache.banca;
@@ -32,7 +29,11 @@ const REGISTRO = {
       Toast.fire({ icon: "success", title: "Carregando dados do servidor..." });
       localStorage.setItem(
         `data_${uid}_cache`,
-        JSON.stringify(data[actualYear()][actualMonth()] ?? [{ banca: [], vales: [], descontos: [] }])
+        JSON.stringify({
+          banca: data[actualYear()][actualMonth()]?.banca ?? [],
+          vales: data[actualYear()][actualMonth()]?.vales ?? [],
+          descontos: data[actualYear()][actualMonth()]?.descontos ?? [],
+        })
       );
       this.relatorios = data[actualYear()][actualMonth()]?.banca ?? [];
     }
@@ -109,7 +110,6 @@ const REGISTRO = {
   },
 
   async atualizarLista() {
-    console.log(await getPhotographers("Sofia"));
     console.log(await getUserBanca());
     console.log("ATUALIZADO");
     const { uid } = JSON.parse(localStorage.getItem(`userLoggedIn`));

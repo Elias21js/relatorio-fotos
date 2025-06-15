@@ -17,7 +17,7 @@ export const actualMonth = () => {
   const now = new Date();
   const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
   const month = JSON.parse(localStorage.getItem(`data_${uid}_forExib`))?.split("/");
-  if (!month) return now.getMonth() + 1 < 10 ? `${now.getMonth() + 1}` : now.getMonth() + 1;
+  if (!month) return now.getMonth() + 1 < 10 ? `0${now.getMonth() + 1}` : now.getMonth() + 1;
 
   return month[0];
 };

@@ -1,5 +1,5 @@
 import Chart from "chart.js/auto";
-import { getPhotographers, getUserBanca } from "../js/user.js";
+import { actualMonth, actualYear, getPhotographers, getUserBanca } from "../js/user.js";
 import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -225,6 +225,8 @@ const getBancas = async (period) => {
   const sarah = await getPhotographers("Sarah");
   const fly = await getPhotographers("fly");
 
+  console.log(sarah);
+
   function filtrarPorDias(nome, banca, inicio, fim) {
     const revBanca = banca.filter((item) => {
       const [dia, mes] = item.data.split("/").map(Number);
@@ -242,13 +244,13 @@ const getBancas = async (period) => {
   }
 
   if (period === "mensal") {
-    const rankingMensal = [ss, sarah, fly].map((fotografo) => {
-      const vendas = fotografo.banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
-      const sobras = fotografo.banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+    const rankingMensal = [ss, sarah, fly].map(({ user, data }) => {
+      const vendas = data[actualYear()][actualMonth()].banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
+      const sobras = data[actualYear()][actualMonth()].banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
       const producao = parseInt(vendas) + parseInt(sobras);
       const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
 
-      return { nome: fotografo.user, vendas, sobras, producao, aproveitamento: aprov.toFixed(2) };
+      return { nome: user, vendas, sobras, producao, aproveitamento: aprov.toFixed(2) };
     });
 
     const fotografosOrdenados = rankingMensal.sort((a, b) => b.vendas - a.vendas);
@@ -265,23 +267,32 @@ const getBancas = async (period) => {
 
     return { nomes, vendas, sobras, producao, aproveitamentos };
   } else {
-    const firstWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 1, 7));
-    const secondWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 8, 15));
-    const thirdWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 16, 22));
-    const fourthWeek = [ss, sarah, fly].map((fotografo) => filtrarPorDias(fotografo.user, fotografo.banca, 23, 31));
+    const firstWeek = [ss, sarah, fly].map(({ user, data }) =>
+      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 1, 7)
+    );
+    const secondWeek = [ss, sarah, fly].map(({ user, data }) =>
+      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 8, 15)
+    );
+    const thirdWeek = [ss, sarah, fly].map(({ user, data }) =>
+      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 16, 22)
+    );
+    const fourthWeek = [ss, sarah, fly].map(({ user, data }) =>
+      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 23, 31)
+    );
 
     const ordenedWeek = (week) => {
       if (week[0] === undefined) return;
 
+      console.log(week);
       const ordered = [...week].sort((a, b) => b.vendas - a.vendas);
 
       const medalha = ["🥇", "🥈", "🥉"] || "📸";
       return ordered.map((i, idx) => ({
-        nomes: `${medalha[idx]} ${i.nome}`,
-        vendas: i.vendas,
-        sobras: i.sobras,
-        producao: i.producao,
-        aproveitamento: i.aprov.toFixed(2),
+        nomes: `${medalha[idx]} ${i?.nome ?? "vazio"}`,
+        vendas: i?.vendas,
+        sobras: i?.sobras,
+        producao: i?.producao,
+        aproveitamento: i?.aprov.toFixed(2),
       }));
     };
 
@@ -702,11 +713,11 @@ export const renderSemanal = async () => {
   }
 
   if (renderSlides(thirdWeek, "third-week")) {
-    const nomes = secondWeek.map((n) => n.nomes);
-    const vendas = secondWeek.map((n) => n.vendas);
-    const sobras = secondWeek.map((n) => n.sobras);
-    const producao = secondWeek.map((n) => n.producao);
-    const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
+    const nomes = thirdWeek.map((n) => n.nomes);
+    const vendas = thirdWeek.map((n) => n.vendas);
+    const sobras = thirdWeek.map((n) => n.sobras);
+    const producao = thirdWeek.map((n) => n.producao);
+    const aproveitamentos = thirdWeek.map((n) => n.aproveitamento);
 
     window.thirdChartInstance = new Chart(document.getElementById("third-week").getContext("2d"), {
       type: "bar",
@@ -822,11 +833,11 @@ export const renderSemanal = async () => {
   }
 
   if (renderSlides(fourthWeek, "fourth-week")) {
-    const nomes = secondWeek.map((n) => n.nomes);
-    const vendas = secondWeek.map((n) => n.vendas);
-    const sobras = secondWeek.map((n) => n.sobras);
-    const producao = secondWeek.map((n) => n.producao);
-    const aproveitamentos = secondWeek.map((n) => n.aproveitamento);
+    const nomes = fourthWeek.map((n) => n.nomes);
+    const vendas = fourthWeek.map((n) => n.vendas);
+    const sobras = fourthWeek.map((n) => n.sobras);
+    const producao = fourthWeek.map((n) => n.producao);
+    const aproveitamentos = fourthWeek.map((n) => n.aproveitamento);
 
     window.fourthChartInstance = new Chart(document.getElementById("fourth-week").getContext("2d"), {
       type: "bar",
