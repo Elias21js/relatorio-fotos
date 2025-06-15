@@ -4,10 +4,16 @@ import Swiper from "swiper";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 
-const ctx = document.getElementById("doughnut-chart").getContext("2d");
+function getDiaDaSemana(day, mes = actualMonth(), ano = actualYear()) {
+  const dia = day.split("/")[0];
+
+  const data = new Date(ano, parseInt(mes, 10) - 1, parseInt(dia, 10));
+  const dias = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+  return `${day} - ${dias[data.getDay()]}`;
+}
 
 export const renderDoughnut = (producao, vendas, sobras) => {
-  // Dados que você pode mudar
+  const ctx = document.getElementById("doughnut-chart").getContext("2d");
 
   if (window.DoughnutChartInstance) window.DoughnutChartInstance.destroy();
 
@@ -23,8 +29,6 @@ export const renderDoughnut = (producao, vendas, sobras) => {
       },
     ],
   };
-
-  // Plugin para desenhar texto no centro do doughnut
 
   window.DoughnutChartInstance = new Chart(ctx, {
     type: "doughnut",
@@ -173,6 +177,7 @@ export const renderBarPessoal = async () => {
           mode: "index",
           intersect: false,
           callbacks: {
+            title: (tooltipItems) => `${getDiaDaSemana(tooltipItems[0].label)}`,
             label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}.`,
           },
         },
@@ -241,6 +246,23 @@ const getBancas = async (period) => {
     if (isNaN(aprov)) return;
 
     return { nome, vendas, sobras, producao, aprov };
+  }
+
+  if (period === "performance") {
+    const performance = [ss, sarah, fly].map(({ user, data }) => {
+      const registros = data[actualYear()][actualMonth()].banca.map((i) => {
+        return {
+          data: i.data,
+          vendas: i.vendas,
+          sobras: i.sobras,
+          producao: i.producao,
+          aproveitamento: i.aprov,
+        };
+      });
+      return { user, registros };
+    });
+
+    return { performance };
   }
 
   if (period === "mensal") {
@@ -951,6 +973,117 @@ export const renderSemanal = async () => {
       },
     });
   }
+};
+
+export const renderPerformance = async () => {
+  const ctx = document.getElementById("performance-chart").getContext("2d");
+
+  const { performance } = await getBancas("performance");
+
+  console.log(performance);
+
+  if (window.performanceChartInstance) {
+    window.performanceChartInstance.destroy();
+  }
+
+  const allDatesSet = new Set();
+  performance.map(({ registros }) => registros.map(({ data }) => allDatesSet.add(data)));
+  const labels = Array.from(allDatesSet).sort();
+
+  const colors = ["#DC143C", "#00BFFF", "#DA70D6"];
+
+  const datasets = performance.map(({ user, registros }, idx) => {
+    const regMap = {};
+
+    registros.forEach(({ data, vendas }) => (regMap[data] = vendas));
+
+    return {
+      label: user,
+      data: labels.map((label) => regMap[label] ?? 0),
+      fill: false,
+      borderColor: colors[idx],
+      pointBackgroundColor: colors[idx],
+      backgroundColor: colors[idx],
+      tension: 0.2,
+    };
+  });
+
+  window.performanceChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels, //nome embaixo
+      datasets,
+    },
+    options: {
+      indexAxis: "x",
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: "#ffffff",
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                return Math.max(8, Math.min(width * 0.03, 24));
+              },
+              family: "JetBrains Mono",
+            },
+          },
+        },
+        tooltip: {
+          titleColor: "#fff",
+          bodyColor: "#fff",
+          footerColor: "#fff",
+          mode: "index",
+          intersect: false,
+          callbacks: {
+            title: (tooltipItems) => `${getDiaDaSemana(tooltipItems[0].label)}`,
+            label: (ctx) => `${ctx.dataset.label}: ${ctx.formattedValue}.`,
+          },
+        },
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: "#fff",
+            stepSize: 5,
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                if (width < 400) return 14;
+                if (width < 600) return 16;
+                return 20;
+              },
+            },
+          },
+        },
+        x: {
+          ticks: {
+            color: "#fff",
+            font: {
+              size: (ctx) => {
+                const width = ctx.chart.width;
+                if (width < 400) return 14;
+                if (width < 600) return 16;
+                return 20;
+              },
+            },
+          },
+          // title: {
+          //   display: true,
+          //   text: "Dias",
+          //   color: "#fff",
+          //   font: {
+          //     size: 20,
+          //     weight: "normal",
+          //   },
+          // },
+        },
+      },
+    },
+  });
 };
 
 export const resetCharts = () => {

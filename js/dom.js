@@ -9,6 +9,7 @@ import {
   renderSemanal,
   renderSwiper,
   smoothScrollTo,
+  renderPerformance,
 } from "../chart/chart.js";
 import flatpickr from "flatpickr";
 
@@ -215,19 +216,24 @@ const rankingSemanal = document.getElementById("ranking-semanal");
 const rankSemanalBtn = document.getElementById("semanal");
 const rankMensalBtn = document.getElementById("mensal");
 
+const performance = document.getElementById("ranking-performance");
+
 const showChart = (chartToDisplay) => {
   if (chartToDisplay === "charts") {
     charts.classList.add("visible");
     rankChoice.classList.remove("visible");
     rankingSemanal.classList.remove("visible");
     rankingDiv.classList.remove("visible");
+    performance.classList.remove("visible");
     rankingDiv.style.marginTop = "0";
+    performance.style.marginBottom = "0";
   }
 
   if (chartToDisplay === "showRanking") {
     rankChoice.classList.add("visible");
     rankingDiv.classList.add("visible");
     rankingSemanal.classList.remove("visible");
+    performance.classList.remove("visible");
     charts.classList.remove("visible");
     charts.style.marginTop = "0";
   }
@@ -235,14 +241,18 @@ const showChart = (chartToDisplay) => {
   if (chartToDisplay === "rankingSemanal") {
     rankingDiv.classList.remove("visible");
     rankingSemanal.classList.add("visible");
+    performance.classList.remove("visible");
+    performance.style.marginBottom = "0";
+  }
+
+  if (chartToDisplay === "performance") {
+    rankingDiv.classList.remove("visible");
+    rankingSemanal.classList.remove("visible");
+    charts.classList.remove("visible");
+    performance.classList.add("visible");
+    performance.style.marginBottom = "10rem";
   }
 };
-
-rankSemanalBtn.addEventListener("click", async () => {
-  await renderSwiper();
-  await renderSemanal();
-  showChart("rankingSemanal");
-});
 
 // GERAR RANKING
 
@@ -263,9 +273,23 @@ const showRanking = (before = false) => {
     charts.style.marginTop = "10rem";
   });
 
+  rankSemanalBtn.addEventListener("click", async () => {
+    await renderSwiper();
+    await renderSemanal();
+    showChart("rankingSemanal");
+  });
+
   rankingBtn.addEventListener("click", () => showRanking(true));
 
   rankMensalBtn.addEventListener("click", showRanking);
+
+  document.getElementById("desempenho").addEventListener("click", async () => {
+    const performanceDiv = document.getElementById("ranking-performance");
+    showChart("performance");
+    smoothScrollTo(performanceDiv, 1000);
+
+    await renderPerformance();
+  });
 }
 // ADICIONAR VALES
 
