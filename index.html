@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="/relatorio-fotos/assets/favicon-BYJlRSnv.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css" />
+
     <title>Relatório do Mês.</title>
-    <script type="module" crossorigin src="/relatorio-fotos/assets/main-1SATYT6k.js"></script>
-    <link rel="modulepreload" crossorigin href="/relatorio-fotos/assets/toast-E2cR0g-B.js">
-    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/toast-C788VUnp.css">
-    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/main-BoFZDBmg.css">
+    <script type="module" crossorigin src="/relatorio-fotos/assets/main-Bw69zIXy.js"></script>
+    <link rel="modulepreload" crossorigin href="/relatorio-fotos/assets/toast-Dy4hwymc.js">
+    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/toast-B1vc6C_y.css">
+    <link rel="stylesheet" crossorigin href="/relatorio-fotos/assets/main-BGpt9Gvk.css">
   </head>
   <body>
     <header>
@@ -17,6 +19,7 @@
       </div>
       <!-- <h1>Relatório de Fotos 📸</h1> -->
       <div id="buttons-header">
+        <button class="btns-header animado" id="changeRelatorio">Trocar Mês</button>
         <button class="btns-header animado" id="ribbon">Ribbon</button>
         <button class="btns-header animado" id="vale">Vales</button>
         <button class="btns-header animado" id="desconto">Descontos</button>
@@ -30,6 +33,83 @@
         <form id="formRegistro">
           <div id="div-registros-title">
             <h1 id="registros-title">Gerenciar Registros</h1>
+            <!-- <div id="dateHandling">
+              <div id="yearHandle">
+                <svg
+                  width="24"
+                  id="prevYear"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 6L9 12L15 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+
+                <h2 id="yearDisplay">2025</h2>
+
+                <svg
+                  width="24"
+                  id="nextYear"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 6L15 12L9 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+
+              <div id="monthHandle">
+                <svg
+                  width="24"
+                  id="prevMonth"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M15 6L9 12L15 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+
+                <h2 id="monthDisplay">Junho</h2>
+
+                <svg
+                  width="24"
+                  id="nextMonth"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 6L15 12L9 18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div> -->
           </div>
           <input type="text" id="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
           <input type="number" id="vendidas" placeholder="Vendas" autocomplete="off" required />
@@ -50,6 +130,7 @@
       <div id="ranking-choice">
         <button id="semanal" type="submit" class="botao-estiloso">Semanal</button>
         <button id="mensal" type="submit" class="botao-estiloso">Mensal</button>
+        <button id="desempenho" type="submit" class="botao-estiloso">Desempenho</button>
       </div>
 
       <div id="charts">
@@ -60,25 +141,14 @@
         <canvas id="bar-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
       </div>
 
+      <div id="ranking-performance">
+        <canvas id="performance-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
+      </div>
+
       <div id="ranking-semanal" class="swiper">
         <div id="wrapper" class="swiper-wrapper">
           <!-- Gráficos inseridos aqui -->
         </div>
-
-        <!-- Botões de navegação -->
-        <!-- <div class="swiper-button-prev custom-arrow">
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2" fill="none" />
-          </svg>
-        </div>
-        <div class="swiper-button-next custom-arrow">
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <path d="M9 6l6 6-6 6" stroke="white" stroke-width="2" fill="none" />
-          </svg>
-        </div> -->
-
-        <!-- Paginação (bolinhas) -->
-        <!-- <div class="swiper-pagination"></div> -->
       </div>
     </main>
   </body>
