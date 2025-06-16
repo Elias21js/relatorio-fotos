@@ -1,7 +1,10 @@
 import flatpickr from "flatpickr";
 import { blurMobileInputs } from "./toast.js";
 import { Portuguese } from "flatpickr/dist/l10n/pt.js";
-import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
+import "flatpickr/dist/plugins/monthSelect/style.css";
+// import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
+import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect/index.js";
+
 import REGISTRO from "./relatorio.js";
 import { resetCharts } from "../chart/chart.js";
 import { actualMonth, actualYear } from "./user.js";
@@ -17,24 +20,28 @@ document.getElementById("changeRelatorio").addEventListener("click", () => {
         <div class="edit-div">
             <div>
                 <label for="dataForExib">Mudar Data:</label>
-                <input name="dataForExib"  class="swal2-input"  id="dataForExib" type="text" autocomplete="off" placeholder="Data para exibição" >
+                <input name="dataForExib" class="swal2-input dataExib" id="dataForExib" type="text" autocomplete="off" placeholder="Data para exibição" >
             </div>
         </div>
         `,
     didOpen: () => {
-      blurMobileInputs();
+      setTimeout(() => {
+        const el = document.querySelector(".dataExib");
+        if (!el) return console.warn("Input .dataExib não encontrado!");
 
-      flatpickr("#dataForExib", {
-        defaultDate: "today",
-        plugins: [
-          new monthSelectPlugin({
-            shorthand: true,
-            dateFormat: "m/Y", // Valor do input real
-            altFormat: "M Y", // Valor exibido pro usuário (Ex: Junho 2025)
-          }),
-        ],
-        locale: Portuguese, // Traduz pro português
-      });
+        flatpickr(el, {
+          defaultDate: "today",
+          plugins: [
+            new monthSelectPlugin({
+              shorthand: true,
+              dateFormat: "m/Y",
+              altFormat: "M Y",
+            }),
+          ],
+          locale: Portuguese,
+          disableMobile: true,
+        });
+      }, 0);
     },
     preConfirm() {
       const dataChange = document.getElementById("dataForExib").value;

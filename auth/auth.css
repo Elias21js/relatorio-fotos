@@ -46,11 +46,11 @@ main {
   border-bottom-right-radius: 8rem;
 
   & #title {
-    width: 190px;
+    width: clamp(150px, 78%, 215px);
     height: 215px;
 
-    img {
-      width: 100%;
+    & img {
+      width: 100% !important;
       height: 100%;
     }
   }

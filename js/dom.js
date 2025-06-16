@@ -12,6 +12,8 @@ import {
   renderPerformance,
 } from "../chart/chart.js";
 import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import { Portuguese } from "flatpickr/dist/l10n/pt.js";
 
 // CRIAR REGISTRO
 {
@@ -110,6 +112,7 @@ import flatpickr from "flatpickr";
               altInput: false, // Exibe data bonitinha
               altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
               locale: Portuguese, // Traduz pro português
+              disableMobile: true,
             });
           },
           focusConfirm: false,
@@ -251,6 +254,7 @@ const showChart = (chartToDisplay) => {
     charts.classList.remove("visible");
     performance.classList.add("visible");
     performance.style.marginBottom = "10rem";
+    charts.style.marginTop = "0";
   }
 };
 
@@ -330,6 +334,7 @@ document.getElementById("vale").addEventListener("click", () => {
         altInput: false, // Exibe data bonitinha
         altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
         locale: Portuguese, // Traduz pro português
+        disableMobile: true,
       });
     },
     focusConfirm: false,
@@ -392,6 +397,7 @@ document.getElementById("desconto").addEventListener("click", () => {
         altInput: false, // Exibe data bonitinha
         altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
         locale: Portuguese, // Traduz pro português
+        disableMobile: true,
       });
     },
     focusConfirm: false,
@@ -450,6 +456,7 @@ document.getElementById("faltas").addEventListener("click", () => {
         altInput: false, // Exibe data bonitinha
         altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
         locale: Portuguese, // Traduz pro português
+        disableMobile: true,
       });
     },
     focusConfirm: false,
@@ -471,10 +478,7 @@ document.getElementById("faltas").addEventListener("click", () => {
   });
 });
 
-// FILTRAR MÊSES
-
-import "flatpickr/dist/flatpickr.min.css";
-import { Portuguese } from "flatpickr/dist/l10n/pt.js";
+// INPUT ADICIONAR DIA
 
 flatpickr("#data", {
   dateFormat: "d", // Você escolhe o formato que quiser
@@ -482,4 +486,5 @@ flatpickr("#data", {
   altInput: false, // Exibe data bonitinha
   altFormat: "F j, Y", // Tipo "13 de Junho, 2025"
   locale: Portuguese, // Traduz pro português
+  disableMobile: true,
 });

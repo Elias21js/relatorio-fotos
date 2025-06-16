@@ -130,6 +130,16 @@
   #gerarRelatorio {
     font-size: 1.5rem;
   }
+
+  #ranking-choice {
+    & #desempenho {
+      display: none;
+    }
+  }
+
+  #ranking-performance {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 487px) {
@@ -154,5 +164,43 @@
 
   .swal2-popup .ul-rela {
     font-size: 4vw;
+  }
+}
+
+.flatpickr-calendar {
+  z-index: 9999; /* Sempre acima de qualquer coisa */
+  max-width: 90vw; /* Nunca maior que a tela no mobile */
+  font-size: 1rem;
+}
+
+.flatpickr-months .flatpickr-month {
+  justify-content: center;
+}
+
+.flatpickr-current-month {
+  font-size: 1.1rem;
+}
+
+/* Plugin de Mês precisa de carinho especial */
+.flatpickr-monthSelect-theme-light .flatpickr-months {
+  padding: 0.5rem;
+}
+
+@media (max-width: 500px) {
+  .flatpickr-calendar {
+    font-size: 0.9rem;
+    width: 90vw !important;
+    left: 5% !important; /* Centraliza */
+    right: auto !important;
+  }
+
+  .flatpickr-monthSelect-theme-light .flatpickr-months {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .flatpickr-monthSelect-theme-light .flatpickr-month {
+    width: 30%;
+    min-width: 70px;
   }
 }
