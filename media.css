@@ -1,9 +1,24 @@
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1020px) {
+  header {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    & #buttons-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      row-gap: 2rem;
+    }
+  }
+}
+
+@media screen and (max-width: 710px) {
   header {
     & #buttons-header {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
+      row-gap: 2rem;
     }
   }
 }
