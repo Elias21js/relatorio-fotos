@@ -20,7 +20,7 @@ body {
     background-image: url("./src/index-700x.webp");
   }
   @media screen and (min-width: 701px) {
-    background-image: url("./src/index-ps.jpg");
+    background-image: url("./src/index.webp");
   }
   background-size: cover;
   background-repeat: no-repeat;
@@ -94,7 +94,7 @@ main {
       border: 1px solid rgba(255, 255, 255, 0.2); /* Contorninho elegante */
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); /* Um glowzinho maroto */
       align-items: center;
-      width: clamp(330px, 100%, 500px);
+      width: clamp(230px, 100%, 500px);
       flex-direction: column;
       row-gap: 2rem;
 
@@ -106,7 +106,8 @@ main {
         row-gap: 2rem;
         margin: 2rem 0;
         & h1 {
-          font-size: 2.2rem;
+          text-align: center;
+          font-size: clamp(11px, 1.8rem, 18px);
         }
 
         & #dateHandling {
@@ -188,6 +189,33 @@ main {
       }
     }
   }
+}
+
+.head-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+
+  & span {
+    text-align: center;
+  }
+}
+
+.descontos-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* background: var(--card-color); */
+  background: rgba(255, 255, 255, 0.061); /* Fundo levemente branco/transparente */
+  backdrop-filter: blur(10px); /* A MÁGICA DO VIDRO ACONTECE AQUI */
+  padding: 1.6rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.7s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .botao-estiloso {

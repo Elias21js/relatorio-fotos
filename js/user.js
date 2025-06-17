@@ -47,7 +47,7 @@ export const logOut = async () => {
   const user = (await getUser()) ?? false;
 
   if (user) await signOut(auth);
-  localStorage.removeItem("userLoggedIn");
+  localStorage.clear();
 
   isLogged();
 
@@ -62,29 +62,7 @@ export const getUserName = () => {
   return name;
 };
 
-export const addVale = async (newVale) => {
-  const user = JSON.parse(localStorage.getItem("userLoggedIn")) ?? false;
-  if (!user) return;
-  try {
-    const { data } = (await getDoc(doc(db, "usuarios", user.uid))).data();
-
-    const vales = data[actualYear()][actualMonth()].vales;
-
-    await updateDoc(doc(db, "usuarios", user.uid), {
-      [`data.${actualYear()}.${actualMonth()}.vales`]: [...vales, newVale],
-    });
-
-    const storaged = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`));
-    storaged.vales = [...storaged.vales, newVale];
-
-    localStorage.setItem(`data_${user.uid}_cache`, JSON.stringify(storaged));
-    addDesconto(newVale, "vales");
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-export const addDesconto = async (newDesconto, reason = false) => {
+export const addDesconto = async (newDesconto) => {
   const user = JSON.parse(localStorage.getItem("userLoggedIn") ?? false);
   if (!user) return false;
   try {
@@ -104,17 +82,89 @@ export const addDesconto = async (newDesconto, reason = false) => {
     console.error(err);
   }
 
-  if (reason === "faltas") {
-    Toast.fire({ icon: "success", title: "Faltas atualizadas no banco de dados." });
-  } else if (reason === "vales") {
-    Toast.fire({ icon: "success", title: "Vales atualizados no banco de dados." });
-  } else {
-    Toast.fire({ icon: "success", title: "Descontos atualizados no banco de dados." });
-  }
+  Toast.fire({ icon: "success", title: "Descontos atualizados no banco de dados." });
 };
 
 export const addFaltas = async ({ data, fotos }) => {
   addDesconto({ data, motivo: "Foto Ausente", fotos }, "faltas");
+};
+
+export const handleDesconto = async ({ id, dia = null, motivo = null, valor = 0 }, action) => {
+  const user = JSON.parse(localStorage.getItem("userLoggedIn") ?? false);
+
+  if (!user) return false;
+
+  try {
+    const { descontos } = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`));
+
+    const exists = descontos.some((d) => d.id === id);
+    if (!exists) {
+      return Toast.fire({
+        title: "ID não encontrado!",
+        icon: "error",
+        customClass: { popup: "toast-glass" },
+      });
+    }
+
+    const updateDescontos = async (array) => {
+      await updateDoc(doc(db, "usuarios", user.uid), {
+        [`data.${actualYear()}.${actualMonth()}.descontos`]: array,
+      });
+      const cached = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`));
+      localStorage.setItem(`data_${user.uid}_cache`, JSON.stringify({ ...cached, descontos: array }));
+    };
+
+    if (action === "edit") {
+      const findIndex = descontos.findIndex((d) => d.id === id);
+      const newDescontos = [...descontos];
+      newDescontos[findIndex] = {
+        id,
+        dia,
+        motivo,
+        valor,
+      };
+      await updateDescontos(newDescontos);
+
+      return Toast.fire({
+        title: "Desconto editado com sucesso!",
+        icon: "success",
+        customClass: {
+          popup: "toast-glass",
+        },
+      });
+    } else if (action === "delete") {
+      const withOut = [...descontos].filter((d) => d.id !== id);
+
+      await updateDescontos(withOut);
+
+      if (withOut.some((i) => i.id === id)) {
+        return Toast.fire({
+          title: "Houve um erro silencioso, não foi deletado!",
+          icon: "error",
+          customClass: {
+            popup: "toast-glass",
+          },
+        });
+      } else {
+        return Toast.fire({
+          title: "Desconto removido com sucesso!",
+          icon: "success",
+          customClass: {
+            popup: "toast-glass",
+          },
+        });
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    Toast.fire({
+      title: "Houve um erro interno ao acessar os descontos!",
+      icon: "error",
+      customClass: {
+        popup: "toast-glass",
+      },
+    });
+  }
 };
 
 export const getUserBanca = async () => {
@@ -123,11 +173,10 @@ export const getUserBanca = async () => {
   const banca = dataCache.banca ?? [];
   const vendas = dataCache.banca?.reduce((ac, i) => ac + parseInt(i.vendas), 0) ?? [];
   const sobras = dataCache.banca?.reduce((ac, i) => ac + parseInt(i.sobras), 0) ?? [];
-  const vales = dataCache.vales ?? [];
   const descontos = dataCache.descontos ?? [];
   const faltas = descontos.filter((desconto) => desconto.motivo === "Foto Ausente") ?? [];
 
-  return { dataCache, banca, vendas, sobras, vales, descontos, faltas };
+  return { dataCache, banca, vendas, sobras, descontos, faltas };
 };
 
 export const getPhotographers = async (username) => {

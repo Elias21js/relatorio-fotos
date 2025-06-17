@@ -50,7 +50,7 @@ export function blurMobileInputs(swallowTheKeeb = true) {
           input.removeAttribute("readonly");
         },
         { once: true }
-      ); // só remove uma vez por input
+      );
     });
   };
 }

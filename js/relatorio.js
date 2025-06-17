@@ -20,8 +20,6 @@ const REGISTRO = {
     const dataCache = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
 
     const { data } = (await getDoc(doc(db, "usuarios", uid))).data();
-    console.log("from dataCache", dataCache);
-    console.log("from db data", data);
     if (isExactly(dataCache, data[actualYear()][actualMonth()])) {
       Toast.fire({ icon: "success", title: "Dados atualizados e sincronizados." });
       this.relatorios = dataCache.banca;
@@ -31,7 +29,6 @@ const REGISTRO = {
         `data_${uid}_cache`,
         JSON.stringify({
           banca: data[actualYear()][actualMonth()]?.banca ?? [],
-          vales: data[actualYear()][actualMonth()]?.vales ?? [],
           descontos: data[actualYear()][actualMonth()]?.descontos ?? [],
         })
       );
@@ -57,12 +54,11 @@ const REGISTRO = {
         }),
       });
 
-      const oldStorage = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`)) ?? [{ vales: [], descontos: [] }];
+      const oldStorage = JSON.parse(localStorage.getItem(`data_${user.uid}_cache`)) ?? [{ descontos: [] }];
 
       localStorage.setItem(
         `data_${user.uid}_cache`,
         JSON.stringify({
-          vales: [...(oldStorage.vales ?? [])],
           descontos: [...(oldStorage.descontos ?? [])],
           banca: this.relatorios.map((reg) => {
             if (reg instanceof Registro) return reg.toJSON();
@@ -84,7 +80,7 @@ const REGISTRO = {
     this.relatorios = data[actualYear()][actualMonth()]?.banca ?? [];
     localStorage.setItem(
       `data_${uid}_cache`,
-      JSON.stringify(data[actualYear()][actualMonth()] ?? [{ banca: [], vales: [], descontos: [] }])
+      JSON.stringify(data[actualYear()][actualMonth()] ?? [{ banca: [], descontos: [] }])
     );
     this.atualizarLista();
 
@@ -110,11 +106,6 @@ const REGISTRO = {
   },
 
   async atualizarLista() {
-    console.log(await getUserBanca());
-    console.log("ATUALIZADO");
-    const { uid } = JSON.parse(localStorage.getItem(`userLoggedIn`));
-    console.log(JSON.parse(localStorage.getItem(`data_${uid}_cache`)));
-
     const lista = document.getElementById("listaRegistros");
     lista.innerHTML = "";
 
@@ -149,8 +140,8 @@ const REGISTRO = {
           "sábado",
         ];
 
-        const data = new Date(dataString); // Aceita formatos como '2025-05-01'
-        const diaDaSemana = data.getDay(); // Retorna um número de 0 (domingo) a 6 (sábado)
+        const data = new Date(dataString);
+        const diaDaSemana = data.getDay();
 
         return diasDaSemana[diaDaSemana];
       }
@@ -209,7 +200,6 @@ const REGISTRO = {
   editarDia({ id, data, vendas, sobras }) {
     if (!data || !vendas || !sobras) return showError("Você deve inserir uma data, as vendas e as sobras.");
 
-    // verifica se já existe um dia com a mesma data
     const dataFind = this.relatorios.find((dia) => dia.data === data);
     const idExists = dataFind?.id === id;
 

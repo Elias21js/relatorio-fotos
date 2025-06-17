@@ -15,24 +15,24 @@ ribbon.addEventListener("click", () => {
     html: `
         <div class="edit-div">
             <div>
-                <label for="initialR">Inicial</label>
+                <span for="initialR">Inicial</span>
                 <input name="initialR"  class="swal2-input"  id="initialR" type="text" autocomplete="off" placeholder="Ribbon Inicial" value="${
                   storaged?.inicial ?? ""
                 }">
             </div>
 
             <div> 
-                <label for="atualR">Atual</label>
+                <span for="atualR">Atual</span>
                 <input name="atualR"  class="swal2-input"  id="atualR" type="text" autocomplete="off" placeholder="Ribbon atual">
             </div>
 
              <div>
-                <label for="sobras">Sobras</label>
+                <span for="sobras">Sobras</span>
                 <input id="ribbonSobras" class="swal2-input" name="ribbonSobras" type="text" autocomplete="off" placeholder="Sobras">
             </div>
 
             <div>
-                <label for="Others">Descontar</label>
+                <span for="Others">Descontar</span>
                 <input id="ribbonOthers" class="swal2-input" name="ribbonOthers" type="text" autocomplete="off" placeholder="Descontar revelações" value="${
                   storaged?.descontar ?? ""
                 }">
@@ -135,8 +135,6 @@ ribbon.addEventListener("click", () => {
             const minhasRev = totalRev - parseInt(descontar);
             const minhasVendas = minhasRev - parseInt(sobras);
 
-            // localStorage.setItem(`ribbon_${uid}_cache`, inicial);
-
             return Swal.fire({
               title: `📸 Relatório de Produção`,
               html: `
@@ -176,17 +174,3 @@ ribbon.addEventListener("click", () => {
     }
   });
 });
-
-// 400 inicial
-// 320 final
-
-// 330 final+otherrevl
-
-// 70 revl
-// 10 othrevl
-
-// 80 revlfnl
-
-// 20 sobras
-
-// 50 vendas

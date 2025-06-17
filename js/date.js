@@ -2,7 +2,6 @@ import flatpickr from "flatpickr";
 import { blurMobileInputs } from "./toast.js";
 import { Portuguese } from "flatpickr/dist/l10n/pt.js";
 import "flatpickr/dist/plugins/monthSelect/style.css";
-// import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect";
 import monthSelectPlugin from "flatpickr/dist/plugins/monthSelect/index.js";
 
 import REGISTRO from "./relatorio.js";

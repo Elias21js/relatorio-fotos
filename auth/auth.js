@@ -41,7 +41,6 @@ document.getElementById("btn-login").addEventListener("click", async () => {
     const q = query(usuariosRef, where("user", "==", user.value));
     const result = await getDocs(q);
 
-    console.log(result);
     if (result.empty)
       return Toast.fire({
         icon: "error",
@@ -182,7 +181,6 @@ btn_register.addEventListener("click", async () => {
     }
   } catch (err) {
     activeBtn();
-    console.log("linha 158, auth.js", err.message);
   }
 });
 

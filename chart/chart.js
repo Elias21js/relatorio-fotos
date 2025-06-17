@@ -103,9 +103,9 @@ export const renderBarPessoal = async () => {
 
   if (vendas.length < 5) {
     element.style.display = "none";
-    return; // 🛑 Sai fora sem tentar criar o gráfico!
+    return;
   } else {
-    element.style.display = "block"; // Garante que ele volte se necessário
+    element.style.display = "block";
   }
 
   if (window.barPessoalChartInstance) {
@@ -113,10 +113,6 @@ export const renderBarPessoal = async () => {
   }
 
   window.barPessoalChartInstance = new Chart(ctx, {
-    // ["rgba(53, 195, 220, 0.7)",
-    // "rgba(54, 235, 114, 0.8)",
-    // "rgba(255, 86, 86, 0.8)"]
-
     type: "bar",
     data: {
       labels: datas,
@@ -210,15 +206,6 @@ export const renderBarPessoal = async () => {
               },
             },
           },
-          // title: {
-          //   display: true,
-          //   text: "Dias",
-          //   color: "#fff",
-          //   font: {
-          //     size: 20,
-          //     weight: "normal",
-          //   },
-          // },
         },
       },
     },
@@ -230,20 +217,18 @@ const getBancas = async (period) => {
   const sarah = await getPhotographers("Sarah");
   const fly = await getPhotographers("fly");
 
-  console.log(sarah);
-
   function filtrarPorDias(nome, banca, inicio, fim) {
     const revBanca = banca.filter((item) => {
       const [dia, mes] = item.data.split("/").map(Number);
       return dia >= inicio && dia <= fim;
     });
 
-    const vendas = revBanca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
-    const sobras = revBanca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+    const vendas = revBanca.reduce((ac, v) => ac + parseInt(v.vendas), 0) ?? 0;
+    const sobras = revBanca.reduce((ac, s) => ac + parseInt(s.sobras), 0) ?? 0;
     const producao = parseInt(vendas) + parseInt(sobras);
-    const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
+    let aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
 
-    if (isNaN(aprov)) return;
+    if (isNaN(aprov)) aprov = 0;
 
     return { nome, vendas, sobras, producao, aprov };
   }
@@ -305,7 +290,6 @@ const getBancas = async (period) => {
     const ordenedWeek = (week) => {
       if (week[0] === undefined) return;
 
-      console.log(week);
       const ordered = [...week].sort((a, b) => b.vendas - a.vendas);
 
       const medalha = ["🥇", "🥈", "🥉"] || "📸";
@@ -380,7 +364,7 @@ export const renderBar = async () => {
       ],
     },
     options: {
-      indexAxis: "x", // Horizontal ranking
+      indexAxis: "x",
       responsive: true,
       plugins: {
         legend: {
@@ -406,14 +390,6 @@ export const renderBar = async () => {
             },
           },
         },
-        // title: {
-        //   display: true,
-        //   text: "Ranking",
-        //   color: "#fff",
-        //   font: {
-        //     size: 18,
-        //   },
-        // },
       },
       scales: {
         x: {
@@ -451,7 +427,7 @@ export const renderSwiper = async () => {
   Swiper.use([Navigation, Pagination, Autoplay]);
 
   return new Swiper(".swiper", {
-    loop: false, // slides infinitos
+    loop: false,
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
@@ -465,6 +441,8 @@ export const renderSwiper = async () => {
 
 export const renderSlides = (week, id) => {
   if (!week) return false;
+  const r = week.reduce((a, v) => a + parseInt(v.vendas), 0);
+  if (r === 0) return false;
 
   const wrapper = document.getElementById("wrapper");
 
@@ -544,7 +522,7 @@ export const renderSemanal = async () => {
         ],
       },
       options: {
-        indexAxis: "x", // Horizontal ranking
+        indexAxis: "x",
         responsive: true,
         plugins: {
           legend: {
@@ -663,7 +641,7 @@ export const renderSemanal = async () => {
         ],
       },
       options: {
-        indexAxis: "x", // Horizontal ranking
+        indexAxis: "x",
         responsive: true,
         plugins: {
           legend: {
@@ -783,7 +761,7 @@ export const renderSemanal = async () => {
         ],
       },
       options: {
-        indexAxis: "x", // Horizontal ranking
+        indexAxis: "x",
         responsive: true,
         plugins: {
           legend: {
@@ -903,7 +881,7 @@ export const renderSemanal = async () => {
         ],
       },
       options: {
-        indexAxis: "x", // Horizontal ranking
+        indexAxis: "x",
         responsive: true,
         plugins: {
           legend: {
@@ -980,8 +958,6 @@ export const renderPerformance = async () => {
 
   const { performance } = await getBancas("performance");
 
-  console.log(performance);
-
   if (window.performanceChartInstance) {
     window.performanceChartInstance.destroy();
   }
@@ -1011,7 +987,7 @@ export const renderPerformance = async () => {
   window.performanceChartInstance = new Chart(ctx, {
     type: "line",
     data: {
-      labels: labels, //nome embaixo
+      labels: labels,
       datasets,
     },
     options: {
@@ -1071,15 +1047,6 @@ export const renderPerformance = async () => {
               },
             },
           },
-          // title: {
-          //   display: true,
-          //   text: "Dias",
-          //   color: "#fff",
-          //   font: {
-          //     size: 20,
-          //     weight: "normal",
-          //   },
-          // },
         },
       },
     },
@@ -1112,7 +1079,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chartsDiv = document.getElementById("charts");
 
   btnGraficos.addEventListener("click", () => {
-    smoothScrollTo(chartsDiv, 1000); // 1000ms de rolagem suave
+    smoothScrollTo(chartsDiv, 1000);
   });
 });
 

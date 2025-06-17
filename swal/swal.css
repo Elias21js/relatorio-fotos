@@ -158,3 +158,10 @@
     text-align: center;
   }
 }
+
+.swal2-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: row nowrap;
+}
