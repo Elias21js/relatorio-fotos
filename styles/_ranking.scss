@@ -1,0 +1,31 @@
+@use "mixins" as *;
+@use "variables" as *;
+
+.ranking-choice {
+  @include flex-center(row, center, center, 2rem);
+  margin-top: 4rem;
+
+  &__button {
+    @include botao-estiloso;
+  }
+
+  @include respond-max(610px) {
+    #desempenho {
+      display: none;
+    }
+  }
+}
+
+#gerarRelatorio-div {
+  @include flex-center(row, center, center, 4rem);
+  margin-top: 4rem;
+  flex-wrap: wrap;
+
+  button {
+    font-size: 1.6rem;
+  }
+
+  @include respond-max(487px) {
+    flex-direction: column;
+  }
+}

@@ -4,77 +4,132 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="src/favicon.png" type="image/x-icon" />
-    <link rel="stylesheet" href="index.css" />
-    <link rel="stylesheet" href="./chart/chart.css" />
+    <link rel="stylesheet" href="main.css" />
+    <!-- <link rel="stylesheet" href="./chart/chart.css" /> -->
     <link rel="stylesheet" href="./swal/swal.css" />
-    <link rel="stylesheet" href="./media.css" />
+    <!-- <link rel="stylesheet" href="./media.css" /> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css" />
 
     <title>Relatório do Mês.</title>
   </head>
   <body>
-    <header>
-      <div>
+    <header class="header">
+      <div class="header__logo">
         <img src="src/arcanjos-logo-2.png" alt="Logo" />
       </div>
       <!-- <h1>Relatório de Fotos 📸</h1> -->
-      <div id="buttons-header">
-        <button class="btns-header animado" id="changeRelatorio">Trocar Mês</button>
-        <button class="btns-header animado" id="ribbon">Ribbon</button>
-        <!-- <button class="btns-header animado" id="vale">Vales</button> -->
-        <button class="btns-header animado" id="desconto">Descontos</button>
-        <!-- <button class="btns-header animado" id="faltas">Faltas</button> -->
-        <button class="btns-header animado" id="log-out">Sair</button>
+      <div class="header__actions" id="buttons-header">
+        <!-- Botões de ações do cabeçalho -->
+        <button class="header__button btns-header animado" id="changeRelatorio">Trocar Mês</button>
+        <button class="header__button btns-header animado" id="ribbon">Ribbon</button>
+        <!-- <button class="header__button btns-header animado" id="vale">Vales</button> -->
+        <button class="header__button btns-header animado" id="desconto">Descontos</button>
+        <!-- <button class="header__button btns-header animado" id="faltas">Faltas</button> -->
+        <button class="header__button btns-header animado" id="log-out">Sair</button>
       </div>
     </header>
 
-    <main>
-      <div class="container">
-        <form id="formRegistro" name="formRegistro">
-          <div id="div-registros-title">
-            <h1 id="registros-title">Gerenciar Registros</h1>
+    <main class="main">
+      <div class="main__container container">
+        <!-- Formulário para registro de vendas -->
+        <form class="registro-form" id="formRegistro" name="formRegistro">
+          <div class="registro-form__title" id="div-registros-title">
+            <h1 class="registro-form__heading" id="registros-title">Gerenciar Registros</h1>
           </div>
-          <input type="text" id="data" name="data" placeholder="Dia/Mês" autocomplete="off" autofocus required />
-          <input type="number" id="vendidas" name="vendidas" placeholder="Vendas" autocomplete="off" required />
-          <input type="number" id="sobras" name="sobras" placeholder="Sobras" autocomplete="off" required />
-          <button type="submit" class="botao-estiloso" id="add-reg">Adicionar Registro</button>
+          <input
+            class="registro-form__input"
+            type="text"
+            id="data"
+            name="data"
+            placeholder="Dia/Mês"
+            autocomplete="off"
+            autofocus
+            required
+          />
+          <input
+            class="registro-form__input"
+            type="number"
+            id="vendidas"
+            name="vendidas"
+            placeholder="Vendas"
+            autocomplete="off"
+            required
+          />
+          <input
+            class="registro-form__input"
+            type="number"
+            id="sobras"
+            name="sobras"
+            placeholder="Sobras"
+            autocomplete="off"
+            w
+            required
+          />
+          <button class="registro-form__submit" type="submit" id="add-reg">Adicionar Registro</button>
         </form>
 
-        <div class="listagem" id="listaRegistros"></div>
-        <!-- Lista de registros -->
+        <!-- Lista renderizada via JS -->
+        <div class="registro-listagem listagem" id="listaRegistros"></div>
       </div>
 
-      <div id="gerarRelatorio-div">
-        <button id="gerarRelatorio" type="submit" class="botao-estiloso">Gerar Relatório</button>
-        <button id="gerarGraficos" type="submit" class="botao-estiloso">Mostrar Gráficos</button>
-        <button id="ranking" type="submit" class="botao-estiloso">Mostrar Ranking</button>
+      <!-- Botões de ações gerais -->
+      <div class="relatorio-actions" id="gerarRelatorio-div">
+        <button class="relatorio-actions__button" id="gerarRelatorio" type="submit">Gerar Relatório</button>
+        <button class="relatorio-actions__button" id="gerarGraficos" type="submit">Mostrar Gráficos</button>
+        <button class="relatorio-actions__button" id="ranking" type="submit">Mostrar Ranking</button>
       </div>
 
-      <div id="ranking-choice">
-        <button id="semanal" type="submit" class="botao-estiloso">Semanal</button>
-        <button id="mensal" type="submit" class="botao-estiloso">Mensal</button>
-        <button id="desempenho" type="submit" class="botao-estiloso">Desempenho</button>
+      <!-- Escolha de ranking -->
+      <div class="ranking-choice" id="ranking-choice">
+        <button class="ranking-choice__button" id="semanal" type="submit">Semanal</button>
+        <button class="ranking-choice__button" id="mensal" type="submit">Mensal</button>
+        <button class="ranking-choice__button" id="desempenho" type="submit">Desempenho</button>
       </div>
 
-      <div id="charts">
-        <canvas id="doughnut-chart" width="500" height="500"></canvas>
-        <canvas id="line-chart" width="1200" height="800" style="width: 1200px; height: 800px"></canvas>
-      </div>
-      <div id="ranking-chart">
-        <canvas id="bar-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
+      <!-- Gráficos principais -->
+      <div class="charts" id="charts">
+        <canvas class="charts__doughnut" id="doughnut-chart" width="500" height="500"></canvas>
+        <canvas
+          class="charts__line"
+          id="line-chart"
+          width="1200"
+          height="800"
+          style="width: 1200px; height: 800px"
+        ></canvas>
       </div>
 
-      <div id="ranking-performance">
-        <canvas id="performance-chart" width="1200" height="800" style="max-width: 1200px; max-height: 800px"></canvas>
+      <!-- Gráfico de ranking geral -->
+      <div class="charts__ranking" id="ranking-chart">
+        <canvas
+          class="charts__bar"
+          id="bar-chart"
+          width="1200"
+          height="800"
+          style="max-width: 1200px; max-height: 800px"
+        ></canvas>
       </div>
 
-      <div id="ranking-semanal" class="swiper">
-        <div id="wrapper" class="swiper-wrapper">
-          <!-- Gráficos inseridos aqui -->
+      <!-- Gráfico de desempenho individual -->
+      <div class="charts__performance" id="ranking-performance">
+        <canvas
+          class="charts__performance-chart"
+          id="performance-chart"
+          width="1200"
+          height="800"
+          style="max-width: 1200px; max-height: 800px"
+        ></canvas>
+      </div>
+
+      <!-- Carrossel de rankings semanais -->
+      <div class="ranking-swiper swiper" id="ranking-semanal">
+        <div class="ranking-swiper__wrapper swiper-wrapper" id="wrapper">
+          <!-- Gráficos inseridos via JS -->
         </div>
       </div>
     </main>
   </body>
+
+  <!-- Scripts JS -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module" src="./chart/chart.js"></script>
   <script type="module" src="./js/sweetconfig.js"></script>

@@ -1,0 +1,66 @@
+@use "mixins" as *;
+@use "variables" as *;
+
+.registro-form {
+  padding: 2.4rem;
+  border-top-left-radius: 15rem;
+  border-bottom-right-radius: 15rem;
+  @include flex-center(column, center, center, 2rem);
+  @include glass-effect;
+  border: 1px solid $color-bg-glass-strong;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  width: clamp(230px, 100%, 500px);
+
+  &__title {
+    @include flex-center(column, center, center, 2rem);
+    margin: 2rem 0;
+
+    h1 {
+      text-align: center;
+      font-size: clamp(11px, 1.8rem, 18px);
+    }
+  }
+
+  &__input {
+    padding: 1.2rem 3rem;
+    border: 1px solid $color-bg-glass-strong;
+    width: clamp(60%, 80%, 90%);
+    @include border-shaping(6rem, 6rem);
+    font-size: 1.6rem;
+    @include glass-effect;
+    color: $color-text;
+    outline: none;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.589);
+    }
+  }
+
+  &__submit {
+    @include glass-effect;
+    @include botao-estiloso;
+    padding: 1.2rem;
+    margin: 2rem 0;
+    border: 1px solid #ccc;
+    font-size: 1.6rem;
+    width: 50%;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+  }
+
+  @include respond-max(610px) {
+    padding: 3rem;
+    row-gap: 3rem;
+
+    input {
+      font-size: 1.3rem;
+    }
+
+    &__submit {
+      font-size: 1.2rem;
+      width: 50vw;
+    }
+  }
+}

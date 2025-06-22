@@ -1,0 +1,80 @@
+@use "variables" as *;
+
+@mixin respond-max($px) {
+  @media screen and (max-width: $px) {
+    @content;
+  }
+}
+
+@mixin respond-min($px) {
+  @media screen and (min-width: $px) {
+    @content;
+  }
+}
+
+@mixin transition($props...) {
+  transition: $props;
+}
+
+@mixin flex-center($dir: row, $justify: center, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $dir;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+@mixin border-shaping($left, $right) {
+  border-top-left-radius: $left;
+  border-bottom-right-radius: $right;
+}
+
+@mixin glass-effect {
+  background: $color-bg-glass;
+  backdrop-filter: blur(2px);
+}
+
+@mixin botao-estiloso {
+  position: relative;
+  padding: 1.5rem 3rem;
+  font-size: 1.8rem;
+  color: #fff;
+  background: transparent;
+  @include border-shaping(4rem, 4rem);
+
+  border: none;
+  outline: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.7s, transform 0.7s;
+  box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.3);
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.5s;
+    transform: skewX(-20deg);
+  }
+
+  &:hover::after {
+    left: 100%;
+  }
+
+  &:focus {
+    animation: pulso 0.6s ease-in-out;
+  }
+
+  &:hover {
+    transform: scale(1.03);
+    background: linear-gradient(135deg, #e37777, #fb6eef);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

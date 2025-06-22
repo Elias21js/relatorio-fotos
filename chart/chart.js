@@ -218,13 +218,13 @@ const getBancas = async (period) => {
   const fly = await getPhotographers("fly");
 
   function filtrarPorDias(nome, banca, inicio, fim) {
-    const revBanca = banca.filter((item) => {
+    const revBanca = banca?.filter((item) => {
       const [dia, mes] = item.data.split("/").map(Number);
       return dia >= inicio && dia <= fim;
     });
 
-    const vendas = revBanca.reduce((ac, v) => ac + parseInt(v.vendas), 0) ?? 0;
-    const sobras = revBanca.reduce((ac, s) => ac + parseInt(s.sobras), 0) ?? 0;
+    const vendas = revBanca?.reduce((ac, v) => ac + parseInt(v.vendas), 0) ?? 0;
+    const sobras = revBanca?.reduce((ac, s) => ac + parseInt(s.sobras), 0) ?? 0;
     const producao = parseInt(vendas) + parseInt(sobras);
     let aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
 
@@ -235,7 +235,7 @@ const getBancas = async (period) => {
 
   if (period === "performance") {
     const performance = [ss, sarah, fly].map(({ user, data }) => {
-      const registros = data[actualYear()][actualMonth()].banca.map((i) => {
+      const registros = data?.[actualYear()]?.[actualMonth()]?.banca?.map((i) => {
         return {
           data: i.data,
           vendas: i.vendas,
@@ -252,8 +252,8 @@ const getBancas = async (period) => {
 
   if (period === "mensal") {
     const rankingMensal = [ss, sarah, fly].map(({ user, data }) => {
-      const vendas = data[actualYear()][actualMonth()].banca.reduce((ac, v) => ac + parseInt(v.vendas), 0);
-      const sobras = data[actualYear()][actualMonth()].banca.reduce((ac, s) => ac + parseInt(s.sobras), 0);
+      const vendas = data?.[actualYear()]?.[actualMonth()]?.banca?.reduce((ac, v) => ac + parseInt(v.vendas), 0) ?? 0;
+      const sobras = data?.[actualYear()]?.[actualMonth()]?.banca?.reduce((ac, s) => ac + parseInt(s.sobras), 0) ?? 0;
       const producao = parseInt(vendas) + parseInt(sobras);
       const aprov = (parseInt(vendas) / (parseInt(vendas) + parseInt(sobras))) * 100;
 
@@ -275,16 +275,16 @@ const getBancas = async (period) => {
     return { nomes, vendas, sobras, producao, aproveitamentos };
   } else {
     const firstWeek = [ss, sarah, fly].map(({ user, data }) =>
-      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 1, 7)
+      filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 1, 7)
     );
     const secondWeek = [ss, sarah, fly].map(({ user, data }) =>
-      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 8, 15)
+      filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 8, 15)
     );
     const thirdWeek = [ss, sarah, fly].map(({ user, data }) =>
-      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 16, 22)
+      filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 16, 22)
     );
     const fourthWeek = [ss, sarah, fly].map(({ user, data }) =>
-      filtrarPorDias(user, data[actualYear()][actualMonth()].banca, 23, 31)
+      filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 23, 31)
     );
 
     const ordenedWeek = (week) => {
@@ -963,15 +963,15 @@ export const renderPerformance = async () => {
   }
 
   const allDatesSet = new Set();
-  performance.map(({ registros }) => registros.map(({ data }) => allDatesSet.add(data)));
+  performance?.map(({ registros }) => registros?.map(({ data }) => allDatesSet.add(data)));
   const labels = Array.from(allDatesSet).sort();
 
   const colors = ["#DC143C", "#00BFFF", "#DA70D6"];
 
-  const datasets = performance.map(({ user, registros }, idx) => {
+  const datasets = performance?.map(({ user, registros }, idx) => {
     const regMap = {};
 
-    registros.forEach(({ data, vendas }) => (regMap[data] = vendas));
+    registros?.forEach(({ data, vendas }) => (regMap[data] = vendas));
 
     return {
       label: user,
@@ -1058,6 +1058,9 @@ export const resetCharts = () => {
   const rankChoice = document.getElementById("ranking-choice");
   const rankingSemanal = document.getElementById("ranking-semanal");
   const rankingDiv = document.getElementById("ranking-chart");
+  const performance = document.getElementById("ranking-performance");
+  performance.classList.remove("visible");
+  performance.style.marginBottom = "0";
   charts.style.marginTop = "0";
   rankingDiv.style.marginTop = "0";
 
@@ -1068,6 +1071,7 @@ export const resetCharts = () => {
   if (window.secondChartInstance) window.secondChartInstance.destroy();
   if (window.thirdChartInstance) window.thirdChartInstance.destroy();
   if (window.fourthChartInstance) window.fourthChartInstance.destroy();
+  if (window.performanceChartInstance) window.performanceChartInstance.destroy();
   charts.classList.remove("visible");
   rankChoice.classList.remove("visible");
   rankingSemanal.classList.remove("visible");

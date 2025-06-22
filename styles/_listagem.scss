@@ -1,0 +1,158 @@
+@use "mixins" as *;
+@use "variables" as *;
+
+.listagem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1248.8px;
+  flex-flow: column nowrap;
+  gap: 0.8rem;
+  font-size: 1.6rem;
+
+  @include respond-max(730px) {
+    padding: 0;
+  }
+
+  #registro-header {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(114px, 251px));
+    background: transparent;
+    padding: 1.6rem;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    border-bottom: 2px solid $color-text;
+    margin-bottom: 0.8rem;
+
+    span {
+      font-weight: bold;
+      cursor: pointer;
+
+      &:first-child {
+        text-align: left;
+      }
+
+      &:last-child {
+        text-align: end;
+      }
+    }
+
+    @include respond-max(730px) {
+      display: none;
+    }
+  }
+
+  .registro {
+    @include flex-center(row, space-between, center);
+    background: $color-bg-glass;
+    backdrop-filter: blur(10px);
+    padding: 1.6rem;
+    width: 100%;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.7s ease;
+
+    &:first-child:hover {
+      transform: scaleX(1);
+      cursor: default;
+    }
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    span {
+      flex: 1;
+      text-align: center;
+      min-width: 8rem;
+
+      &:first-child {
+        text-align: left;
+      }
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+
+    &.div-estilosa {
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent 40%, #8828ff 50%, transparent 60%);
+        transform: skewX(-20deg);
+        transition: left 0.7s ease;
+        z-index: 0;
+      }
+
+      &:hover::before {
+        left: 0%;
+      }
+
+      span {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    @include respond-max(730px) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-flow: column nowrap;
+      width: 100%;
+      gap: 0.8rem;
+      background: linear-gradient(135deg, transparent, #7700ff3f);
+      color: $color-text;
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      text-align: center;
+      grid-template-columns: 1fr;
+
+      span:first-child {
+        font-size: 1.45rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #fff;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        &::before {
+          content: "📅 ";
+        }
+      }
+
+      span:not(:first-child) {
+        font-size: 1.3rem;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.3rem 0.7rem;
+        border-radius: 10px;
+      }
+
+      span:nth-child(2)::before {
+        content: "🛒 Vendas: ";
+      }
+      span:nth-child(3)::before {
+        content: "🍞 Sobras: ";
+      }
+      span:nth-child(4)::before {
+        content: "🏭 Produção: ";
+      }
+      span:nth-child(5)::before {
+        content: "📈 Aproveitamento: ";
+      }
+    }
+  }
+}

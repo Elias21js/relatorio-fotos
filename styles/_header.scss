@@ -1,0 +1,74 @@
+@use "mixins" as *;
+@use "variables" as *;
+
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-content: space-between;
+  justify-items: end;
+  padding: 0rem 4rem;
+  background: $color-bg-glass;
+  backdrop-filter: blur(2px);
+  outline: 1px solid $color-bg-glass-strong;
+
+  &__logo img {
+    width: clamp(128px, 5vw, 10vw);
+    height: clamp(128px, 5vw, 10vw);
+  }
+
+  &__actions {
+    @include flex-center(row, center, center, 2rem);
+
+    .btns-header {
+      padding: 1.2rem 2.4rem;
+      outline: none;
+      border: 2px solid $color-text;
+      color: $color-text;
+      font-size: 1.5rem;
+      font-weight: bold;
+      @include border-shaping(3rem, 3rem);
+
+      cursor: pointer;
+      background-color: transparent;
+      @include transition(border-color 0.3s, color 0.3s);
+
+      &:hover {
+        color: $color-primary-gradient;
+        border-color: $color-primary-gradient;
+      }
+    }
+  }
+
+  @include respond-max(750px) {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+
+    &__actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      row-gap: 2rem;
+    }
+  }
+
+  @include respond-max(710px) {
+    &__actions {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+    }
+  }
+
+  @include respond-max(610px) {
+    place-items: center;
+    grid-template-columns: 1fr;
+    padding-bottom: 5rem;
+    padding-top: 1rem;
+    position: static;
+
+    &__actions {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      row-gap: 2rem;
+    }
+  }
+}

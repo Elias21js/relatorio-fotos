@@ -354,7 +354,21 @@ const showChart = (chartToDisplay) => {
             container.addEventListener("click", () => editOrRemove(id, dia, motivo, valor));
 
             const dataR = document.createElement("span");
-            dataR.textContent = dia;
+
+            function descobrirDiaDaSemana(dataString) {
+              const diasDaSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+
+              const data = new Date(dataString);
+              const diaDaSemana = data.getDay();
+
+              return diasDaSemana[diaDaSemana];
+            }
+
+            // Teste
+            const relaDate = new Date(2025, actualMonth() - 1, dia);
+
+            dataR.textContent = `${dia} - ${descobrirDiaDaSemana(relaDate)}`;
+
             const motivoR = document.createElement("span");
             motivoR.textContent = motivo;
             const valorR = document.createElement("span");

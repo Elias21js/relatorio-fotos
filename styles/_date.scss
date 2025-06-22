@@ -1,0 +1,40 @@
+@use "variables" as *;
+@use "mixins" as *;
+
+.flatpickr-calendar {
+  font-family: $font-primary, sans-serif;
+  padding: 2rem !important;
+  border-top-left-radius: 25px !important;
+  border-bottom-right-radius: 25px !important;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+  width: max-content !important;
+  z-index: 9999;
+
+  @include respond-max(500px) {
+    font-size: 0.9rem;
+    width: 90vw !important;
+    left: 5% !important;
+    right: auto !important;
+  }
+}
+
+.flatpickr-months .flatpickr-month {
+  justify-content: center;
+}
+
+.flatpickr-current-month {
+  font-size: 1.1rem;
+}
+
+.flatpickr-monthSelect-theme-light {
+  .flatpickr-months {
+    padding: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    .flatpickr-month {
+      width: 30%;
+      min-width: 70px;
+    }
+  }
+}

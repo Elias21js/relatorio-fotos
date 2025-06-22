@@ -1,0 +1,146 @@
+@use "./styles/variables" as *;
+@use "./styles/mixins" as *;
+@use "./styles/header" as *;
+@use "./styles/form" as *;
+@use "./styles/listagem" as *;
+@use "./styles/ranking" as *;
+@use "./styles/charts" as *;
+@use "./styles/date" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font-primary !important;
+}
+
+html {
+  font-size: 62.5%;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+body {
+  color: $color-text;
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background 0.3s, color 0.3s;
+  user-select: none;
+
+  &.swal2-shown {
+    padding-right: 0px !important;
+  }
+
+  @include respond-max(700px) {
+    background-image: url("./src/index-700x.webp");
+  }
+
+  @include respond-min(701px) {
+    background-image: url("./src/index.webp");
+  }
+}
+
+.main__container {
+  @include flex-center($dir: column, $align: center, $justify: center);
+  row-gap: 10rem;
+  margin-top: 10rem;
+  padding: 0 3rem;
+}
+
+.relatorio-actions {
+  .relatorio-actions__button {
+    @include botao-estiloso;
+  }
+}
+
+.head-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+
+  & span {
+    text-align: center;
+  }
+}
+
+button {
+  user-select: none;
+}
+
+.animado {
+  &:hover,
+  &:focus {
+    animation: pulso 0.6s ease-in-out;
+  }
+}
+
+@keyframes pulso {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 10px rgba(129, 140, 248, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(129, 140, 248, 0);
+  }
+}
+
+@include respond-max(730px) {
+  .head-container {
+    display: none;
+  }
+}
+
+@include respond-max(610px) {
+  .swal2-popup {
+    font-size: 0.9rem;
+
+    & button {
+      font-size: 1.2rem;
+    }
+  }
+
+  .swal2-actions {
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-flow: column-reverse nowrap !important;
+  }
+
+  #ranking-performance {
+    display: none;
+  }
+
+  #ranking-choice {
+    & #desempenho {
+      display: none;
+    }
+  }
+}
+
+@include respond-max(470px) {
+  .edit-div {
+    & div {
+      flex-flow: column nowrap;
+      align-items: start;
+    }
+  }
+}
+
+@include respond-max(390px) {
+  .rela-title {
+    font-size: 4vw;
+  }
+
+  .swal2-popup .ul-rela {
+    font-size: 4vw;
+  }
+}
