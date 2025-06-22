@@ -298,9 +298,8 @@ const showChart = (chartToDisplay) => {
 
 // ADICIONAR DESCONTOS
 {
-  const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
-
   const getCache = () => {
+    const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
     const { descontos } = JSON.parse(localStorage.getItem(`data_${uid}_cache`));
     return descontos;
   };
@@ -321,6 +320,7 @@ const showChart = (chartToDisplay) => {
       </div>`;
     }
   };
+  const { uid } = JSON.parse(localStorage.getItem("userLoggedIn"));
 
   document.getElementById("desconto").addEventListener("click", async () => {
     Swal.fire({
@@ -346,7 +346,7 @@ const showChart = (chartToDisplay) => {
 
           const { descontos } = JSON.parse(localStorage.getItem(`data_${uid}_cache`)) ?? [];
 
-          descontos?.forEach(({ id, dia, motivo, valor }) => {
+          descontos?.forEach(({ id, dia, fotos, motivo, valor }) => {
             const container = document.createElement("div");
             container.classList.add("registro", "div-estilosa");
             container.style.cursor = "pointer";
