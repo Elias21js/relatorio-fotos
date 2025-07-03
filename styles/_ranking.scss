@@ -2,7 +2,6 @@
 @use "variables" as *;
 
 .ranking-choice {
-  @include flex-center(row, center, center, 2rem);
   margin-top: 4rem;
 
   &__button {
@@ -19,6 +18,7 @@
 #gerarRelatorio-div {
   @include flex-center(row, center, center, 4rem);
   margin-top: 4rem;
+  margin-bottom: 4rem;
   flex-wrap: wrap;
 
   button {

@@ -216,6 +216,9 @@ const getBancas = async (period) => {
   const ss = await getPhotographers("SS");
   const sarah = await getPhotographers("Sarah");
   const fly = await getPhotographers("fly");
+  const mariana = await getPhotographers("Mariana");
+
+  const fotografos = [ss, sarah, fly, mariana];
 
   function filtrarPorDias(nome, banca, inicio, fim) {
     const revBanca = banca?.filter((item) => {
@@ -234,7 +237,7 @@ const getBancas = async (period) => {
   }
 
   if (period === "performance") {
-    const performance = [ss, sarah, fly].map(({ user, data }) => {
+    const performance = fotografos.map(({ user, data }) => {
       const registros = data?.[actualYear()]?.[actualMonth()]?.banca?.map((i) => {
         return {
           data: i.data,
@@ -251,7 +254,7 @@ const getBancas = async (period) => {
   }
 
   if (period === "mensal") {
-    const rankingMensal = [ss, sarah, fly].map(({ user, data }) => {
+    const rankingMensal = fotografos.map(({ user, data }) => {
       const vendas = data?.[actualYear()]?.[actualMonth()]?.banca?.reduce((ac, v) => ac + parseInt(v.vendas), 0) ?? 0;
       const sobras = data?.[actualYear()]?.[actualMonth()]?.banca?.reduce((ac, s) => ac + parseInt(s.sobras), 0) ?? 0;
       const producao = parseInt(vendas) + parseInt(sobras);
@@ -264,7 +267,7 @@ const getBancas = async (period) => {
 
     const nomes = fotografosOrdenados.map((i, idx) => {
       const medalha = ["🥇", "🥈", "🥉"][idx] || "📸";
-      return `${medalha} ${i.nome}`;
+      return `${medalha ?? "📸"} ${i.nome}`;
     });
 
     const vendas = fotografosOrdenados.map((i) => i.vendas);
@@ -274,16 +277,16 @@ const getBancas = async (period) => {
 
     return { nomes, vendas, sobras, producao, aproveitamentos };
   } else {
-    const firstWeek = [ss, sarah, fly].map(({ user, data }) =>
+    const firstWeek = fotografos.map(({ user, data }) =>
       filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 1, 7)
     );
-    const secondWeek = [ss, sarah, fly].map(({ user, data }) =>
+    const secondWeek = fotografos.map(({ user, data }) =>
       filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 8, 15)
     );
-    const thirdWeek = [ss, sarah, fly].map(({ user, data }) =>
+    const thirdWeek = fotografos.map(({ user, data }) =>
       filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 16, 22)
     );
-    const fourthWeek = [ss, sarah, fly].map(({ user, data }) =>
+    const fourthWeek = fotografos.map(({ user, data }) =>
       filtrarPorDias(user, data?.[actualYear()]?.[actualMonth()]?.banca, 23, 31)
     );
 
@@ -294,7 +297,7 @@ const getBancas = async (period) => {
 
       const medalha = ["🥇", "🥈", "🥉"] || "📸";
       return ordered.map((i, idx) => ({
-        nomes: `${medalha[idx]} ${i?.nome ?? "vazio"}`,
+        nomes: `${medalha[idx] ?? "📸"} ${i?.nome ?? "vazio"}`,
         vendas: i?.vendas,
         sobras: i?.sobras,
         producao: i?.producao,
@@ -966,7 +969,7 @@ export const renderPerformance = async () => {
   performance?.map(({ registros }) => registros?.map(({ data }) => allDatesSet.add(data)));
   const labels = Array.from(allDatesSet).sort();
 
-  const colors = ["#DC143C", "#00BFFF", "#DA70D6"];
+  const colors = ["yellow", "blue", "#DA70D6", "#000000"];
 
   const datasets = performance?.map(({ user, registros }, idx) => {
     const regMap = {};

@@ -56,8 +56,8 @@
 }
 
 #ranking-choice {
-  display: none;
   @include flex-center(row, center, center, 2rem);
+  display: none;
   transition: all 0.5s ease;
   opacity: 0;
   height: 0;
