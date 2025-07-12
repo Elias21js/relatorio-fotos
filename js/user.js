@@ -68,7 +68,7 @@ export const addDesconto = async (newDesconto) => {
   try {
     const { data } = (await getDoc(doc(db, "usuarios", user.uid))).data();
 
-    const descontos = data[actualYear()][actualMonth()].descontos;
+    const descontos = data[actualYear()][actualMonth()].descontos ?? [];
 
     await updateDoc(doc(db, "usuarios", user.uid), {
       [`data.${actualYear()}.${actualMonth()}.descontos`]: [...descontos, newDesconto],
